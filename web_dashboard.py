@@ -859,7 +859,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
 
 def start_server(port=None):
     if port is None:
-        port = int(os.environ.get("PORT", 5000))
+        port = int(os.environ.get("PORT", 7860))
     
     server = HTTPServer(("0.0.0.0", port), DashboardHandler)
     print(f"\n=======================================================")
