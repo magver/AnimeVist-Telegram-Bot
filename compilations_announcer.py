@@ -11,8 +11,8 @@ import io
 import json
 import time
 import urllib.request
-import urllib.parse
-from PIL import Image, ImageDraw
+import re
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -209,9 +209,27 @@ def download_image(url):
     with urllib.request.urlopen(req, timeout=10) as resp:
         return Image.open(io.BytesIO(resp.read()))
 
+def _get_font(size, bold=True):
+    candidates = [
+        "C:/Windows/Fonts/segoeuib.ttf" if bold else "C:/Windows/Fonts/segoeui.ttf",
+        "C:/Windows/Fonts/arialbd.ttf" if bold else "C:/Windows/Fonts/arial.ttf",
+        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+        "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            try:
+                return ImageFont.truetype(p, size)
+            except Exception:
+                pass
+    return ImageFont.load_default()
+
 def create_compilation_collage(poster_urls, title_text, output_filename="compilation_collage.jpg"):
     """
-    Downloads all poster images and composites them into a single high-resolution collage.
+    Downloads all poster images and composites them into a single high-resolution,
+    aesthetically polished collage banner with rounded corners, drop shadows,
+    and glowing position badges (following UI/UX Pro Max guidelines).
     """
     os.makedirs(COLLAGE_DIR, exist_ok=True)
     out_path = os.path.join(COLLAGE_DIR, output_filename)
@@ -219,8 +237,10 @@ def create_compilation_collage(poster_urls, title_text, output_filename="compila
     images = []
     for u in poster_urls:
         try:
-            img = download_image(u).convert("RGB")
-            images.append(img)
+            req = urllib.request.Request(u, headers={'User-Agent': 'AnimeVistBot/1.0'})
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                img = Image.open(io.BytesIO(resp.read())).convert("RGBA")
+                images.append(img)
         except Exception as e:
             print(f"[Compilations] Ошибка загрузки постера {u}: {e}")
 
@@ -228,38 +248,104 @@ def create_compilation_collage(poster_urls, title_text, output_filename="compila
         return None
 
     n = len(images)
-    target_h = 420 if n <= 4 else 380
-    resized = []
-    for img in images:
-        ratio = target_h / img.height
-        new_w = int(img.width * ratio)
-        resized.append(img.resize((new_w, target_h), Image.Resampling.LANCZOS))
+    poster_h = 440 if n <= 4 else 390
+    poster_w = int(poster_h * 0.70)
 
-    gap = 4
-    total_w = sum(img.width for img in resized) + (n - 1) * gap
-    banner_h = 48
-    final_h = target_h + banner_h
+    card_gap = 16
+    pad_x = 24
+    pad_top = 92
+    pad_bottom = 24
 
-    collage = Image.new("RGB", (total_w, final_h), (9, 13, 22))
-    draw = ImageDraw.Draw(collage)
+    total_w = pad_x * 2 + (poster_w * n) + (card_gap * (n - 1))
+    total_h = pad_top + poster_h + pad_bottom
 
-    # Header banner
-    draw.rectangle([(0, 0), (total_w, banner_h)], fill=(15, 23, 42))
-    draw.line([(0, banner_h), (total_w, banner_h)], fill=(59, 130, 246), width=2)
-    draw.text((14, 13), f"AnimeVist • {title_text}", fill=(248, 250, 252))
+    # Canvas with dark luxury background (#080C16)
+    canvas = Image.new("RGBA", (total_w, total_h), (8, 12, 22, 255))
+    draw = ImageDraw.Draw(canvas)
 
-    # Paste sub-posters and add badges
-    curr_x = 0
-    for idx, img in enumerate(resized, 1):
-        collage.paste(img, (curr_x, banner_h))
-        bx = curr_x + 8
-        by = banner_h + 8
-        draw.rectangle([(bx, by), (bx + 28, by + 28)], fill=(37, 99, 235))
-        draw.text((bx + 10, by + 6), str(idx), fill=(255, 255, 255))
-        curr_x += img.width + gap
+    # Header fonts
+    font_pill = _get_font(12, bold=True)
+    font_title = _get_font(21, bold=True)
+    font_badge = _get_font(19, bold=True)
 
-    collage.save(out_path, "JPEG", quality=92)
-    print(f"[Compilations] Фотоколлаж успешно сгенерирован ({n} постеров): {out_path}")
+    # Clean title from emojis and duplicated prefixes
+    clean_title = re.sub(r'[\U00010000-\U0010ffff]', '', title_text).strip()
+    clean_title = re.sub(r'^(ТОП[\s\-\d:]*)+', '', clean_title, flags=re.IGNORECASE).strip()
+    header_display = f"ТОП-{n}: {clean_title}" if clean_title else f"ТОП-{n} Шедевров"
+
+    # Header glass card container
+    header_box = (pad_x, 12, total_w - pad_x, 80)
+    draw.rounded_rectangle(header_box, radius=12, fill=(15, 23, 42, 220), outline=(255, 255, 255, 25), width=1)
+
+    # Header Pill badge inside container
+    pill_text = "ANIME VIST  •  CURATED SELECTION"
+    pill_w = 260
+    pill_h = 22
+    draw.rounded_rectangle((pad_x + 14, 18, pad_x + 14 + pill_w, 18 + pill_h), radius=10, fill=(30, 41, 59, 230), outline=(99, 102, 241, 140), width=1)
+    draw.text((pad_x + 24, 21), pill_text, fill=(129, 140, 248), font=font_pill)
+
+    # Header main title
+    draw.text((pad_x + 16, 47), header_display, fill=(248, 250, 252), font=font_title)
+
+    # Glowing subtle accent dot in right corner
+    draw.ellipse((total_w - pad_x - 30, 38, total_w - pad_x - 18, 50), fill=(99, 102, 241, 220), outline=(236, 72, 153, 200), width=1)
+
+    # Rounded corner mask template for posters
+    scale = 2
+    r = 14
+    mask = Image.new("L", (poster_w * scale, poster_h * scale), 0)
+    draw_mask = ImageDraw.Draw(mask)
+    draw_mask.rounded_rectangle((0, 0, poster_w * scale, poster_h * scale), radius=r * scale, fill=255)
+    mask = mask.resize((poster_w, poster_h), Image.Resampling.LANCZOS)
+
+    # Composite cards
+    curr_x = pad_x
+    for idx, raw in enumerate(images, 1):
+        # 1. Drop shadow behind card
+        shadow = Image.new("RGBA", (poster_w + 16, poster_h + 16), (0, 0, 0, 0))
+        s_draw = ImageDraw.Draw(shadow)
+        s_draw.rounded_rectangle((8, 8, poster_w + 8, poster_h + 8), radius=16, fill=(0, 0, 0, 150))
+        shadow = shadow.filter(ImageFilter.GaussianBlur(8))
+        canvas.paste(shadow, (curr_x - 8, pad_top - 4), shadow)
+
+        # 2. Resize and apply vignette
+        resized = raw.resize((poster_w, poster_h), Image.Resampling.LANCZOS).convert("RGBA")
+        vignette = Image.new("RGBA", (poster_w, poster_h), (0, 0, 0, 0))
+        v_draw = ImageDraw.Draw(vignette)
+        for y in range(int(poster_h * 0.62), poster_h):
+            alpha = int(190 * ((y - poster_h * 0.62) / (poster_h * 0.38)))
+            v_draw.line([(0, y), (poster_w, y)], fill=(9, 13, 24, alpha))
+        card_composite = Image.alpha_composite(resized, vignette)
+
+        # 3. 1px card border
+        border = Image.new("RGBA", (poster_w, poster_h), (0, 0, 0, 0))
+        b_draw = ImageDraw.Draw(border)
+        b_draw.rounded_rectangle((0, 0, poster_w - 1, poster_h - 1), radius=r, outline=(255, 255, 255, 50), width=1)
+        card_with_border = Image.alpha_composite(card_composite, border)
+
+        # 4. Paste card with anti-aliased mask
+        card_masked = Image.new("RGBA", (poster_w, poster_h), (0, 0, 0, 0))
+        card_masked.paste(card_with_border, (0, 0), mask)
+        canvas.paste(card_masked, (curr_x, pad_top), card_masked)
+
+        # 5. Position Badge (vibrant circular gradient pill)
+        b_size = 36
+        badge = Image.new("RGBA", (b_size, b_size), (0, 0, 0, 0))
+        badge_draw = ImageDraw.Draw(badge)
+        badge_draw.ellipse((0, 0, b_size - 1, b_size - 1), fill=(99, 102, 241, 240), outline=(255, 255, 255, 180), width=2)
+        
+        # Centered number
+        bbox = badge_draw.textbbox((0, 0), str(idx), font=font_badge)
+        bw = bbox[2] - bbox[0]
+        bh = bbox[3] - bbox[1]
+        badge_draw.text(((b_size - bw) / 2, (b_size - bh) / 2 - 2), str(idx), fill=(255, 255, 255, 255), font=font_badge)
+        canvas.paste(badge, (curr_x + 10, pad_top + 10), badge)
+
+        curr_x += poster_w + card_gap
+
+    final_rgb = canvas.convert("RGB")
+    final_rgb.save(out_path, "JPEG", quality=95)
+    print(f"[Compilations] Высококачественный HD-коллаж успешно сгенерирован ({n} постеров): {out_path}")
     return out_path
 
 def fetch_shikimori_candidates(genre_id=None, order="ranked", limit=20):

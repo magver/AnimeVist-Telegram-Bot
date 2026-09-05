@@ -149,31 +149,35 @@ HTML_PAGE = """<!DOCTYPE html>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-base: #090d16;
-      --bg-surface: #0f172a;
-      --bg-surface-elevated: #1e293b;
-      --bg-card: #131d31;
-      --bg-card-hover: #18243d;
+      --bg-base: #080c14;
+      --bg-surface: rgba(15, 23, 42, 0.75);
+      --bg-surface-elevated: rgba(30, 41, 59, 0.8);
+      --bg-card: rgba(19, 29, 49, 0.65);
+      --bg-card-hover: rgba(28, 42, 70, 0.8);
       --bg-input: #0a0f1d;
-      --border-subtle: #1e293b;
-      --border-default: #334155;
-      --border-focus: #3b82f6;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-default: rgba(255, 255, 255, 0.14);
+      --border-glow: rgba(99, 102, 241, 0.4);
+      --border-focus: #6366f1;
       --text-primary: #f8fafc;
       --text-secondary: #94a3b8;
       --text-muted: #64748b;
+      --accent-primary: #6366f1;
+      --accent-secondary: #ec4899;
+      --accent-gradient: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
       --accent-blue: #3b82f6;
       --accent-blue-hover: #2563eb;
       --accent-cyan: #06b6d4;
       --success: #10b981;
-      --success-bg: rgba(16, 185, 129, 0.12);
+      --success-bg: rgba(16, 185, 129, 0.15);
       --warning: #f59e0b;
-      --warning-bg: rgba(245, 158, 11, 0.12);
+      --warning-bg: rgba(245, 158, 11, 0.15);
       --danger: #ef4444;
-      --danger-bg: rgba(239, 68, 68, 0.12);
-      --radius-sm: 6px;
-      --radius-md: 10px;
-      --radius-lg: 14px;
-      --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+      --danger-bg: rgba(239, 68, 68, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
       --font-mono: 'JetBrains Mono', monospace;
     }
 
@@ -181,6 +185,11 @@ HTML_PAGE = """<!DOCTYPE html>
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.04) 0%, transparent 60%);
+      background-attachment: fixed;
       color: var(--text-primary);
       min-height: 100vh;
       display: flex;
@@ -192,6 +201,8 @@ HTML_PAGE = """<!DOCTYPE html>
     /* Top App Header */
     header {
       background: var(--bg-surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-subtle);
       padding: 0.85rem 1.75rem;
       display: flex;
@@ -207,22 +218,23 @@ HTML_PAGE = """<!DOCTYPE html>
       gap: 14px;
     }
     .logo-badge {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-      border: 1px solid rgba(59, 130, 246, 0.4);
+      width: 40px;
+      height: 40px;
+      background: var(--accent-gradient);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: var(--radius-md);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 700;
-      font-size: 1.1rem;
+      font-weight: 800;
+      font-size: 1.15rem;
       color: #fff;
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.4);
     }
     .brand-title {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 700;
-      letter-spacing: -0.2px;
+      letter-spacing: -0.3px;
       color: #fff;
       display: flex;
       align-items: center;
@@ -230,15 +242,15 @@ HTML_PAGE = """<!DOCTYPE html>
     }
     .version-tag {
       font-size: 0.72rem;
-      background: rgba(59, 130, 246, 0.15);
-      color: #93c5fd;
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      padding: 1px 7px;
+      background: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      padding: 2px 8px;
       border-radius: 20px;
       font-weight: 600;
     }
     .brand-sub {
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       color: var(--text-secondary);
     }
 
@@ -251,9 +263,11 @@ HTML_PAGE = """<!DOCTYPE html>
       display: flex;
       align-items: center;
       gap: 8px;
-      background: var(--bg-input);
+      background: var(--bg-surface-elevated);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       border: 1px solid var(--border-subtle);
-      padding: 5px 12px;
+      padding: 6px 14px;
       border-radius: 20px;
       font-size: 0.8rem;
     }
@@ -262,10 +276,15 @@ HTML_PAGE = """<!DOCTYPE html>
       height: 8px;
       border-radius: 50%;
       background: var(--success);
-      box-shadow: 0 0 8px var(--success);
+      box-shadow: 0 0 10px var(--success);
+      animation: pulseGlow 2s infinite ease-in-out;
     }
-    .status-dot.warn { background: var(--warning); box-shadow: 0 0 8px var(--warning); }
-    .status-dot.error { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.85); }
+    }
+    .status-dot.warn { background: var(--warning); box-shadow: 0 0 10px var(--warning); }
+    .status-dot.error { background: var(--danger); box-shadow: 0 0 10px var(--danger); }
 
     .header-right {
       display: flex;
@@ -278,38 +297,76 @@ HTML_PAGE = """<!DOCTYPE html>
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
+      gap: 8px;
       font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 500;
-      padding: 8px 14px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      padding: 9px 16px;
+      min-height: 40px;
       border-radius: var(--radius-sm);
       border: 1px solid transparent;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
       white-space: nowrap;
+      user-select: none;
     }
-    .btn:active { transform: translateY(1px); }
-    .btn-primary { background: var(--accent-blue); color: #fff; }
-    .btn-primary:hover { background: var(--accent-blue-hover); box-shadow: 0 2px 10px rgba(59, 130, 246, 0.35); }
-    .btn-secondary { background: var(--bg-surface-elevated); color: var(--text-primary); border-color: var(--border-default); }
-    .btn-secondary:hover { background: #273549; border-color: #475569; }
-    .btn-outline { background: transparent; color: var(--text-secondary); border-color: var(--border-default); }
-    .btn-outline:hover { color: #fff; border-color: var(--text-secondary); background: rgba(255, 255, 255, 0.03); }
-    .btn-danger { background: var(--danger-bg); color: #fca5a5; border-color: rgba(239, 68, 68, 0.3); }
-    .btn-danger:hover { background: rgba(239, 68, 68, 0.25); color: #fff; }
-    .btn-sm { padding: 5px 10px; font-size: 0.78rem; border-radius: 4px; }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: var(--accent-gradient);
+      color: #fff;
+      box-shadow: 0 2px 14px rgba(99, 102, 241, 0.35);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.55);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: var(--bg-surface-elevated);
+      color: var(--text-primary);
+      border-color: var(--border-default);
+    }
+    .btn-secondary:hover {
+      background: rgba(51, 65, 85, 0.8);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text-secondary);
+      border-color: var(--border-default);
+    }
+    .btn-outline:hover {
+      color: #fff;
+      border-color: var(--accent-primary);
+      background: rgba(99, 102, 241, 0.08);
+      transform: translateY(-1px);
+    }
+    .btn-danger {
+      background: var(--danger-bg);
+      color: #fca5a5;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+      color: #fff;
+    }
+    .btn-sm { padding: 6px 12px; min-height: 34px; font-size: 0.8rem; border-radius: 6px; }
     .btn-block { width: 100%; }
 
     /* Navigation Tabs */
     .nav-tabs {
       display: flex;
-      gap: 4px;
+      gap: 6px;
       background: var(--bg-surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-subtle);
       padding: 0 1.75rem;
+      overflow-x: auto;
+      scrollbar-width: none;
     }
+    .nav-tabs::-webkit-scrollbar { display: none; }
     .tab-btn {
       background: transparent;
       border: none;
@@ -317,42 +374,57 @@ HTML_PAGE = """<!DOCTYPE html>
       font-family: inherit;
       font-size: 0.88rem;
       font-weight: 500;
-      padding: 12px 16px;
+      padding: 13px 18px;
       cursor: pointer;
       border-bottom: 2px solid transparent;
-      transition: all 0.15s ease;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       gap: 8px;
+      white-space: nowrap;
+      outline: none;
     }
     .tab-btn:hover { color: var(--text-primary); }
-    .tab-btn.active { color: #fff; border-bottom-color: var(--accent-blue); font-weight: 600; }
+    .tab-btn.active {
+      color: #fff;
+      border-bottom-color: var(--accent-primary);
+      font-weight: 600;
+      text-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
+    }
 
     /* Main Container */
     .app-body {
       flex: 1;
-      padding: 1.5rem 1.75rem;
+      padding: 1.75rem;
       max-width: 1440px;
       width: 100%;
       margin: 0 auto;
     }
     .tab-content { display: none; }
-    .tab-content.active { display: block; animation: fadeIn 0.15s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+    .tab-content.active { display: block; animation: fadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
     /* KPI Cards Grid */
     .grid-kpi {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+      gap: 1.15rem;
+      margin-bottom: 1.75rem;
     }
     .kpi-card {
       background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 1.15rem;
+      padding: 1.25rem;
       box-shadow: var(--shadow-card);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .kpi-card:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px -6px rgba(0, 0, 0, 0.6), 0 0 16px rgba(99, 102, 241, 0.15);
     }
     .kpi-header {
       display: flex;
@@ -362,18 +434,19 @@ HTML_PAGE = """<!DOCTYPE html>
       font-size: 0.76rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
+      letter-spacing: 0.6px;
+      margin-bottom: 8px;
     }
     .kpi-value {
-      font-size: 1.45rem;
-      font-weight: 700;
+      font-size: 1.6rem;
+      font-weight: 800;
       color: #fff;
       font-family: var(--font-mono);
       margin-bottom: 4px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      letter-spacing: -0.5px;
     }
     .kpi-desc {
       font-size: 0.78rem;
@@ -381,17 +454,21 @@ HTML_PAGE = """<!DOCTYPE html>
     }
 
     /* Layout Grids */
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 1.5rem; margin-bottom: 1.75rem; }
     .card {
       background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
+      border-radius: var(--radius-lg);
+      padding: 1.4rem;
       box-shadow: var(--shadow-card);
+      transition: all 0.2s ease;
     }
+    .card:hover { border-color: rgba(99, 102, 241, 0.22); }
     .card-title {
-      font-size: 1rem;
-      font-weight: 600;
+      font-size: 1.05rem;
+      font-weight: 700;
       color: #fff;
       display: flex;
       align-items: center;
@@ -399,61 +476,64 @@ HTML_PAGE = """<!DOCTYPE html>
       margin-bottom: 4px;
     }
     .card-subtitle {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: var(--text-secondary);
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
     }
 
     /* Action Tiles */
     .action-tiles-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 0.85rem;
+      gap: 1rem;
     }
     .action-tile {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      padding: 1rem;
+      border-radius: var(--radius-md);
+      padding: 1.15rem;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      text-decoration: none;
     }
     .action-tile:hover {
-      border-color: var(--border-focus);
+      border-color: var(--accent-primary);
       background: var(--bg-card-hover);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.5), 0 0 16px rgba(99, 102, 241, 0.2);
     }
     .tile-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
-    .tile-icon { font-size: 1.5rem; }
-    .tile-title { font-size: 0.92rem; font-weight: 600; color: #fff; }
-    .tile-tag { font-size: 0.7rem; font-family: var(--font-mono); color: var(--accent-cyan); }
-    .tile-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 10px; }
-    .tile-footer { display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 8px; }
+    .tile-icon { font-size: 1.6rem; }
+    .tile-title { font-size: 0.95rem; font-weight: 700; color: #fff; }
+    .tile-tag { font-size: 0.72rem; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 500; }
+    .tile-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45; margin-bottom: 12px; }
+    .tile-footer { display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 10px; }
 
     /* Form Controls */
-    .form-group { margin-bottom: 1.15rem; }
-    .form-label { display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-label { display: flex; align-items: center; justify-content: space-between; font-size: 0.84rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 7px; }
     .input-wrapper { position: relative; display: flex; align-items: center; }
     input[type="text"], input[type="password"], input[type="number"], textarea, select {
       width: 100%;
       background: var(--bg-input);
       border: 1px solid var(--border-default);
       color: #fff;
-      padding: 9px 12px;
+      padding: 10px 14px;
+      min-height: 42px;
       border-radius: var(--radius-sm);
       font-size: 0.88rem;
       font-family: inherit;
       outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
       border-color: var(--border-focus);
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
     }
-    .input-toggle-btn { position: absolute; right: 8px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; font-size: 0.85rem; }
+    .input-toggle-btn { position: absolute; right: 10px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; font-size: 0.95rem; }
     .input-toggle-btn:hover { color: #fff; }
 
     /* Switch */
@@ -461,49 +541,129 @@ HTML_PAGE = """<!DOCTYPE html>
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 12px;
+      padding: 12px 14px;
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      transition: border-color 0.15s;
     }
-    .switch-title { font-size: 0.85rem; font-weight: 500; color: #fff; }
-    .switch-sub { font-size: 0.74rem; color: var(--text-muted); }
-    .switch { position: relative; display: inline-block; width: 42px; height: 22px; flex-shrink: 0; }
+    .switch-row:hover { border-color: rgba(255, 255, 255, 0.18); }
+    .switch-title { font-size: 0.88rem; font-weight: 600; color: #fff; }
+    .switch-sub { font-size: 0.76rem; color: var(--text-muted); }
+    .switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
       position: absolute; cursor: pointer;
       top: 0; left: 0; right: 0; bottom: 0;
       background-color: #334155;
       transition: .2s;
-      border-radius: 22px;
+      border-radius: 24px;
     }
     .slider:before {
       position: absolute; content: "";
-      height: 16px; width: 16px; left: 3px; bottom: 3px;
+      height: 18px; width: 18px; left: 3px; bottom: 3px;
       background-color: white;
       transition: .2s;
       border-radius: 50%;
     }
-    input:checked + .slider { background-color: var(--accent-blue); }
+    input:checked + .slider { background-color: var(--accent-primary); }
     input:checked + .slider:before { transform: translateX(20px); }
 
-    /* Live Preview Box */
-    .preview-card {
-      background: #0a0f1d;
-      border: 1px solid #1e293b;
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      margin-top: 10px;
+    /* Visual Toolbar Button */
+    .tool-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: var(--bg-surface-elevated); border: 1px solid var(--border-default);
+      color: var(--text-primary); font-family: inherit; font-size: 0.82rem; font-weight: 600;
+      padding: 7px 12px; min-height: 38px; min-width: 40px; border-radius: var(--radius-sm);
+      cursor: pointer; transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); outline: none;
     }
-    .preview-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; display: none; }
-    .preview-text { font-size: 0.85rem; color: #f1f5f9; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
-    .preview-btn { margin-top: 10px; display: none; background: #2563eb; color: #fff; padding: 7px 12px; border-radius: 4px; text-align: center; font-size: 0.82rem; font-weight: 600; text-decoration: none; }
+    .tool-btn:hover {
+      background: var(--bg-card-hover); border-color: var(--accent-primary);
+      color: #fff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    }
+    .tool-btn:active { transform: scale(0.96); }
+    .tool-btn:focus-visible { outline: 2px solid var(--accent-primary); }
+
+    /* Telegram Realistic Chat Mockup */
+    .tg-device-mockup {
+      background: #0f1621;
+      background-image: 
+        radial-gradient(circle at 100% 0%, rgba(99, 102, 241, 0.08), transparent 40%),
+        radial-gradient(circle at 0% 100%, rgba(6, 182, 212, 0.06), transparent 40%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      max-width: 520px;
+      margin: 0 auto 16px auto;
+      box-shadow: 0 12px 35px -6px rgba(0, 0, 0, 0.6);
+    }
+    .tg-chat-header {
+      display: flex; align-items: center; gap: 12px;
+      padding-bottom: 12px; margin-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .tg-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.95rem; color: #fff;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+    }
+    .tg-chat-meta { display: flex; flex-direction: column; }
+    .tg-channel-name {
+      font-weight: 600; font-size: 0.95rem; color: #fff;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tg-badge-check {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 14px; height: 14px; background: #38bdf8; color: #0c1524;
+      border-radius: 50%; font-size: 9px; font-weight: 900;
+    }
+    .tg-channel-subs { font-size: 0.75rem; color: #708499; }
+    .tg-post-bubble {
+      background: #182533; border-radius: 14px; border-bottom-left-radius: 4px;
+      padding: 12px; color: #f1f5f9; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .tg-post-img-wrap {
+      width: 100%; border-radius: 10px; overflow: hidden; margin-bottom: 10px; background: #0d1620;
+    }
+    .tg-post-img {
+      width: 100%; max-height: 280px; object-fit: cover; display: block;
+      transition: transform 0.3s ease;
+    }
+    .tg-post-img:hover { transform: scale(1.02); }
+    .tg-post-text {
+      font-size: 0.88rem; line-height: 1.5; color: #f1f5f9; white-space: pre-wrap; word-break: break-word;
+    }
+    .tg-post-text a { color: #64b5f6; text-decoration: none; }
+    .tg-post-text a:hover { text-decoration: underline; }
+    .tg-post-text blockquote {
+      border-left: 3px solid #6366f1; padding: 4px 8px; margin: 6px 0;
+      color: #cbd5e1; background: rgba(99, 102, 241, 0.08); border-radius: 0 6px 6px 0;
+    }
+    .tg-post-footer {
+      display: flex; align-items: center; justify-content: flex-end;
+      gap: 4px; margin-top: 6px; font-size: 0.72rem; color: #708499;
+    }
+    .tg-post-ticks { color: #38bdf8; letter-spacing: -1px; }
+    .tg-post-btn-wrap { margin-top: 8px; }
+    .tg-post-btn {
+      display: block; background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 9px;
+      color: #64b5f6; text-align: center; padding: 10px 14px; font-size: 0.88rem;
+      font-weight: 500; text-decoration: none; transition: background 0.15s, border-color 0.15s;
+      cursor: pointer;
+    }
+    .tg-post-btn:hover {
+      background: rgba(255, 255, 255, 0.12); border-color: rgba(100, 181, 246, 0.3);
+    }
 
     /* Console Terminal */
     .terminal-container {
       background: #05080f;
-      border: 1px solid #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: var(--radius-sm);
       padding: 12px;
       font-family: var(--font-mono);
@@ -525,20 +685,31 @@ HTML_PAGE = """<!DOCTYPE html>
     /* Toast */
     #toastContainer {
       position: fixed; bottom: 24px; right: 24px; z-index: 9999;
-      display: flex; flex-direction: column; gap: 8px;
-      max-width: 380px; width: calc(100% - 48px);
+      display: flex; flex-direction: column; gap: 10px;
+      max-width: 400px; width: calc(100% - 48px);
     }
     .toast {
-      background: var(--bg-surface-elevated); border: 1px solid var(--border-default);
-      color: #fff; padding: 12px 16px; border-radius: var(--radius-md);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      background: rgba(22, 32, 53, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-default);
+      color: #fff; padding: 13px 18px; border-radius: var(--radius-md);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      animation: slideIn 0.2s ease forwards; font-size: 0.85rem;
+      animation: slideIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards; font-size: 0.88rem;
     }
-    .toast.success { border-color: rgba(16, 185, 129, 0.4); }
-    .toast.error { border-color: rgba(239, 68, 68, 0.4); }
-    .toast.info { border-color: rgba(59, 130, 246, 0.4); }
+    .toast.success { border-color: rgba(16, 185, 129, 0.5); box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2); }
+    .toast.error { border-color: rgba(239, 68, 68, 0.5); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2); }
+    .toast.info { border-color: rgba(99, 102, 241, 0.5); box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2); }
     @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    @media (max-width: 768px) {
+      header { padding: 0.75rem 1rem; }
+      .nav-tabs { padding: 0 1rem; }
+      .app-body { padding: 1rem; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .btn { min-height: 44px; }
+    }
   </style>
 </head>
 <body>
@@ -720,7 +891,7 @@ HTML_PAGE = """<!DOCTYPE html>
 
           <div class="form-group">
             <label class="form-label">Тема подборки:</label>
-            <select id="compilationGenreSelect">
+            <select id="compilationGenreSelect" onchange="previewSelectedCompTheme(this.value)">
               <option value="auto">🔄 Автоматический выбор (по очереди без повторов)</option>
               <option value="must_watch">🏆 Золотая классика и шедевры (8.5+)</option>
               <option value="hidden_gems">💎 Недооценённые алмазы и скрытые жемчужины</option>
@@ -735,19 +906,45 @@ HTML_PAGE = """<!DOCTYPE html>
 
           <div class="form-group">
             <label class="form-label">Количество аниме в подборке (в 1 коллаже):</label>
-            <select id="compilationCountSelect">
+            <select id="compilationCountSelect" onchange="previewSelectedCompTheme(document.getElementById('compilationGenreSelect').value)">
               <option value="3">3 аниме (крупный постер)</option>
               <option value="4" selected>4 аниме (рекомендуется)</option>
               <option value="5">5 аниме (панорамный коллаж)</option>
             </select>
           </div>
 
-          <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:16px; font-size:0.8rem; color:#67e8f9; display:flex; align-items:center; gap:8px;">
+          <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:14px; font-size:0.8rem; color:#67e8f9; display:flex; align-items:center; gap:8px;">
             <span>🖼</span>
             <span>Все обложки склеиваются в <b>единый горизонтальный HD-коллаж</b> с номерами 1..N и шапкой AnimeVist!</span>
           </div>
 
-          <button class="btn btn-primary btn-block" onclick="publishCompilation()" style="margin-bottom:20px;">
+          <div class="form-label" style="margin-top:12px; font-weight:600; color:var(--text-primary);">
+            🖼 Предпросмотр карточки подборки в Telegram:
+          </div>
+
+          <div class="tg-device-mockup" style="margin-bottom:16px;">
+            <div class="tg-chat-header">
+              <div class="tg-avatar">AV</div>
+              <div class="tg-chat-meta">
+                <div class="tg-channel-name">
+                  AnimeVist <span class="tg-badge-check">✓</span>
+                </div>
+                <div class="tg-channel-subs">канал • #подборка</div>
+              </div>
+            </div>
+            <div class="tg-post-bubble">
+              <div class="tg-post-img-wrap" style="display:block;">
+                <img id="compPreviewImg" class="tg-post-img" alt="Обложка" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80">
+              </div>
+              <div id="compPreviewText" class="tg-post-text"></div>
+              <div class="tg-post-footer">
+                <span class="tg-post-time" id="compPreviewTime">14:30</span>
+                <span class="tg-post-ticks">✓✓</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-block" onclick="publishCompilation()" style="margin-bottom:18px;">
             🌟 Опубликовать выбранную подборку сейчас
           </button>
 
@@ -778,22 +975,23 @@ HTML_PAGE = """<!DOCTYPE html>
           <div class="card-subtitle">Создайте пост с форматированием, фото и кнопкой без ручного HTML-кодинга:</div>
 
           <div class="form-group">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
               <label class="form-label" style="margin-bottom:0;">Текст публикации:</label>
-              <button class="btn btn-outline btn-sm" type="button" onclick="autoFormatAnimeVistPost('customText')" style="background:linear-gradient(135deg, rgba(59,130,246,0.2) 0%, rgba(147,51,234,0.2) 100%); border-color:rgba(147,51,234,0.4); color:#c084fc; font-weight:600;">
+              <button class="btn btn-sm" type="button" onclick="autoFormatAnimeVistPost('customText')" style="background:var(--accent-gradient); color:#fff; font-weight:700; box-shadow:0 2px 10px rgba(99,102,241,0.35);">
                 ✨ Оформить в стиле AnimeVist
               </button>
             </div>
 
-            <!-- Visual Formatting Toolbar -->
-            <div class="editor-toolbar" style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px; background:var(--bg-surface); padding:6px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
-              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 10px; font-weight:700;" onclick="insertTag('customText', 'b')" title="Жирный">B</button>
-              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 10px; font-style:italic;" onclick="insertTag('customText', 'i')" title="Курсив">I</button>
-              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertLinkPrompt('customText')" title="Вставить ссылку">🔗 Ссылка</button>
-              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertTag('customText', 'blockquote')" title="Цитата">💬 Цитата</button>
-              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertSnippet('customText', '⭐️ <b>Рейтинг:</b> 8.6 / 10 (Shikimori)\n')" title="Вставить рейтинг">⭐️ Рейтинг</button>
-              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertSnippet('customText', '🎬 <b>Студия:</b> MAPPA\n📅 <b>Премьера:</b> 2026\n')" title="Студия и дата">🎬 Студия/Дата</button>
-              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertSnippet('customText', '\n\n#новости #анонс #animevist')" title="Хештеги">🏷 Хештеги</button>
+            <!-- Visual Formatting Toolbar (UI/UX Pro Max touch targets) -->
+            <div class="editor-toolbar" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; background:var(--bg-surface); padding:8px; border-radius:var(--radius-md); border:1px solid var(--border-subtle);">
+              <button type="button" class="tool-btn" onclick="insertTag('customText', 'b')" title="Жирный шрифт (Ctrl+B)"><b>B</b></button>
+              <button type="button" class="tool-btn" onclick="insertTag('customText', 'i')" title="Курсив (Ctrl+I)"><i>I</i></button>
+              <button type="button" class="tool-btn" onclick="insertTag('customText', 'tg-spoiler')" title="Спойлер (скрыть текст)">👁 Спойлер</button>
+              <button type="button" class="tool-btn" onclick="insertLinkPrompt('customText')" title="Вставить ссылку">🔗 Ссылка</button>
+              <button type="button" class="tool-btn" onclick="insertTag('customText', 'blockquote')" title="Цитата">💬 Цитата</button>
+              <button type="button" class="tool-btn" onclick="insertSnippet('customText', '⭐️ <b>Рейтинг:</b> 8.6 / 10 (Shikimori)\n')" title="Вставить рейтинг">⭐️ Рейтинг</button>
+              <button type="button" class="tool-btn" onclick="insertSnippet('customText', '🎬 <b>Студия:</b> MAPPA\n📅 <b>Премьера:</b> 2026\n')" title="Студия и дата">🎬 Студия/Дата</button>
+              <button type="button" class="tool-btn" onclick="insertSnippet('customText', '\n\n#новости #анонс #animevist')" title="Хештеги">🏷 Хештеги</button>
             </div>
 
             <textarea id="customText" rows="6" placeholder="Вставьте любой сырой текст или заметку — и нажмите «✨ Оформить в стиле AnimeVist», либо используйте кнопки панели форматирования..." oninput="updateCustomPreview()"></textarea>
@@ -816,14 +1014,37 @@ HTML_PAGE = """<!DOCTYPE html>
           </div>
 
           <!-- Preview -->
-          <div class="form-label" style="margin-top:10px;">Предварительный просмотр поста:</div>
-          <div class="preview-card">
-            <img id="previewImg" class="preview-img" alt="Постер">
-            <div id="previewText" class="preview-text">Текст вашего сообщения появится здесь...</div>
-            <a id="previewBtn" class="preview-btn" target="_blank">Кнопка</a>
+          <div class="form-label" style="margin-top:14px; font-weight:600; color:var(--text-primary);">
+            📱 Симуляция поста в Telegram-канале (Live Device Preview):
+          </div>
+          <div class="tg-device-mockup">
+            <div class="tg-chat-header">
+              <div class="tg-avatar">AV</div>
+              <div class="tg-chat-meta">
+                <div class="tg-channel-name">
+                  AnimeVist <span class="tg-badge-check">✓</span>
+                </div>
+                <div class="tg-channel-subs">канал • живой просмотр</div>
+              </div>
+            </div>
+
+            <div class="tg-post-bubble">
+              <div id="previewImgWrap" class="tg-post-img-wrap" style="display:none;">
+                <img id="previewImg" class="tg-post-img" alt="Постер">
+              </div>
+              <div id="previewText" class="tg-post-text">Текст вашего сообщения появится здесь...</div>
+              <div class="tg-post-footer">
+                <span class="tg-post-time" id="previewPostTime">14:30</span>
+                <span class="tg-post-ticks">✓✓</span>
+              </div>
+            </div>
+
+            <div id="previewBtnWrap" class="tg-post-btn-wrap" style="display:none;">
+              <a id="previewBtn" class="tg-post-btn" target="_blank">Кнопка</a>
+            </div>
           </div>
 
-          <div style="margin-top:15px;">
+          <div style="margin-top:16px;">
             <button class="btn btn-primary btn-block" onclick="sendCustomPost()">
               🚀 Опубликовать кастомный пост в канал
             </button>
@@ -1305,6 +1526,77 @@ HTML_PAGE = """<!DOCTYPE html>
       if (el) el.focus();
     }
 
+    const SAMPLE_THEMES = {
+      must_watch: {
+        title: "Золотая Классика и Шедевры Аниме (8.5+)",
+        banner: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80",
+        items: [
+          "1. 🏆 <b>«Стальной алхимик: Братство»</b> (Fullmetal Alchemist: Brotherhood)\\n⭐️ Рейтинг: <b>9.1</b> • Студия: Bones • 🎭 Сёнэн, Приключения",
+          "2. 🏆 <b>«Врата Штейна»</b> (Steins;Gate)\\n⭐️ Рейтинг: <b>9.0</b> • Студия: White Fox • 🎭 Фантастика, Триллер",
+          "3. 🏆 <b>«Атака титанов»</b> (Shingeki no Kyojin)\\n⭐️ Рейтинг: <b>8.9</b> • Студия: Wit Studio • 🎭 Экшен, Драма",
+          "4. 🏆 <b>«Охотник х Охотник»</b> (Hunter x Hunter)\\n⭐️ Рейтинг: <b>9.0</b> • Студия: Madhouse • 🎭 Приключения"
+        ]
+      },
+      hidden_gems: {
+        title: "Недооценённые Алмазы и Скрытые Жемчужины",
+        banner: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&q=80",
+        items: [
+          "1. 💎 <b>«Виви: Песнь флюоритового глаза»</b> (Vivy: Fluorite Eye's Song)\\n⭐️ Рейтинг: <b>8.4</b> • Студия: Wit Studio • 🎭 Киберпанк, Музыка",
+          "2. 💎 <b>«Парад смерти»</b> (Death Parade)\\n⭐️ Рейтинг: <b>8.2</b> • Студия: Madhouse • 🎭 Психология, Мистика",
+          "3. 💎 <b>«Пинг-понг»</b> (Ping Pong the Animation)\\n⭐️ Рейтинг: <b>8.6</b> • Студия: Tatsunoko • 🎭 Спорт, Драма",
+          "4. 💎 <b>«Дороро»</b> (Dororo)\\n⭐️ Рейтинг: <b>8.2</b> • Студия: MAPPA • 🎭 Экшен, Сверхъестественное"
+        ]
+      },
+      mindfuck: {
+        title: "Игры Разума, Психологические Триллеры и Детективы",
+        banner: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80",
+        items: [
+          "1. 🧠 <b>«Монстр»</b> (Monster)\\n⭐️ Рейтинг: <b>8.9</b> • Студия: Madhouse • 🎭 Детектив, Триллер",
+          "2. 🧠 <b>«Идеальная грусть»</b> (Perfect Blue)\\n⭐️ Рейтинг: <b>8.5</b> • Студия: Madhouse • 🎭 Психология",
+          "3. 🧠 <b>«Психопаспорт»</b> (Psycho-Pass)\\n⭐️ Рейтинг: <b>8.3</b> • Студия: Production I.G • 🎭 Киберпанк",
+          "4. 🧠 <b>«Тетрадь смерти»</b> (Death Note)\\n⭐️ Рейтинг: <b>8.6</b> • Студия: Madhouse • 🎭 Мистика, Триллер"
+        ]
+      },
+      cyberpunk_scifi: {
+        title: "Киберпанк, Космос и Научная Фантастика",
+        banner: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800&q=80",
+        items: [
+          "1. 🌆 <b>«Киберпанк: Бегущие по краю»</b> (Edgerunners)\\n⭐️ Рейтинг: <b>8.6</b> • Студия: Trigger • 🎭 Киберпанк",
+          "2. 🌆 <b>«Ковбой Бибоп»</b> (Cowboy Bebop)\\n⭐️ Рейтинг: <b>8.8</b> • Студия: Sunrise • 🎭 Космос, Джаз",
+          "3. 🌆 <b>«Призрак в доспехах: Синдром одиночки»</b>\\n⭐️ Рейтинг: <b>8.4</b> • Студия: Production I.G • 🎭 Sci-Fi",
+          "4. 🌆 <b>«Эрго Прокси»</b> (Ergo Proxy)\\n⭐️ Рейтинг: <b>7.9</b> • Студия: Manglobe • 🎭 Постапокалипсис"
+        ]
+      }
+    };
+
+    function previewSelectedCompTheme(themeKey) {
+      if (!themeKey || themeKey === 'auto') themeKey = 'must_watch';
+      const theme = SAMPLE_THEMES[themeKey] || SAMPLE_THEMES.must_watch;
+      const count = parseInt(document.getElementById('compilationCountSelect')?.value || 4);
+      const items = theme.items.slice(0, count);
+
+      const pText = document.getElementById('compPreviewText');
+      const pImg = document.getElementById('compPreviewImg');
+      const pTime = document.getElementById('compPreviewTime');
+
+      if (pTime) {
+        const now = new Date();
+        pTime.textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+      }
+
+      if (pImg) pImg.src = theme.banner;
+      if (pText) {
+        let html = `✨ <b>ТОП-${count}: ${theme.title}</b><br><br>`;
+        html += `Отборная коллекция тайтлов для вашего идеального вечера:<br><br>`;
+        html += items.join('<br><br>') + '<br><br>';
+        html += `━━━━━━━━━━━━━━━<br>`;
+        html += `💬 Обсудить подборку: @animevist_chat<br>`;
+        html += `🍿 Приложение: AnimeVist v1.0<br><br>`;
+        html += `#подборка #топаниме #animevist`;
+        pText.innerHTML = html;
+      }
+    }
+
     function updateCustomPreview() {
       const text = document.getElementById('customText').value;
       const photo = document.getElementById('customPhoto').value.trim();
@@ -1312,24 +1604,48 @@ HTML_PAGE = """<!DOCTYPE html>
       const btnUrl = document.getElementById('customBtnUrl').value.trim();
 
       const pText = document.getElementById('previewText');
+      const pImgWrap = document.getElementById('previewImgWrap');
       const pImg = document.getElementById('previewImg');
+      const pBtnWrap = document.getElementById('previewBtnWrap');
       const pBtn = document.getElementById('previewBtn');
+      const pTime = document.getElementById('previewPostTime');
 
-      pText.innerHTML = text ? text.replace(/\\n/g, '<br>') : 'Текст вашего сообщения появится здесь...';
+      if (pTime) {
+        const now = new Date();
+        pTime.textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+      }
 
-      if (photo && photo.startsWith('http')) {
+      if (text) {
+        let formatted = text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/&lt;b&gt;(.*?)&lt;\\/b&gt;/gi, '<b>$1</b>')
+          .replace(/&lt;i&gt;(.*?)&lt;\\/i&gt;/gi, '<i>$1</i>')
+          .replace(/&lt;tg-spoiler&gt;(.*?)&lt;\\/tg-spoiler&gt;/gi, '<span style="background:#334155; filter:blur(3px); cursor:pointer;" onclick="this.style.filter=\'none\'">$1</span>')
+          .replace(/&lt;blockquote&gt;([\\s\\S]*?)&lt;\\/blockquote&gt;/gi, '<blockquote>$1</blockquote>')
+          .replace(/&lt;a href=["\'](.*?)["\']&gt;(.*?)&lt;\\/a&gt;/gi, '<a href="$1" target="_blank">$2</a>')
+          .replace(/\\n/g, '<br>');
+        pText.innerHTML = formatted;
+      } else {
+        pText.innerHTML = '<span style="color:var(--text-muted); font-style:italic;">Текст вашего сообщения появится здесь...</span>';
+      }
+
+      if (photo && (photo.startsWith('http://') || photo.startsWith('https://'))) {
         pImg.src = photo;
+        if (pImgWrap) pImgWrap.style.display = 'block';
         pImg.style.display = 'block';
       } else {
+        if (pImgWrap) pImgWrap.style.display = 'none';
         pImg.style.display = 'none';
       }
 
       if (btnText) {
         pBtn.innerText = btnText;
         pBtn.href = btnUrl || '#';
-        pBtn.style.display = 'block';
+        if (pBtnWrap) pBtnWrap.style.display = 'block';
       } else {
-        pBtn.style.display = 'none';
+        if (pBtnWrap) pBtnWrap.style.display = 'none';
       }
     }
 
@@ -1509,6 +1825,21 @@ HTML_PAGE = """<!DOCTYPE html>
     window.onload = () => {
       loadData();
       setInterval(fetchLogsOnly, 4000);
+      previewSelectedCompTheme('must_watch');
+      updateCustomPreview();
+
+      const customArea = document.getElementById('customText');
+      if (customArea) {
+        customArea.addEventListener('keydown', (e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+            e.preventDefault();
+            insertTag('customText', 'b');
+          } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'i') {
+            e.preventDefault();
+            insertTag('customText', 'i');
+          }
+        });
+      }
     };
   </script>
 </body>
