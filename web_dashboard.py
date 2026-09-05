@@ -457,10 +457,10 @@ HTML_PAGE = """<!DOCTYPE html>
 
   <div class="container">
     <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('tab-dashboard')">📊 Панель управления</button>
-      <button class="tab-btn" onclick="switchTab('tab-settings')">⚙️ Настройки Telegram</button>
-      <button class="tab-btn" onclick="switchTab('tab-cloud')">☁️ Работа 24/7 без ПК</button>
-      <button class="tab-btn" onclick="switchTab('tab-logs')">📜 Журнал событий</button>
+      <button class="tab-btn active" onclick="switchTab('tab-dashboard', this)">📊 Панель управления</button>
+      <button class="tab-btn" onclick="switchTab('tab-settings', this)">⚙️ Настройки Telegram</button>
+      <button class="tab-btn" onclick="switchTab('tab-cloud', this)">☁️ Работа 24/7 без ПК</button>
+      <button class="tab-btn" onclick="switchTab('tab-logs', this)">📜 Журнал событий</button>
     </div>
 
     <!-- TAB 1: DASHBOARD -->
@@ -640,11 +640,17 @@ HTML_PAGE = """<!DOCTYPE html>
   </div>
 
   <script>
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      event.target.classList.add('active');
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const p = document.getElementById(tabId);
+      if (p) p.classList.add('active');
+      if (el) {
+        el.classList.add('active');
+      } else {
+        const btn = document.querySelector(`button[onclick*="'${tabId}'"]`);
+        if (btn) btn.classList.add('active');
+      }
     }
 
     async function loadData() {
@@ -656,13 +662,16 @@ HTML_PAGE = """<!DOCTYPE html>
           document.getElementById('botStatusText').innerText = 'Бот онлайн: @' + data.bot.username;
         }
         if (data.config) {
-          document.getElementById('cfg_token').value = data.config.telegram.bot_token || '';
-          document.getElementById('cfg_channel').value = data.config.telegram.channel_id || '';
-          document.getElementById('cfg_chat').value = data.config.app.chat_invite_url || '';
-          document.getElementById('cfg_interval').value = data.config.announcer.check_interval_seconds || 300;
-          document.getElementById('cfg_releases_enabled').checked = data.config.announcer.enable_series_releases !== false;
-          document.getElementById('cfg_news_enabled').checked = data.config.announcer.enable_anime_news !== false;
-          document.getElementById('channelNameVal').innerText = data.config.telegram.channel_id || 'Не задан';
+          const tg = data.config.telegram || {};
+          const app = data.config.app || {};
+          const ann = data.config.announcer || {};
+          document.getElementById('cfg_token').value = tg.bot_token || '';
+          document.getElementById('cfg_channel').value = tg.channel_id || '';
+          document.getElementById('cfg_chat').value = app.chat_invite_url || '';
+          document.getElementById('cfg_interval').value = ann.check_interval_seconds || 300;
+          document.getElementById('cfg_releases_enabled').checked = ann.enable_series_releases !== false;
+          document.getElementById('cfg_news_enabled').checked = ann.enable_anime_news !== false;
+          document.getElementById('channelNameVal').innerText = tg.channel_id || 'Не задан';
         }
         if (data.last_check) {
           document.getElementById('lastCheckVal').innerText = data.last_check;
@@ -859,15 +868,40 @@ class DashboardHandler(BaseHTTPRequestHandler):
 
 def start_server(port=None):
     if port is None:
-        port = int(os.environ.get("PORT", 7860))
+        preferred_port = int(os.environ.get("PORT", 5000))
+        ports_to_try = [preferred_port, 5001, 5050, 8080]
+    else:
+        ports_to_try = [port]
     
-    server = HTTPServer(("0.0.0.0", port), DashboardHandler)
+    server = None
+    actual_port = None
+    for p in ports_to_try:
+        try:
+            server = HTTPServer(("0.0.0.0", p), DashboardHandler)
+            actual_port = p
+            break
+        except OSError:
+            continue
+
+    if server is None:
+        server = HTTPServer(("0.0.0.0", 0), DashboardHandler)
+        actual_port = server.server_port
+
     print(f"\n=======================================================")
     print(f"  🌟 ANIME VIST ВЕБ-ИНТЕРФЕЙС УПРАВЛЕНИЯ ЗАПУЩЕН")
-    print(f"  🌐 Локальный адрес: http://localhost:{port}")
-    print(f"  ☁️ Серверный адрес: http://0.0.0.0:{port}")
+    print(f"  🌐 Локальный адрес: http://localhost:{actual_port}")
+    print(f"  ☁️ Серверный адрес: http://0.0.0.0:{actual_port}")
     print(f"=======================================================\n")
-    log_event(f"Веб-сервер запущен на порту {port}", "info")
+    log_event(f"Веб-сервер запущен на порту {actual_port}", "info")
+
+    import webbrowser
+    def open_browser():
+        time.sleep(0.8)
+        try:
+            webbrowser.open(f"http://localhost:{actual_port}")
+        except Exception:
+            pass
+    threading.Thread(target=open_browser, daemon=True).start()
 
     # Start 24/7 background worker thread
     global daemon_thread
