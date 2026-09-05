@@ -1,13 +1,13 @@
 @echo off
-chcp 65001 > nul
-title AnimeVist - [2/4] Автопостинг аниме-новостей (#news)
+title AnimeVist - Post News
 cd /d "%~dp0"
 
-echo ========================================================
-echo   [2/4] МОДУЛЬ АНИМЕ-НОВОСТЕЙ И АНОНСОВ (#news)
-echo ========================================================
-echo.
+where python >nul 2>nul
+if errorlevel 1 (
+    if exist "%LOCALAPPDATA%\Programs\Python\Python311\python.exe" (
+        set "PATH=%LOCALAPPDATA%\Programs\Python\Python311;%LOCALAPPDATA%\Programs\Python\Python311\Scripts;%PATH%"
+    )
+)
 
-python news_announcer.py
-echo.
+python main.py --news
 pause
