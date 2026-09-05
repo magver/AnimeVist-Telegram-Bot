@@ -1,21 +1,13 @@
 @echo off
-chcp 65001 > nul
-title AnimeVist - [4/4] Закрепленный навигатор и FAQ (Pin)
+title AnimeVist - Pin Navigator
 cd /d "%~dp0"
 
-echo ========================================================
-echo   [4/4] ЗАКРЕПЛЕННЫЙ НАВИГАТОР, ССЫЛКИ И FAQ (Pin)
-echo ========================================================
-echo.
+where python >nul 2>nul
+if errorlevel 1 (
+    if exist "%LOCALAPPDATA%\Programs\Python\Python311\python.exe" (
+        set "PATH=%LOCALAPPDATA%\Programs\Python\Python311;%LOCALAPPDATA%\Programs\Python\Python311\Scripts;%PATH%"
+    )
+)
 
-python -c "
-from pinned_navigator import publish_pinned_navigator
-confirm = input('Отправить и закрепить главный навигационный пост в канале? (y/n): ').strip().lower()
-if confirm in ['y', 'yes', 'д', 'да']:
-    publish_pinned_navigator(dry_run=False)
-else:
-    print('Отправка отменена.')
-"
-
-echo.
+python main.py --pinned
 pause
