@@ -11,9 +11,25 @@ on:
         options:
           - 'check_releases'
           - 'check_news'
+          - 'publish_compilation'
           - 'publish_patchnote'
           - 'pin_navigator'
           - 'test_bot_connection'
+      genre:
+        description: 'Тема подборки (только для publish_compilation, оставьте пустым для авто-выбора):'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - 'auto'
+          - 'cyberpunk'
+          - 'psychological'
+          - 'fantasy'
+          - 'romance'
+          - 'dark_fantasy'
+          - 'isekai'
+          - 'classics'
+          - 'comedy'
 
 jobs:
   execute-action:
@@ -32,11 +48,18 @@ jobs:
       - name: Execute selected action
         run: |
           ACTION="${{ github.event.inputs.action }}"
-          echo "Executing action: $ACTION"
+          GENRE="${{ github.event.inputs.genre }}"
+          echo "Executing action: $ACTION with genre: $GENRE"
           if [ "$ACTION" = "check_releases" ]; then
             python series_announcer.py
           elif [ "$ACTION" = "check_news" ]; then
             python news_announcer.py
+          elif [ "$ACTION" = "publish_compilation" ]; then
+            if [ "$GENRE" = "auto" ] || [ -z "$GENRE" ]; then
+              python compilations_announcer.py
+            else
+              python compilations_announcer.py --genre="$GENRE"
+            fi
           elif [ "$ACTION" = "publish_patchnote" ]; then
             python patchnote_publisher.py
           elif [ "$ACTION" = "pin_navigator" ]; then
@@ -49,10 +72,10 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add seen_episodes.json seen_news.json config.json || true
+          git add seen_episodes.json seen_news.json seen_compilations.json config.json || true
           if git diff --staged --quiet; then
-            echo "No changes."
+            echo "No changes to commit."
           else
-            git commit -m "Manual run update state [skip ci]"
+            git commit -m "Manual action state update [skip ci]"
             git push
           fi

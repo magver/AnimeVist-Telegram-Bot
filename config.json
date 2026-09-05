@@ -16,7 +16,11 @@
     "check_interval_seconds": 300,
     "enable_series_releases": true,
     "enable_anime_news": true,
-    "max_releases_per_cycle": 3
+    "max_releases_per_cycle": 3,
+    "enable_compilations": true,
+    "compilations_interval_hours": 6,
+    "include_genre_hashtags": true,
+    "show_chat_button": false
   },
   "cloud_storage": {
     "provider": "supabase",
@@ -25,6 +29,6 @@
     "upstash_rest_token": "",
     "supabase_url": "https://zuciuwunelfqhhhohhyn.supabase.co",
     "supabase_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1Y2l1d3VuZWxmcWhoaG9oaHluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwODgwOTcsImV4cCI6MjEwMzY2NDA5N30.JTxCO-GWXtLLBWLwE5I6AsmXvKrGNGQ9J6sS7QM4ITQ",
-    "last_sync": "2026-09-06 00:17:31"
+    "last_sync": "2026-09-06 00:45:01"
   }
 }

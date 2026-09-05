@@ -49,7 +49,6 @@
       font-size: 14px;
     }
 
-    /* Top App Header */
     header {
       background: var(--bg-surface);
       border-bottom: 1px solid var(--border-subtle);
@@ -61,451 +60,182 @@
       top: 0;
       z-index: 100;
     }
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+    .header-left { display: flex; align-items: center; gap: 14px; }
     .logo-badge {
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
       border: 1px solid rgba(59, 130, 246, 0.4);
       border-radius: var(--radius-md);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1.1rem; color: #fff;
     }
     .brand-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: -0.2px;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 1.05rem; font-weight: 700; letter-spacing: -0.2px; color: #fff;
+      display: flex; align-items: center; gap: 8px;
     }
     .version-tag {
-      font-size: 0.72rem;
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 1px 7px;
-      border-radius: 20px;
-      font-weight: 600;
+      font-size: 0.72rem; background: rgba(16, 185, 129, 0.15); color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3); padding: 1px 7px;
+      border-radius: 20px; font-weight: 600;
     }
-    .brand-sub {
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-    }
+    .brand-sub { font-size: 0.75rem; color: var(--text-secondary); }
 
-    .header-center {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+    .header-center { display: flex; align-items: center; gap: 16px; }
     .status-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--bg-input);
-      border: 1px solid var(--border-subtle);
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
+      display: flex; align-items: center; gap: 8px; background: var(--bg-input);
+      border: 1px solid var(--border-subtle); padding: 5px 12px;
+      border-radius: 20px; font-size: 0.8rem;
     }
     .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 8px var(--success);
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--success); box-shadow: 0 0 8px var(--success);
     }
-    .status-dot.offline {
-      background: var(--danger);
-      box-shadow: 0 0 8px var(--danger);
-    }
+    .status-dot.error { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .header-right { display: flex; align-items: center; gap: 10px; }
 
-    /* Layout & Navigation */
-    .app-body {
-      max-width: 1360px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 1.5rem 1.75rem;
-      flex: 1;
-    }
-
-    .nav-tabs {
-      display: flex;
-      gap: 6px;
-      background: var(--bg-surface);
-      padding: 5px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-subtle);
-      margin-bottom: 1.5rem;
-      overflow-x: auto;
-    }
-    .tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-secondary);
-      font-family: inherit;
-      font-size: 0.86rem;
-      font-weight: 500;
-      padding: 8px 16px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      white-space: nowrap;
-      transition: all 0.15s ease;
-    }
-    .tab-btn:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.04);
-    }
-    .tab-btn.active {
-      color: #fff;
-      background: var(--bg-surface-elevated);
-      font-weight: 600;
-      border: 1px solid var(--border-default);
-    }
-
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    /* Grid & Cards */
-    .grid-kpi {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    @media (max-width: 1024px) {
-      .grid-kpi { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 600px) {
-      .grid-kpi { grid-template-columns: 1fr; }
-    }
-
-    .kpi-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
-      box-shadow: var(--shadow-card);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .kpi-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      color: var(--text-secondary);
-      font-size: 0.8rem;
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-    .kpi-value {
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .kpi-desc {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.25rem;
-    }
-    @media (max-width: 900px) {
-      .grid-2 { grid-template-columns: 1fr; }
-    }
-
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 1.5rem;
-      box-shadow: var(--shadow-card);
-      margin-bottom: 1.25rem;
-    }
-    .card-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 1rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-    .card-subtitle {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      margin-top: -0.5rem;
-      margin-bottom: 1.25rem;
-    }
-
-    /* Buttons */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border-radius: var(--radius-sm);
-      font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      border: 1px solid transparent;
-      transition: all 0.15s ease;
-      text-decoration: none;
-      white-space: nowrap;
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      font-family: inherit; font-size: 0.85rem; font-weight: 500;
+      padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid transparent;
+      cursor: pointer; transition: all 0.15s ease; text-decoration: none; white-space: nowrap;
     }
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .btn-primary {
-      background: var(--accent-blue);
-      color: #fff;
-    }
-    .btn-primary:hover:not(:disabled) {
-      background: var(--accent-blue-hover);
-    }
-    .btn-secondary {
-      background: var(--bg-surface-elevated);
-      color: var(--text-primary);
-      border-color: var(--border-default);
-    }
-    .btn-secondary:hover:not(:disabled) {
-      background: #28364c;
-      border-color: #475569;
-    }
-    .btn-outline {
-      background: transparent;
-      color: var(--text-secondary);
-      border-color: var(--border-default);
-    }
-    .btn-outline:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.05);
-      color: #fff;
-    }
-    .btn-sm { padding: 5px 10px; font-size: 0.78rem; }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--accent-blue); color: #fff; }
+    .btn-primary:hover { background: var(--accent-blue-hover); box-shadow: 0 2px 10px rgba(59, 130, 246, 0.35); }
+    .btn-secondary { background: var(--bg-surface-elevated); color: var(--text-primary); border-color: var(--border-default); }
+    .btn-secondary:hover { background: #273549; border-color: #475569; }
+    .btn-outline { background: transparent; color: var(--text-secondary); border-color: var(--border-default); }
+    .btn-outline:hover { color: #fff; border-color: var(--text-secondary); background: rgba(255, 255, 255, 0.03); }
+    .btn-sm { padding: 5px 10px; font-size: 0.78rem; border-radius: 4px; }
     .btn-block { width: 100%; }
 
-    /* Action Tiles */
-    .action-tiles-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    .nav-tabs {
+      display: flex; gap: 4px; background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle); padding: 0 1.75rem;
     }
-    @media (max-width: 650px) {
-      .action-tiles-grid { grid-template-columns: 1fr; }
+    .tab-btn {
+      background: transparent; border: none; color: var(--text-secondary);
+      font-family: inherit; font-size: 0.88rem; font-weight: 500;
+      padding: 12px 16px; cursor: pointer; border-bottom: 2px solid transparent;
+      transition: all 0.15s ease; display: flex; align-items: center; gap: 8px;
     }
-    .action-tile {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 1.1rem;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      text-decoration: none;
-    }
-    .action-tile:hover {
-      border-color: var(--border-default);
-      background: var(--bg-card-hover);
-      transform: translateY(-1px);
-    }
-    .tile-top {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    .tile-icon {
-      width: 34px;
-      height: 34px;
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-    }
-    .tile-title {
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: #fff;
-    }
-    .tile-tag {
-      font-size: 0.7rem;
-      font-family: var(--font-mono);
-      color: var(--accent-cyan);
-    }
-    .tile-desc {
-      font-size: 0.78rem;
-      color: var(--text-secondary);
-      line-height: 1.4;
-      margin-bottom: 10px;
-    }
-    .tile-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      border-top: 1px solid var(--border-subtle);
-      padding-top: 8px;
-    }
+    .tab-btn:hover { color: var(--text-primary); }
+    .tab-btn.active { color: #fff; border-bottom-color: var(--accent-blue); font-weight: 600; }
 
-    /* Form Controls */
-    .form-group {
-      margin-bottom: 1.25rem;
+    .app-body {
+      flex: 1; padding: 1.5rem 1.75rem; max-width: 1440px; width: 100%; margin: 0 auto;
     }
-    .form-label {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: var(--text-secondary);
-      margin-bottom: 6px;
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.15s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+
+    .grid-kpi {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem; margin-bottom: 1.5rem;
     }
-    .input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
+    .kpi-card {
+      background: var(--bg-card); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md); padding: 1.15rem; box-shadow: var(--shadow-card);
     }
-    input[type="text"], input[type="password"], input[type="number"], textarea {
-      width: 100%;
-      background: var(--bg-input);
-      border: 1px solid var(--border-default);
-      color: #fff;
-      padding: 9px 12px;
-      border-radius: var(--radius-sm);
-      font-size: 0.88rem;
-      font-family: inherit;
-      outline: none;
+    .kpi-header {
+      display: flex; align-items: center; justify-content: space-between;
+      color: var(--text-muted); font-size: 0.76rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+    }
+    .kpi-value {
+      font-size: 1.45rem; font-weight: 700; color: #fff;
+      font-family: var(--font-mono); margin-bottom: 4px; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    .kpi-desc { font-size: 0.78rem; color: var(--text-secondary); }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md); padding: 1.25rem; box-shadow: var(--shadow-card);
+    }
+    .card-title { font-size: 1rem; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .card-subtitle { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem; }
+
+    .action-tiles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0.85rem; }
+    .action-tile {
+      background: var(--bg-surface); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm); padding: 1rem; cursor: pointer;
+      transition: all 0.15s ease; display: flex; flex-direction: column;
+      justify-content: space-between; text-decoration: none;
+    }
+    .action-tile:hover { border-color: var(--border-focus); background: var(--bg-card-hover); transform: translateY(-2px); }
+    .tile-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+    .tile-icon { font-size: 1.5rem; }
+    .tile-title { font-size: 0.92rem; font-weight: 600; color: #fff; }
+    .tile-tag { font-size: 0.7rem; font-family: var(--font-mono); color: var(--accent-cyan); }
+    .tile-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 10px; }
+    .tile-footer { display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 8px; }
+
+    .form-group { margin-bottom: 1.15rem; }
+    .form-label { display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; }
+    .input-wrapper { position: relative; display: flex; align-items: center; }
+    input[type="text"], input[type="password"], input[type="number"], textarea, select {
+      width: 100%; background: var(--bg-input); border: 1px solid var(--border-default);
+      color: #fff; padding: 9px 12px; border-radius: var(--radius-sm);
+      font-size: 0.88rem; font-family: inherit; outline: none;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
-    input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+      border-color: var(--border-focus); box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
     }
-    .input-toggle-btn {
-      position: absolute;
-      right: 8px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      padding: 4px;
-      font-size: 0.85rem;
-    }
+    .input-toggle-btn { position: absolute; right: 8px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; font-size: 0.85rem; }
     .input-toggle-btn:hover { color: #fff; }
 
-    /* Switch */
     .switch-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 12px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-sm);
-      margin-bottom: 8px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 12px; background: var(--bg-surface); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm); margin-bottom: 8px;
     }
     .switch-title { font-size: 0.85rem; font-weight: 500; color: #fff; }
     .switch-sub { font-size: 0.74rem; color: var(--text-muted); }
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 42px;
-      height: 22px;
-      flex-shrink: 0;
-    }
+    .switch { position: relative; display: inline-block; width: 42px; height: 22px; flex-shrink: 0; }
     .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
-      position: absolute; cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #334155;
-      transition: .2s;
-      border-radius: 22px;
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #334155; transition: .2s; border-radius: 22px;
     }
     .slider:before {
-      position: absolute; content: "";
-      height: 16px; width: 16px; left: 3px; bottom: 3px;
-      background-color: white;
-      transition: .2s;
-      border-radius: 50%;
+      position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
+      background-color: white; transition: .2s; border-radius: 50%;
     }
     input:checked + .slider { background-color: var(--accent-blue); }
     input:checked + .slider:before { transform: translateX(20px); }
 
-    /* Toast */
+    /* Live Preview */
+    .preview-card {
+      background: #0a0f1d; border: 1px solid #1e293b; border-radius: var(--radius-sm);
+      padding: 14px; margin-top: 10px;
+    }
+    .preview-img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; display: none; }
+    .preview-text { font-size: 0.85rem; color: #f1f5f9; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+    .preview-btn { margin-top: 10px; display: none; background: #2563eb; color: #fff; padding: 7px 12px; border-radius: 4px; text-align: center; font-size: 0.82rem; font-weight: 600; text-decoration: none; }
+
     #toastContainer {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-width: 380px;
-      width: calc(100% - 48px);
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      display: flex; flex-direction: column; gap: 8px; max-width: 380px; width: calc(100% - 48px);
     }
     .toast {
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border-default);
-      color: #fff;
-      padding: 12px 16px;
-      border-radius: var(--radius-md);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      animation: slideIn 0.2s ease forwards;
-      font-size: 0.85rem;
+      background: var(--bg-surface-elevated); border: 1px solid var(--border-default);
+      color: #fff; padding: 12px 16px; border-radius: var(--radius-md);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); display: flex; align-items: center;
+      justify-content: space-between; gap: 12px; animation: slideIn 0.2s ease forwards; font-size: 0.85rem;
     }
     .toast.success { border-color: rgba(16, 185, 129, 0.4); }
     .toast.error { border-color: rgba(239, 68, 68, 0.4); }
     .toast.info { border-color: rgba(59, 130, 246, 0.4); }
-    @keyframes slideIn {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
+    @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   </style>
 </head>
 <body>
 
-  <!-- Top System Header -->
+  <!-- Header -->
   <header>
     <div class="header-left">
       <div class="logo-badge">AV</div>
@@ -529,60 +259,49 @@
       <button class="btn btn-secondary btn-sm" onclick="sendTestMessage()">
         💬 Тест канала
       </button>
-      <button class="btn btn-outline btn-sm" onclick="loadFromSupabase()" title="Обновить данные из базы">
-        🔄 Обновить
+      <button class="btn btn-outline btn-sm" onclick="loadFromSupabase()" title="Обновить">
+        🔄
       </button>
-      <a href="https://github.com/magver/AnimeVist-Telegram-Bot/actions" target="_blank" class="btn btn-primary btn-sm">
+      <a href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank" class="btn btn-primary btn-sm">
         ⚡ Запуск Actions ➔
       </a>
     </div>
   </header>
 
-  <!-- Main Body Container -->
-  <main class="app-body">
-    <!-- Tab Navigation -->
-    <nav class="nav-tabs">
-      <button class="tab-btn active" onclick="switchTab('tab-overview', this)">📊 Мониторинг & KPI</button>
-      <button class="tab-btn" onclick="switchTab('tab-broadcast', this)">💬 Экспресс-пост</button>
-      <button class="tab-btn" onclick="switchTab('tab-config', this)">⚙️ Конфигурация в Supabase</button>
-      <button class="tab-btn" onclick="switchTab('tab-actions', this)">⚡ Ручной запуск модулей</button>
-    </nav>
+  <!-- Navigation Tabs -->
+  <nav class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('tab-overview', this)">📊 Мониторинг & KPI</button>
+    <button class="tab-btn" onclick="switchTab('tab-broadcast', this)">✍️ Кастомный пост</button>
+    <button class="tab-btn" onclick="switchTab('tab-compilations', this)">🌟 Топ-подборки</button>
+    <button class="tab-btn" onclick="switchTab('tab-config', this)">⚙️ Конфигурация в Supabase</button>
+    <button class="tab-btn" onclick="switchTab('tab-actions', this)">⚡ Ручной запуск модулей</button>
+  </nav>
 
+  <!-- Main Body -->
+  <main class="app-body">
     <!-- TAB 1: OVERVIEW -->
     <section id="tab-overview" class="tab-content active">
       <div class="grid-kpi">
         <div class="kpi-card">
-          <div class="kpi-header">
-            <span>TELEGRAM BOT</span>
-            <span>🤖</span>
-          </div>
+          <div class="kpi-header"><span>TELEGRAM BOT</span><span>🤖</span></div>
           <div class="kpi-value" id="kpiBotUser">Проверка...</div>
           <div class="kpi-desc" id="kpiBotId">ID: —</div>
         </div>
 
         <div class="kpi-card">
-          <div class="kpi-header">
-            <span>ЦЕЛЕВОЙ КАНАЛ</span>
-            <span>📢</span>
-          </div>
+          <div class="kpi-header"><span>ЦЕЛЕВОЙ КАНАЛ</span><span>📢</span></div>
           <div class="kpi-value" id="kpiChannel">—</div>
-          <div class="kpi-desc" id="kpiChannelLink">Официальный вещатель</div>
+          <div class="kpi-desc">Официальный вещатель</div>
         </div>
 
         <div class="kpi-card">
-          <div class="kpi-header">
-            <span>ОБЛАЧНАЯ БАЗА</span>
-            <span>🐘</span>
-          </div>
+          <div class="kpi-header"><span>ОБЛАЧНАЯ БАЗА</span><span>🐘</span></div>
           <div class="kpi-value" style="color:var(--success);" id="kpiStorageMode">Supabase Live</div>
           <div class="kpi-desc" id="kpiLastSync">zuciuwunelfqhhhohhyn</div>
         </div>
 
         <div class="kpi-card">
-          <div class="kpi-header">
-            <span>ПЛАНИРОВЩИК 24/7</span>
-            <span>⏱️</span>
-          </div>
+          <div class="kpi-header"><span>ПЛАНИРОВЩИК 24/7</span><span>⏱️</span></div>
           <div class="kpi-value" style="color:#38bdf8;" id="kpiScheduler">GitHub Actions</div>
           <div class="kpi-desc">Каждые 15 минут</div>
         </div>
@@ -598,60 +317,48 @@
               <div class="tile-top">
                 <div class="tile-icon">📺</div>
                 <div>
-                  <div class="tile-title">1. Выход серий</div>
-                  <div class="tile-tag">#release</div>
+                  <div class="tile-title">Новые серии</div>
+                  <div class="tile-tag">#онгоинг</div>
                 </div>
               </div>
-              <div class="tile-desc">Сканирование AnimeVost + Shikimori и отправка серий.</div>
-              <div class="tile-footer">
-                <span>GitHub Actions</span>
-                <span class="btn btn-outline btn-sm">Запустить ➔</span>
-              </div>
+              <div class="tile-desc">Точный номер серии, постеры без 404, навигация по жанрам.</div>
+              <div class="tile-footer"><span>GitHub Actions</span><span class="btn btn-outline btn-sm">Запуск ➔</span></div>
             </a>
 
             <a class="action-tile" href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank">
               <div class="tile-top">
                 <div class="tile-icon">📰</div>
                 <div>
-                  <div class="tile-title">2. Аниме-новости</div>
-                  <div class="tile-tag">#news</div>
+                  <div class="tile-title">Аниме-новости</div>
+                  <div class="tile-tag">#новости</div>
                 </div>
               </div>
-              <div class="tile-desc">Официальные анонсы и трейлеры индустрии.</div>
-              <div class="tile-footer">
-                <span>GitHub Actions</span>
-                <span class="btn btn-outline btn-sm">Запустить ➔</span>
-              </div>
+              <div class="tile-desc">Сбор из Shikimori, MAL и ANN с категоризацией и переводом.</div>
+              <div class="tile-footer"><span>GitHub Actions</span><span class="btn btn-outline btn-sm">Запуск ➔</span></div>
             </a>
 
-            <a class="action-tile" href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank">
+            <div class="action-tile" onclick="switchTab('tab-compilations', document.querySelectorAll('.tab-btn')[2])">
               <div class="tile-top">
-                <div class="tile-icon">🚀</div>
+                <div class="tile-icon">🌟</div>
                 <div>
-                  <div class="tile-title">3. Патчноут релиза</div>
-                  <div class="tile-tag">#patchnote</div>
+                  <div class="tile-title">Топ-подборки</div>
+                  <div class="tile-tag">#подборка</div>
                 </div>
               </div>
-              <div class="tile-desc">Публикация свежего релиза из GitHub.</div>
-              <div class="tile-footer">
-                <span>GitHub Actions</span>
-                <span class="btn btn-outline btn-sm">Запустить ➔</span>
-              </div>
-            </a>
+              <div class="tile-desc">Киберпанк, Фэнтези, Триллеры, Романтика и Золотая классика.</div>
+              <div class="tile-footer"><span>Выбрать жанр</span><span class="btn btn-outline btn-sm">Открыть ➔</span></div>
+            </div>
 
             <a class="action-tile" href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank">
               <div class="tile-top">
                 <div class="tile-icon">📌</div>
                 <div>
-                  <div class="tile-title">4. Навигатор и Pin</div>
+                  <div class="tile-title">Навигатор</div>
                   <div class="tile-tag">Pin FAQ</div>
                 </div>
               </div>
-              <div class="tile-desc">Главный закрепленный пост со ссылками на APK и EXE.</div>
-              <div class="tile-footer">
-                <span>GitHub Actions</span>
-                <span class="btn btn-outline btn-sm">Запустить ➔</span>
-              </div>
+              <div class="tile-desc">Закрепленный пост со ссылками на APK и EXE.</div>
+              <div class="tile-footer"><span>GitHub Actions</span><span class="btn btn-outline btn-sm">Запуск ➔</span></div>
             </a>
           </div>
         </div>
@@ -689,29 +396,81 @@
       </div>
     </section>
 
-    <!-- TAB 2: BROADCAST -->
+    <!-- TAB 2: CUSTOM POST STUDIO -->
     <section id="tab-broadcast" class="tab-content">
-      <div class="card" style="max-width: 760px; margin: 0 auto;">
-        <div class="card-title">💬 Прямая Публикация Сообщения в Канал</div>
-        <div class="card-subtitle">Отправка форматированного объявления прямо из браузера в ваш Telegram-канал:</div>
+      <div class="card" style="max-width: 800px; margin: 0 auto;">
+        <div class="card-title">✍️ Студия Кастомного Поста в Telegram-Канал</div>
+        <div class="card-subtitle">Создайте форматированное сообщение с картинкой и инлайн-кнопкой прямо из браузера:</div>
 
         <div class="form-group">
-          <label class="form-label">Текст сообщения (поддерживает HTML &lt;b&gt;, &lt;i&gt;, &lt;a&gt;, &lt;code&gt;):</label>
-          <textarea id="customMsgText" rows="6" placeholder="Привет! 🎬 Мы опубликовали новое обновление..."></textarea>
+          <label class="form-label">Текст сообщения (HTML &lt;b&gt;, &lt;i&gt;, &lt;a&gt;, &lt;code&gt;):</label>
+          <textarea id="customMsgText" rows="6" placeholder="Привет! 🎬 Мы добавили новую подборку тайтлов..." oninput="updateLivePreview()"></textarea>
         </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <label style="display:flex; align-items:center; gap:8px; font-size:0.8rem; color:var(--text-secondary); cursor:pointer;">
-            <input type="checkbox" id="customMsgDisablePreview"> Отключить предпросмотр ссылок
-          </label>
-          <button class="btn btn-primary" onclick="sendDirectMessage()">
-            🚀 Опубликовать в Telegram
+        <div class="form-group">
+          <label class="form-label">URL изображения / постера (опционально):</label>
+          <input type="text" id="customPhotoUrl" placeholder="https://example.com/poster.jpg" oninput="updateLivePreview()">
+        </div>
+
+        <div class="grid-2" style="margin-bottom:0; gap:10px;">
+          <div class="form-group">
+            <label class="form-label">Текст кнопки (опционально):</label>
+            <input type="text" id="customBtnText" placeholder="Смотреть онлайн" oninput="updateLivePreview()">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ссылка кнопки (URL):</label>
+            <input type="text" id="customBtnUrl" placeholder="https://t.me/..." oninput="updateLivePreview()">
+          </div>
+        </div>
+
+        <div class="form-label" style="margin-top:12px;">Предварительный просмотр:</div>
+        <div class="preview-card">
+          <img id="livePreviewImg" class="preview-img" alt="Постер">
+          <div id="livePreviewText" class="preview-text">Текст вашего сообщения появится здесь...</div>
+          <a id="livePreviewBtn" class="preview-btn" target="_blank">Кнопка</a>
+        </div>
+
+        <div style="margin-top:16px;">
+          <button class="btn btn-primary btn-block" onclick="sendCustomPostDirect()">
+            🚀 Опубликовать пост в Telegram-канал
           </button>
         </div>
       </div>
     </section>
 
-    <!-- TAB 3: CONFIGURATION -->
+    <!-- TAB 3: COMPILATIONS -->
+    <section id="tab-compilations" class="tab-content">
+      <div class="card" style="max-width: 800px; margin: 0 auto;">
+        <div class="card-title">🌟 Публикатор Топ-Подборок Аниме (#подборка)</div>
+        <div class="card-subtitle">Выберите интересующий жанр и опубликуйте готовую иллюстрированную подборку прямо сейчас:</div>
+
+        <div class="form-group">
+          <label class="form-label">Жанр / Тема подборки:</label>
+          <select id="webCompilationThemeSelect" onchange="previewSelectedTheme(this.value)">
+            <option value="cyberpunk">🌆 Киберпанк & Фантастика</option>
+            <option value="psychological">🧠 Психологические триллеры & Детективы</option>
+            <option value="fantasy">⚔️ Эпическое фэнтези 8.5+</option>
+            <option value="romance">💖 Романтика & Повседневность</option>
+            <option value="dark_fantasy">🗡 Тёмное фэнтези & Экшен</option>
+            <option value="isekai">🌀 Захватывающие исекаи & Попаданцы</option>
+            <option value="classics">🏆 Золотая классика аниме</option>
+            <option value="comedy">😂 Безумные комедии для настроения</option>
+          </select>
+        </div>
+
+        <div class="form-label">Предпросмотр карточки подборки:</div>
+        <div class="preview-card" style="margin-bottom:16px;">
+          <img id="compPreviewImg" class="preview-img" style="display:block;" alt="Обложка">
+          <div id="compPreviewText" class="preview-text"></div>
+        </div>
+
+        <button class="btn btn-primary btn-block" onclick="sendCompilationDirect()">
+          🌟 Опубликовать эту подборку в Telegram-канал
+        </button>
+      </div>
+    </section>
+
+    <!-- TAB 4: CONFIGURATION -->
     <section id="tab-config" class="tab-content">
       <div class="card" style="max-width: 800px; margin: 0 auto;">
         <div class="card-title">⚙️ Настройки Telegram (Синхронизируются с Supabase)</div>
@@ -746,15 +505,13 @@
         </div>
 
         <div class="form-group">
-          <div class="form-label">
-            <span>ID Администратора:</span>
-          </div>
+          <div class="form-label"><span>ID Администратора:</span></div>
           <input type="text" id="cfg_admin" placeholder="869155357">
         </div>
 
         <div class="switch-row">
           <div>
-            <div class="switch-title">Автопостинг новых серий (#release)</div>
+            <div class="switch-title">Автопостинг новых серий (#онгоинг)</div>
             <div class="switch-sub">Публиковать серии онгоингов из AnimeVost и Shikimori</div>
           </div>
           <label class="switch">
@@ -765,13 +522,57 @@
 
         <div class="switch-row">
           <div>
-            <div class="switch-title">Автопостинг аниме-новостей (#news)</div>
-            <div class="switch-sub">Публиковать официальные новости индустрии и трейлеры</div>
+            <div class="switch-title">Автопостинг аниме-новостей (#новости)</div>
+            <div class="switch-sub">Сбор из Shikimori, MyAnimeList и ANN с авто-переводом</div>
           </div>
           <label class="switch">
             <input type="checkbox" id="cfg_news_enabled" checked>
             <span class="slider"></span>
           </label>
+        </div>
+
+        <div class="switch-row">
+          <div>
+            <div class="switch-title">Автопостинг топ-подборок (#подборка)</div>
+            <div class="switch-sub">Регулярная публикация коллекций лучших тайтлов по жанрам</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="cfg_compilations_enabled" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="switch-row">
+          <div>
+            <div class="switch-title">Жанровые хештеги к сериям (#фэнтези #онгоинг)</div>
+            <div class="switch-sub">Быстрая фильтрация по жанрам для подписчиков канала</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="cfg_genre_hashtags_enabled" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="switch-row">
+          <div>
+            <div class="switch-title">Кнопка «Обсудить серию в чате»</div>
+            <div class="switch-sub">Показывать инлайн-кнопку чата (если ссылка задана)</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="cfg_chat_button_enabled">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="grid-2" style="margin-top:14px;">
+          <div class="form-group">
+            <label class="form-label">Интервал серий/новостей (сек):</label>
+            <input type="number" id="cfg_interval" value="300" min="30" step="30">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Интервал подборок (часов):</label>
+            <input type="number" id="cfg_comp_hours" value="6" min="1" step="1">
+          </div>
         </div>
 
         <div style="margin-top:25px;">
@@ -782,17 +583,17 @@
       </div>
     </section>
 
-    <!-- TAB 4: MANUAL ACTIONS -->
+    <!-- TAB 5: MANUAL GITHUB ACTIONS -->
     <section id="tab-actions" class="tab-content">
       <div class="card" style="max-width: 800px; margin: 0 auto;">
         <div class="card-title">⚡ Ручной Запуск через GitHub Actions</div>
-        <div class="card-subtitle">GitHub предоставляет бесплатные серверы для выполнения задач в 1 клик с телефона:</div>
+        <div class="card-subtitle">GitHub предоставляет бесплатные облачные серверы для выполнения задач в 1 клик с телефона:</div>
 
         <div style="display:flex; flex-direction:column; gap:12px;">
           <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:14px; display:flex; justify-content:space-between; align-items:center;">
             <div>
               <div style="font-weight:600; color:#fff;">📺 Выход новых серий</div>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Проверить релизы прямо сейчас</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Проверить релизы и выложить свежие серии</div>
             </div>
             <a href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank" class="btn btn-primary btn-sm">
               Запустить в GitHub ➔
@@ -802,7 +603,17 @@
           <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:14px; display:flex; justify-content:space-between; align-items:center;">
             <div>
               <div style="font-weight:600; color:#fff;">📰 Аниме-новости</div>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Проверить свежие трейлеры и анонсы</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Собрать трейлеры и новости индустрии</div>
+            </div>
+            <a href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank" class="btn btn-primary btn-sm">
+              Запустить в GitHub ➔
+            </a>
+          </div>
+
+          <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:14px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:600; color:#fff;">🌟 Топ-подборка аниме</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Опубликовать подборку по выбранному жанру</div>
             </div>
             <a href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank" class="btn btn-primary btn-sm">
               Запустить в GitHub ➔
@@ -818,22 +629,12 @@
               Запустить в GitHub ➔
             </a>
           </div>
-
-          <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:14px; display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div style="font-weight:600; color:#fff;">📌 Закрепить навигатор</div>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Отправить и закрепить пост-навигатор</div>
-            </div>
-            <a href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank" class="btn btn-primary btn-sm">
-              Запустить в GitHub ➔
-            </a>
-          </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Toast Notification Container -->
+  <!-- Toast Container -->
   <div id="toastContainer"></div>
 
   <script>
@@ -841,6 +642,105 @@
     const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1Y2l1d3VuZWxmcWhoaG9oaHluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwODgwOTcsImV4cCI6MjEwMzY2NDA5N30.JTxCO-GWXtLLBWLwE5I6AsmXvKrGNGQ9J6sS7QM4ITQ";
 
     let currentConfig = null;
+
+    const THEMES_DATA = {
+      cyberpunk: {
+        title: "ТОП-4: Культовый Киберпанк и Фантастика 🌆",
+        desc: "Мрачное будущее, передовые технологии и неоновые мегаполисы:",
+        tags: "#киберпанк #фантастика",
+        poster: "https://shikimori.one/system/animes/original/42310.jpg",
+        items: [
+          "1️⃣ <b>«Киберпанк: Бегущие по краю»</b> / <i>Cyberpunk: Edgerunners</i>\\n⭐️ <b>8.62</b> | 🎭 Экшен, Фантастика\\n📝 Парень из трущоб теряет всё и становится наемником в безжалостном Найт-Сити.",
+          "2️⃣ <b>«Психопаспорт»</b> / <i>Psycho-Pass</i>\\n⭐️ <b>8.34</b> | 🎭 Детектив, Триллер\\n📝 Система «Сивилла» вычисляет преступный коэффициент еще до совершения преступления.",
+          "3️⃣ <b>«Призрак в доспехах»</b> / <i>Ghost in the Shell</i>\\n⭐️ <b>8.28</b> | 🎭 Экшен, Меха\\n📝 Майор Мотоко Кусанаги расследует киберпреступления на грани человечности.",
+          "4️⃣ <b>«Эрго Прокси»</b> / <i>Ergo Proxy</i>\\n⭐️ <b>7.91</b> | 🎭 Детектив, Психология\\n📝 Загадки города-купола, где андроиды внезапно обретают душу."
+        ]
+      },
+      psychological: {
+        title: "ТОП-4: Психологические Триллеры и Детективы 🧠",
+        desc: "Напряженные сюжеты, игры разума и неожиданные сюжетные твисты:",
+        tags: "#триллер #психология #детектив",
+        poster: "https://shikimori.one/system/animes/original/1535.jpg",
+        items: [
+          "1️⃣ <b>«Тетрадь смерти»</b> / <i>Death Note</i>\\n⭐️ <b>8.62</b> | 🎭 Мистика, Детектив\\n📝 Интеллектуальная дуэль школьника с тетрадью бога смерти и гениального сыщика L.",
+          "2️⃣ <b>«Монстр»</b> / <i>Monster</i>\\n⭐️ <b>8.87</b> | 🎭 Драма, Триллер\\n📝 Хирург спасает жизнь мальчику, не подозревая, что взрастил чудовище.",
+          "3️⃣ <b>«Врата Штейна»</b> / <i>Steins;Gate</i>\\n⭐️ <b>9.07</b> | 🎭 Фантастика, Триллер\\n📝 Случайное изобретение машины времени в микроволновке втягивает друзей в заговор.",
+          "4️⃣ <b>«Из нового света»</b> / <i>Shinsekai yori</i>\\n⭐️ <b>8.27</b> | 🎭 Драма, Фантастика\\n📝 Утопическое общество телекинетиков скрывает леденящую тайну."
+        ]
+      },
+      fantasy: {
+        title: "ТОП-4: Шедевры Фэнтези с Оценкой 8.5+ ⚔️",
+        desc: "Грандиозные миры, магия и незабываемые приключения:",
+        tags: "#фэнтези #приключения #эпик",
+        poster: "https://shikimori.one/system/animes/original/52991.jpg",
+        items: [
+          "1️⃣ <b>«Провожающая в последний путь Фрирен»</b> / <i>Sousou no Frieren</i>\\n⭐️ <b>9.25</b> | 🎭 Фэнтези, Драма\\n📝 Бессмертная эльфийка отправляется в путь, чтобы понять человеческие чувства.",
+          "2️⃣ <b>«Стальной алхимик: Братство»</b> / <i>Fullmetal Alchemist</i>\\n⭐️ <b>9.11</b> | 🎭 Сёнэн, Фэнтези\\n📝 Братья Элрики ищут философский камень, чтобы вернуть утраченные тела.",
+          "3️⃣ <b>«Охотник х Охотник (2011)»</b> / <i>Hunter x Hunter</i>\\n⭐️ <b>9.04</b> | 🎭 Экшен, Приключения\\n📝 Гон отправляется на смертельно опасный экзамен Охотников ради поисков отца.",
+          "4️⃣ <b>«Клеймор»</b> / <i>Claymore</i>\\n⭐️ <b>7.80</b> | 🎭 Тёмное фэнтези, Экшен\\n📝 Воительницы-полудемоны с серебряными глазами очищают континент от чудовищ."
+        ]
+      },
+      romance: {
+        title: "ТОП-4: Романтика, от которой Теплеет на Душе 💖",
+        desc: "Искренние чувства, неловкие признания и ламповая атмосфера:",
+        tags: "#романтика #повседневность #комедия",
+        poster: "https://shikimori.one/system/animes/original/37999.jpg",
+        items: [
+          "1️⃣ <b>«Госпожа Кагуя: В любви как на войне»</b> / <i>Kaguya-sama</i>\\n⭐️ <b>8.89</b> | 🎭 Комедия, Романтика\\n📝 Два гения студсовета ведут войну умов за первое признание в чувствах.",
+          "2️⃣ <b>«Хоримия»</b> / <i>Horimiya</i>\\n⭐️ <b>8.19</b> | 🎭 Школа, Романтика\\n📝 Два разных старшеклассника открывают друг другу свои тайные стороны.",
+          "3️⃣ <b>«Как и ожидалось, моя школьная жизнь не задалась»</b> / <i>Oregairu</i>\\n⭐️ <b>8.24</b> | 🎭 Драма, Романтика\\n📝 Циничный школьник Хатиман против воли разбирается с чужими проблемами.",
+          "4️⃣ <b>«Кланнад: Продолжение истории»</b> / <i>Clannad: After Story</i>\\n⭐️ <b>8.93</b> | 🎭 Драма, Романтика\\n📝 Трогательная до слез история взросления, семьи и настоящей любви."
+        ]
+      },
+      dark_fantasy: {
+        title: "ТОП-4: Бескомпромиссное Тёмное Фэнтези и Экшен 🗡",
+        desc: "Суровые законы выживания, жестокие схватки и неоднозначные герои:",
+        tags: "#тёмное_фэнтези #экшен #драма",
+        poster: "https://shikimori.one/system/animes/original/37521.jpg",
+        items: [
+          "1️⃣ <b>«Сага о Винланде»</b> / <i>Vinland Saga</i>\\n⭐️ <b>8.75</b> | 🎭 Экшен, Приключения\\n📝 Юный Торфинн жаждет мести за отца в кровавую эпоху викингов.",
+          "2️⃣ <b>«Берсерк (1997)»</b> / <i>Berserk</i>\\n⭐️ <b>8.57</b> | 🎭 Тёмное фэнтези, Военное\\n📝 Одинокий наемник Гатс встречает Гриффита и вступает в Отряд Сокола.",
+          "3️⃣ <b>«Атака титанов»</b> / <i>Attack on Titan</i>\\n⭐️ <b>8.55</b> | 🎭 Экшен, Детектив\\n📝 Остатки человечества ведут отчаянную войну с гигантскими людоедами.",
+          "4️⃣ <b>«Магическая битва»</b> / <i>Jujutsu Kaisen</i>\\n⭐️ <b>8.59</b> | 🎭 Сверхъестественное, Экшен\\n📝 Юдзи проглатывает проклятый палец древнего демона ради друзей."
+        ]
+      },
+      isekai: {
+        title: "ТОП-4: Захватывающие Исекаи с Необычным Сюжетом 🌀",
+        desc: "Попаданцы в другие миры, где всё пошло не по стандартному сценарию:",
+        tags: "#исекай #фэнтези #приключения",
+        poster: "https://shikimori.one/system/animes/original/39535.jpg",
+        items: [
+          "1️⃣ <b>«Реинкарнация безработного»</b> / <i>Mushoku Tensei</i>\\n⭐️ <b>8.65</b> | 🎭 Магия, Приключения\\n📝 34-летний затворник получает второй шанс прожить достойную жизнь с мечом и магией.",
+          "2️⃣ <b>«Re:Zero — жизнь с нуля в другом мире»</b> / <i>Re:Zero</i>\\n⭐️ <b>8.23</b> | 🎭 Триллер, Драма\\n📝 Субару возвращается во времени только после своей гибели.",
+          "3️⃣ <b>«Этот замечательный мир! (KonoSuba)»</b> / <i>KonoSuba</i>\\n⭐️ <b>8.10</b> | 🎭 Комедия, Пародия\\n📝 Казума берет с собой бесполезную богиню Акву и чудаковатую пати.",
+          "4️⃣ <b>«О моём перерождении в слизь»</b> / <i>Tensei Slime</i>\\n⭐️ <b>8.12</b> | 🎭 Фэнтези, Сёнэн\\n📝 Офисный клерк перерождается слизью и строит процветающую федерацию монстров."
+        ]
+      },
+      classics: {
+        title: "ТОП-4: Золотая Классика, которую Обязан Посмотреть Каждый 🏆",
+        desc: "Легендарные тайтлы, навсегда изменившие мировую анимацию:",
+        tags: "#классика #шедевр #топ_аниме",
+        poster: "https://shikimori.one/system/animes/original/1.jpg",
+        items: [
+          "1️⃣ <b>«Ковбой Бибоп»</b> / <i>Cowboy Bebop</i>\\n⭐️ <b>8.75</b> | 🎭 Фантастика, Вестерн\\n📝 Охотники за головами бороздят Солнечную систему под звуки джаза.",
+          "2️⃣ <b>«Евангелион»</b> / <i>Neon Genesis Evangelion</i>\\n⭐️ <b>8.36</b> | 🎭 Меха, Психология\\n📝 Подростки пилотируют биороботов против таинственных Ангелов.",
+          "3️⃣ <b>«Гуррен-Лаганн»</b> / <i>Tengen Toppa Gurren Lagann</i>\\n⭐️ <b>8.63</b> | 🎭 Экшен, Меха\\n📝 Симон и Камина бурят путь наверх сквозь пространство.",
+          "4️⃣ <b>«Крутой учитель Онидзука»</b> / <i>Great Teacher Onizuka</i>\\n⭐️ <b>8.70</b> | 🎭 Комедия, Школа\\n📝 Бывший байкер становится учителем самого проблемного класса."
+        ]
+      },
+      comedy: {
+        title: "ТОП-4: Безумные Комедии для Отличного Настроения 😂",
+        desc: "Море отборного юмора, ярких персонажей и гарантированный заряд смеха:",
+        tags: "#комедия #пародия #позитив",
+        poster: "https://shikimori.one/system/animes/original/918.jpg",
+        items: [
+          "1️⃣ <b>«Гинтама»</b> / <i>Gintama</i>\\n⭐️ <b>8.93</b> | 🎭 Пародия, Экшен\\n📝 Самураи, инопланетяне и мастер абсурдного юмора Гинтоки Саката.",
+          "2️⃣ <b>«Необъятный океан»</b> / <i>Grand Blue</i>\\n⭐️ <b>8.44</b> | 🎭 Комедия, Студенты\\n📝 Студенческая жизнь дайвинг-клуба, полная вечеринок и крепкой дружбы.",
+          "3️⃣ <b>«Несладкая жизнь псионика Сайки К.»</b> / <i>Saiki Kusuo</i>\\n⭐️ <b>8.41</b> | 🎭 Комедия, Сверхъестественное\\n📝 Могущественный экстрасенс мечтает о тихой жизни среди чудаков.",
+          "4️⃣ <b>«Моб Психо 100»</b> / <i>Mob Psycho 100</i>\\n⭐️ <b>8.48</b> | 🎭 Экшен, Комедия\\n📝 Скромный школьник с чудовищной психической силой пытается жить обычной жизнью."
+        ]
+      }
+    };
 
     function showToast(message, type = 'info', duration = 3500) {
       const c = document.getElementById('toastContainer');
@@ -876,6 +776,156 @@
       }
     }
 
+    function updateLivePreview() {
+      const text = document.getElementById('customMsgText').value;
+      const photo = document.getElementById('customPhotoUrl').value.trim();
+      const btnText = document.getElementById('customBtnText').value.trim();
+      const btnUrl = document.getElementById('customBtnUrl').value.trim();
+
+      const pText = document.getElementById('livePreviewText');
+      const pImg = document.getElementById('livePreviewImg');
+      const pBtn = document.getElementById('livePreviewBtn');
+
+      pText.innerHTML = text ? text.replace(/\n/g, '<br>') : 'Текст вашего сообщения появится здесь...';
+
+      if (photo && photo.startsWith('http')) {
+        pImg.src = photo;
+        pImg.style.display = 'block';
+      } else {
+        pImg.style.display = 'none';
+      }
+
+      if (btnText) {
+        pBtn.innerText = btnText;
+        pBtn.href = btnUrl || '#';
+        pBtn.style.display = 'block';
+      } else {
+        pBtn.style.display = 'none';
+      }
+    }
+
+    function previewSelectedTheme(themeKey) {
+      const t = THEMES_DATA[themeKey] || THEMES_DATA['cyberpunk'];
+      const appName = (currentConfig && currentConfig.app && currentConfig.app.name) || 'AnimeVist';
+      
+      const lines = [
+        `🌟 <b>${t.title}</b>`,
+        `<i>${t.desc}</i>`,
+        '',
+        ...t.items,
+        '',
+        `✨ <i>Смотрите эти тайтлы в высоком качестве в приложении ${appName}!</i>`,
+        `#подборка #топ_аниме ${t.tags} #чтопосмотреть #${appName.toLowerCase()}`
+      ];
+
+      const fullText = lines.join('\n');
+      document.getElementById('compPreviewText').innerHTML = fullText.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
+      document.getElementById('compPreviewImg').src = t.poster;
+    }
+
+    async function sendCompilationDirect() {
+      const token = document.getElementById('cfg_token').value.trim();
+      const channel = document.getElementById('cfg_channel').value.trim();
+      if (!token || !channel) {
+        showToast("Укажите токен и ID канала в конфигурации!", "error");
+        return;
+      }
+
+      const key = document.getElementById('webCompilationThemeSelect').value;
+      const t = THEMES_DATA[key] || THEMES_DATA['cyberpunk'];
+      const appName = (currentConfig && currentConfig.app && currentConfig.app.name) || 'AnimeVist';
+
+      const lines = [
+        `🌟 <b>${t.title}</b>\n`,
+        `<i>${t.desc}</i>\n`,
+        ...t.items.map(it => it.replace(/\\n/g, '\n') + '\n'),
+        `✨ <i>Смотрите эти тайтлы в высоком качестве в приложении ${appName}!</i>\n`,
+        `#подборка #топ_аниме ${t.tags} #чтопосмотреть #${appName.toLowerCase()}`
+      ];
+      const caption = lines.join('\n');
+
+      showToast("Публикация подборки в Telegram...", "info");
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: channel,
+            photo: t.poster,
+            caption: caption,
+            parse_mode: "HTML"
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showToast("✅ Топ-подборка успешно опубликована в канале!", "success");
+        } else {
+          showToast(`Ошибка: ${data.description}`, "error", 5000);
+        }
+      } catch (e) {
+        showToast("Ошибка связи с Telegram API: " + e.message, "error");
+      }
+    }
+
+    async function sendCustomPostDirect() {
+      const text = document.getElementById('customMsgText').value.trim();
+      if (!text) {
+        showToast("Введите текст публикации", "error");
+        return;
+      }
+      const token = document.getElementById('cfg_token').value.trim();
+      const channel = document.getElementById('cfg_channel').value.trim();
+      if (!token || !channel) {
+        showToast("Укажите токен и ID канала в конфигурации!", "error");
+        return;
+      }
+
+      const photo = document.getElementById('customPhotoUrl').value.trim();
+      const btnText = document.getElementById('customBtnText').value.trim();
+      const btnUrl = document.getElementById('customBtnUrl').value.trim();
+
+      let reply_markup = undefined;
+      if (btnText && btnUrl && btnUrl.startsWith('http')) {
+        reply_markup = {
+          inline_keyboard: [[{ text: btnText, url: btnUrl }]]
+        };
+      }
+
+      showToast("Публикация в канал...", "info");
+      try {
+        let endpoint = `https://api.telegram.org/bot${token}/sendMessage`;
+        let payload = {
+          chat_id: channel,
+          parse_mode: "HTML",
+          reply_markup: reply_markup
+        };
+
+        if (photo && photo.startsWith('http')) {
+          endpoint = `https://api.telegram.org/bot${token}/sendPhoto`;
+          payload.photo = photo;
+          payload.caption = text;
+        } else {
+          payload.text = text;
+        }
+
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showToast("Пост успешно опубликован в канале!", "success");
+          document.getElementById('customMsgText').value = '';
+          updateLivePreview();
+        } else {
+          showToast(`Ошибка: ${data.description}`, "error", 5000);
+        }
+      } catch (e) {
+        showToast("Ошибка связи с Telegram API", "error");
+      }
+    }
+
     async function loadFromSupabase() {
       try {
         const url = `${SUPABASE_URL}/rest/v1/bot_config?id=eq.animevist_main&select=*`;
@@ -898,6 +948,11 @@
           document.getElementById('cfg_admin').value = tg.admin_id || '';
           document.getElementById('cfg_releases_enabled').checked = ann.enable_series_releases !== false;
           document.getElementById('cfg_news_enabled').checked = ann.enable_anime_news !== false;
+          document.getElementById('cfg_compilations_enabled').checked = ann.enable_compilations !== false;
+          document.getElementById('cfg_genre_hashtags_enabled').checked = ann.include_genre_hashtags !== false;
+          document.getElementById('cfg_chat_button_enabled').checked = ann.show_chat_button === true;
+          document.getElementById('cfg_interval').value = ann.check_interval_seconds || 300;
+          document.getElementById('cfg_comp_hours').value = ann.compilations_interval_hours || 6;
 
           document.getElementById('kpiChannel').innerText = tg.channel_id || 'Не задан';
           document.getElementById('overviewLastSync').innerText = rows[0].updated_at ? new Date(rows[0].updated_at).toLocaleString('ru-RU') : 'Только что';
@@ -905,10 +960,8 @@
           document.getElementById('headerStatusText').innerText = 'Supabase активна';
           document.getElementById('headerDot').className = 'status-dot';
 
-          // Check Telegram Bot
-          if (tg.bot_token) {
-            checkTelegramBot(tg.bot_token);
-          }
+          if (tg.bot_token) checkTelegramBot(tg.bot_token);
+          previewSelectedTheme(document.getElementById('webCompilationThemeSelect').value);
         } else {
           showToast("Конфиг пока не найден в базе. Нажмите 'Сохранить настройки'.", "info");
         }
@@ -943,8 +996,14 @@
       tg.channel_id = document.getElementById('cfg_channel').value.trim();
       tg.admin_id = document.getElementById('cfg_admin').value.trim();
       app.chat_invite_url = document.getElementById('cfg_chat').value.trim();
+      
       ann.enable_series_releases = document.getElementById('cfg_releases_enabled').checked;
       ann.enable_anime_news = document.getElementById('cfg_news_enabled').checked;
+      ann.enable_compilations = document.getElementById('cfg_compilations_enabled').checked;
+      ann.include_genre_hashtags = document.getElementById('cfg_genre_hashtags_enabled').checked;
+      ann.show_chat_button = document.getElementById('cfg_chat_button_enabled').checked;
+      ann.check_interval_seconds = parseInt(document.getElementById('cfg_interval').value) || 300;
+      ann.compilations_interval_hours = parseFloat(document.getElementById('cfg_comp_hours').value) || 6;
 
       currentConfig.telegram = tg;
       currentConfig.app = app;
@@ -982,14 +1041,14 @@
         showToast("Сначала укажите токен и ID канала в настройках!", "error");
         return;
       }
-      showToast("Отправка проверочного сообщения через Telegram API...", "info");
+      showToast("Отправка проверочного сообщения в Telegram...", "info");
       try {
         const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             chat_id: channel,
-            text: "🤖 <b>AnimeVist — Тест подключения!</b>\\n\\nВеб-панель GitHub Pages успешно связалась с вашим каналом через Supabase.",
+            text: "🤖 <b>AnimeVist — Тест подключения!</b>\n\nВеб-панель GitHub Pages успешно связалась с вашим каналом через Supabase.",
             parse_mode: "HTML"
           })
         });
@@ -1001,40 +1060,6 @@
         }
       } catch (e) {
         showToast("Ошибка отправки запроса в Telegram API", "error");
-      }
-    }
-
-    async function sendDirectMessage() {
-      const text = document.getElementById('customMsgText').value.trim();
-      if (!text) {
-        showToast("Пожалуйста, введите текст сообщения", "error");
-        return;
-      }
-      const token = document.getElementById('cfg_token').value.trim();
-      const channel = document.getElementById('cfg_channel').value.trim();
-      const disablePreview = document.getElementById('customMsgDisablePreview').checked;
-
-      showToast("Публикация в канал...", "info");
-      try {
-        const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: channel,
-            text: text,
-            parse_mode: "HTML",
-            disable_web_page_preview: disablePreview
-          })
-        });
-        const data = await res.json();
-        if (data.ok) {
-          showToast("Сообщение успешно опубликовано в канале!", "success");
-          document.getElementById('customMsgText').value = '';
-        } else {
-          showToast(`Ошибка: ${data.description}`, "error", 5000);
-        }
-      } catch (e) {
-        showToast("Ошибка связи с Telegram API", "error");
       }
     }
 
@@ -1067,8 +1092,9 @@
       }
     }
 
-    // Initial load
+    // Initialize
     loadFromSupabase();
+    previewSelectedTheme('cyberpunk');
   </script>
 </body>
 </html>
