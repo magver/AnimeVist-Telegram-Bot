@@ -1,14 +1,13 @@
 @echo off
-chcp 65001 > nul
-title AnimeVist Telegram Bot - Фоновый демон 24/7
+title AnimeVist 24/7 Automation Daemon
 cd /d "%~dp0"
 
-echo ========================================================
-echo   ANIME VIST — ФОНОВЫЙ ДЕМОН (Серии + Новости 24/7)
-echo ========================================================
-echo   Проверка каждые 5 минут. Нажмите Ctrl+C для выхода.
-echo ========================================================
-echo.
+where python >nul 2>nul
+if errorlevel 1 (
+    if exist "%LOCALAPPDATA%\Programs\Python\Python311\python.exe" (
+        set "PATH=%LOCALAPPDATA%\Programs\Python\Python311;%LOCALAPPDATA%\Programs\Python\Python311\Scripts;%PATH%"
+    )
+)
 
 python main.py --daemon
 pause
