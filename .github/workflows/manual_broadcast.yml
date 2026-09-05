@@ -1,0 +1,58 @@
+name: Manual Actions (Web Panel in GitHub)
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Выберите действие для запуска:'
+        required: true
+        default: 'check_releases'
+        type: choice
+        options:
+          - 'check_releases'
+          - 'check_news'
+          - 'publish_patchnote'
+          - 'pin_navigator'
+          - 'test_bot_connection'
+
+jobs:
+  execute-action:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Execute selected action
+        run: |
+          ACTION="${{ github.event.inputs.action }}"
+          echo "Executing action: $ACTION"
+          if [ "$ACTION" = "check_releases" ]; then
+            python series_announcer.py
+          elif [ "$ACTION" = "check_news" ]; then
+            python news_announcer.py
+          elif [ "$ACTION" = "publish_patchnote" ]; then
+            python patchnote_publisher.py
+          elif [ "$ACTION" = "pin_navigator" ]; then
+            python pinned_navigator.py
+          elif [ "$ACTION" = "test_bot_connection" ]; then
+            python main.py --test
+          fi
+
+      - name: Commit state changes if any
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add seen_episodes.json seen_news.json config.json || true
+          if git diff --staged --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Manual run update state [skip ci]"
+            git push
+          fi
