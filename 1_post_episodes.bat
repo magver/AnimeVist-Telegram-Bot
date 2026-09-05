@@ -1,13 +1,13 @@
 @echo off
-chcp 65001 > nul
-title AnimeVist - [1/4] Автопостинг новых серий (#release)
+title AnimeVist - Post Episodes
 cd /d "%~dp0"
 
-echo ========================================================
-echo   [1/4] МОДУЛЬ АВТОПОСТИНГА НОВЫХ СЕРИЙ (#release)
-echo ========================================================
-echo.
+where python >nul 2>nul
+if errorlevel 1 (
+    if exist "%LOCALAPPDATA%\Programs\Python\Python311\python.exe" (
+        set "PATH=%LOCALAPPDATA%\Programs\Python\Python311;%LOCALAPPDATA%\Programs\Python\Python311\Scripts;%PATH%"
+    )
+)
 
-python series_announcer.py
-echo.
+python main.py --releases
 pause
