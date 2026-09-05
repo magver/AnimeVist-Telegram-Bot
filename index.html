@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnimeVist — Консоль Управления Ботом (GitHub Pages)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #090d16;
+      --bg-surface: #0f172a;
+      --bg-surface-elevated: #1e293b;
+      --bg-card: #131d31;
+      --bg-card-hover: #18243d;
+      --bg-input: #0a0f1d;
+      --border-subtle: #1e293b;
+      --border-default: #334155;
+      --border-focus: #3b82f6;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-blue: #3b82f6;
+      --accent-blue-hover: #2563eb;
+      --accent-cyan: #06b6d4;
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.12);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.12);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.12);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    /* Top App Header */
+    header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0.85rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo-badge {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .version-tag {
+      font-size: 0.72rem;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 1px 7px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    .brand-sub {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .header-center {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+    .status-dot.offline {
+      background: var(--danger);
+      box-shadow: 0 0 8px var(--danger);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Layout & Navigation */
+    .app-body {
+      max-width: 1360px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 1.75rem;
+      flex: 1;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 6px;
+      background: var(--bg-surface);
+      padding: 5px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .tab-btn.active {
+      color: #fff;
+      background: var(--bg-surface-elevated);
+      font-weight: 600;
+      border: 1px solid var(--border-default);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Grid & Cards */
+    .grid-kpi {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 1024px) {
+      .grid-kpi { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .grid-kpi { grid-template-columns: 1fr; }
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .kpi-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .kpi-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    @media (max-width: 900px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 1.25rem;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .card-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: -0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: var(--accent-blue);
+      color: #fff;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent-blue-hover);
+    }
+    .btn-secondary {
+      background: var(--bg-surface-elevated);
+      color: var(--text-primary);
+      border-color: var(--border-default);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: #28364c;
+      border-color: #475569;
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text-secondary);
+      border-color: var(--border-default);
+    }
+    .btn-outline:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+    .btn-sm { padding: 5px 10px; font-size: 0.78rem; }
+    .btn-block { width: 100%; }
+
+    /* Action Tiles */
+    .action-tiles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 650px) {
+      .action-tiles-grid { grid-template-columns: 1fr; }
+    }
+    .action-tile {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.1rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+    }
+    .action-tile:hover {
+      border-color: var(--border-default);
+      background: var(--bg-card-hover);
+      transform: translateY(-1px);
+    }
+    .tile-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .tile-icon {
+      width: 34px;
+      height: 34px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+    .tile-title {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .tile-tag {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      color: var(--accent-cyan);
+    }
+    .tile-desc {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .tile-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 8px;
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    input[type="text"], input[type="password"], input[type="number"], textarea {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-default);
+      color: #fff;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+    .input-toggle-btn {
+      position: absolute;
+      right: 8px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      font-size: 0.85rem;
+    }
+    .input-toggle-btn:hover { color: #fff; }
+
+    /* Switch */
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+    }
+    .switch-title { font-size: 0.85rem; font-weight: 500; color: #fff; }
+    .switch-sub { font-size: 0.74rem; color: var(--text-muted); }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 42px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #334155;
+      transition: .2s;
+      border-radius: 22px;
+    }
+    .slider:before {
+      position: absolute; content: "";
+      height: 16px; width: 16px; left: 3px; bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+    input:checked + .slider { background-color: var(--accent-blue); }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    /* Toast */
+    #toastContainer {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 380px;
+      width: calc(100% - 48px);
+    }
+    .toast {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-default);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      animation: slideIn 0.2s ease forwards;
+      font-size: 0.85rem;
+    }
+    .toast.success { border-color: rgba(16, 185, 129, 0.4); }
+    .toast.error { border-color: rgba(239, 68, 68, 0.4); }
+    .toast.info { border-color: rgba(59, 130, 246, 0.4); }
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top System Header -->
+  <header>
+    <div class="header-left">
+      <div class="logo-badge">AV</div>
+      <div>
+        <div class="brand-title">
+          AnimeVist <span>Bot Console</span>
+          <span class="version-tag">GitHub Pages &bull; Supabase Live</span>
+        </div>
+        <div class="brand-sub">Облачная веб-панель управления (Serverless 24/7)</div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="status-pill">
+        <div class="status-dot" id="headerDot"></div>
+        <span id="headerStatusText">Подключение к Supabase...</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button class="btn btn-secondary btn-sm" onclick="sendTestMessage()">
+        💬 Тест канала
+      </button>
+      <button class="btn btn-outline btn-sm" onclick="loadFromSupabase()" title="Обновить данные из базы">
+        🔄 Обновить
+      </button>
+      <a href="https://github.com/magver/AnimeVist-Telegram-Bot/actions" target="_blank" class="btn btn-primary btn-sm">
+        ⚡ Запуск Actions ➔
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Body Container -->
+  <main class="app-body">
+    <!-- Tab Navigation -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('tab-overview', this)">📊 Мониторинг & KPI</button>
+      <button class="tab-btn" onclick="switchTab('tab-broadcast', this)">💬 Экспресс-пост</button>
+      <button class="tab-btn" onclick="switchTab('tab-config', this)">⚙️ Конфигурация в Supabase</button>
+      <button class="tab-btn" onclick="switchTab('tab-actions', this)">⚡ Ручной запуск модулей</button>
+    </nav>
+
+    <!-- TAB 1: OVERVIEW -->
+    <section id="tab-overview" class="tab-content active">
+      <div class="grid-kpi">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>TELEGRAM BOT</span>
+            <span>🤖</span>
+          </div>
+          <div class="kpi-value" id="kpiBotUser">Проверка...</div>
+          <div class="kpi-desc" id="kpiBotId">ID: —</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>ЦЕЛЕВОЙ КАНАЛ</span>
+            <span>📢</span>
+          </div>
+          <div class="kpi-value" id="kpiChannel">—</div>
+          <div class="kpi-desc" id="kpiChannelLink">Официальный вещатель</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>ОБЛАЧНАЯ БАЗА</span>
+            <span>🐘</span>
+          </div>
+          <div class="kpi-value" style="color:var(--success);" id="kpiStorageMode">Supabase Live</div>
+          <div class="kpi-desc" id="kpiLastSync">zuciuwunelfqhhhohhyn</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span>ПЛАНИРОВЩИК 24/7</span>
+            <span>⏱️</span>
+          </div>
+          <div class="kpi-value" style="color:#38bdf8;" id="kpiScheduler">GitHub Actions</div>
+          <div class="kpi-desc">Каждые 15 минут</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">⚡ Модули Управления Каналом</div>
+          <div class="card-subtitle">Запуск любого модуля через GitHub Actions в 1 клик с телефона или ПК:</div>
+
+          <div class="action-tiles-grid">
+            <a class="action-tile" href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank">
+              <div class="tile-top">
+                <div class="tile-icon">📺</div>
+                <div>
+                  <div class="tile-title">1. Выход серий</div>
+                  <div class="tile-tag">#release</div>
+                </div>
+              </div>
+              <div class="tile-desc">Сканирование AnimeVost + Shikimori и отправка серий.</div>
+              <div class="tile-footer">
+                <span>GitHub Actions</span>
+                <span class="btn btn-outline btn-sm">Запустить ➔</span>
+              </div>
+            </a>
+
+            <a class="action-tile" href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank">
+              <div class="tile-top">
+                <div class="tile-icon">📰</div>
+                <div>
+                  <div class="tile-title">2. Аниме-новости</div>
+                  <div class="tile-tag">#news</div>
+                </div>
+              </div>
+              <div class="tile-desc">Официальные анонсы и трейлеры индустрии.</div>
+              <div class="tile-footer">
+                <span>GitHub Actions</span>
+                <span class="btn btn-outline btn-sm">Запустить ➔</span>
+              </div>
+            </a>
+
+            <a class="action-tile" href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank">
+              <div class="tile-top">
+                <div class="tile-icon">🚀</div>
+                <div>
+                  <div class="tile-title">3. Патчноут релиза</div>
+                  <div class="tile-tag">#patchnote</div>
+                </div>
+              </div>
+              <div class="tile-desc">Публикация свежего релиза из GitHub.</div>
+              <div class="tile-footer">
+                <span>GitHub Actions</span>
+                <span class="btn btn-outline btn-sm">Запустить ➔</span>
+              </div>
+            </a>
+
+            <a class="action-tile" href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank">
+              <div class="tile-top">
+                <div class="tile-icon">📌</div>
+                <div>
+                  <div class="tile-title">4. Навигатор и Pin</div>
+                  <div class="tile-tag">Pin FAQ</div>
+                </div>
+              </div>
+              <div class="tile-desc">Главный закрепленный пост со ссылками на APK и EXE.</div>
+              <div class="tile-footer">
+                <span>GitHub Actions</span>
+                <span class="btn btn-outline btn-sm">Запустить ➔</span>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🐘 Статус Синхронизации Supabase</div>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:18px;">
+            <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
+              <span style="color:var(--text-secondary);">Облачный хост базы:</span>
+              <strong style="color:var(--success);">zuciuwunelfqhhhohhyn.supabase.co</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
+              <span style="color:var(--text-secondary);">Таблица настроек:</span>
+              <span style="font-family:var(--font-mono); color:#fff;">public.bot_config</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
+              <span style="color:var(--text-secondary);">Таблица истории серий:</span>
+              <span style="font-family:var(--font-mono); color:var(--accent-cyan);">public.bot_seen_items</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
+              <span style="color:var(--text-secondary);">Последнее сохранение:</span>
+              <span style="font-family:var(--font-mono); color:#fff;" id="overviewLastSync">Загрузка...</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px;">
+            <button class="btn btn-secondary btn-block" onclick="loadFromSupabase()">
+              📥 Загрузить свежие данные
+            </button>
+            <button class="btn btn-primary btn-block" onclick="sendTestMessage()">
+              💬 Проверить Telegram-бота
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: BROADCAST -->
+    <section id="tab-broadcast" class="tab-content">
+      <div class="card" style="max-width: 760px; margin: 0 auto;">
+        <div class="card-title">💬 Прямая Публикация Сообщения в Канал</div>
+        <div class="card-subtitle">Отправка форматированного объявления прямо из браузера в ваш Telegram-канал:</div>
+
+        <div class="form-group">
+          <label class="form-label">Текст сообщения (поддерживает HTML &lt;b&gt;, &lt;i&gt;, &lt;a&gt;, &lt;code&gt;):</label>
+          <textarea id="customMsgText" rows="6" placeholder="Привет! 🎬 Мы опубликовали новое обновление..."></textarea>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <label style="display:flex; align-items:center; gap:8px; font-size:0.8rem; color:var(--text-secondary); cursor:pointer;">
+            <input type="checkbox" id="customMsgDisablePreview"> Отключить предпросмотр ссылок
+          </label>
+          <button class="btn btn-primary" onclick="sendDirectMessage()">
+            🚀 Опубликовать в Telegram
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: CONFIGURATION -->
+    <section id="tab-config" class="tab-content">
+      <div class="card" style="max-width: 800px; margin: 0 auto;">
+        <div class="card-title">⚙️ Настройки Telegram (Синхронизируются с Supabase)</div>
+        <div class="card-subtitle">Все изменения сохраняются в облачную таблицу <code>bot_config</code> и сразу применяются к боту.</div>
+
+        <div class="form-group">
+          <div class="form-label">
+            <span>Токен Telegram-бота:</span>
+            <span style="font-size:0.75rem; color:var(--text-muted);">От @BotFather</span>
+          </div>
+          <div class="input-wrapper">
+            <input type="password" id="cfg_token" placeholder="8958974614:AAF-...">
+            <button type="button" class="input-toggle-btn" onclick="togglePasswordVisibility('cfg_token', this)">👁️</button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <div class="form-label">
+              <span>ID канала:</span>
+              <a href="javascript:void(0)" onclick="autoDetectChannel()" style="color:var(--accent-cyan); text-decoration:none; font-size:0.75rem;">🔍 Найти в Telegram</a>
+            </div>
+            <input type="text" id="cfg_channel" placeholder="-1004465332635">
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">
+              <span>Ссылка чата обсуждений:</span>
+            </div>
+            <input type="text" id="cfg_chat" placeholder="https://t.me/animevist_chat">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label">
+            <span>ID Администратора:</span>
+          </div>
+          <input type="text" id="cfg_admin" placeholder="869155357">
+        </div>
+
+        <div class="switch-row">
+          <div>
+            <div class="switch-title">Автопостинг новых серий (#release)</div>
+            <div class="switch-sub">Публиковать серии онгоингов из AnimeVost и Shikimori</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="cfg_releases_enabled" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="switch-row">
+          <div>
+            <div class="switch-title">Автопостинг аниме-новостей (#news)</div>
+            <div class="switch-sub">Публиковать официальные новости индустрии и трейлеры</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="cfg_news_enabled" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div style="margin-top:25px;">
+          <button class="btn btn-primary btn-block" onclick="saveToSupabase()">
+            💾 Сохранить настройки в Supabase
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: MANUAL ACTIONS -->
+    <section id="tab-actions" class="tab-content">
+      <div class="card" style="max-width: 800px; margin: 0 auto;">
+        <div class="card-title">⚡ Ручной Запуск через GitHub Actions</div>
+        <div class="card-subtitle">GitHub предоставляет бесплатные серверы для выполнения задач в 1 клик с телефона:</div>
+
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:14px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:600; color:#fff;">📺 Выход новых серий</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Проверить релизы прямо сейчас</div>
+            </div>
+            <a href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank" class="btn btn-primary btn-sm">
+              Запустить в GitHub ➔
+            </a>
+          </div>
+
+          <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:14px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:600; color:#fff;">📰 Аниме-новости</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Проверить свежие трейлеры и анонсы</div>
+            </div>
+            <a href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank" class="btn btn-primary btn-sm">
+              Запустить в GitHub ➔
+            </a>
+          </div>
+
+          <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:14px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:600; color:#fff;">🚀 Патчноут релиза</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Опубликовать версию из GitHub Releases</div>
+            </div>
+            <a href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank" class="btn btn-primary btn-sm">
+              Запустить в GitHub ➔
+            </a>
+          </div>
+
+          <div style="background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:14px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:600; color:#fff;">📌 Закрепить навигатор</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Отправить и закрепить пост-навигатор</div>
+            </div>
+            <a href="https://github.com/magver/AnimeVist-Telegram-Bot/actions/workflows/manual_broadcast.yml" target="_blank" class="btn btn-primary btn-sm">
+              Запустить в GitHub ➔
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer"></div>
+
+  <script>
+    const SUPABASE_URL = "https://zuciuwunelfqhhhohhyn.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1Y2l1d3VuZWxmcWhoaG9oaHluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwODgwOTcsImV4cCI6MjEwMzY2NDA5N30.JTxCO-GWXtLLBWLwE5I6AsmXvKrGNGQ9J6sS7QM4ITQ";
+
+    let currentConfig = null;
+
+    function showToast(message, type = 'info', duration = 3500) {
+      const c = document.getElementById('toastContainer');
+      const t = document.createElement('div');
+      t.className = `toast ${type}`;
+      const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
+      t.innerHTML = `<span>${icon} ${message}</span><button style="background:transparent; border:none; color:#94a3b8; cursor:pointer; font-size:1rem;" onclick="this.parentElement.remove()">&times;</button>`;
+      c.appendChild(t);
+      setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transform = 'translateY(10px)';
+        t.style.transition = 'all 0.2s';
+        setTimeout(() => t.remove(), 200);
+      }, duration);
+    }
+
+    function switchTab(tabId, el) {
+      document.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+      if (el) el.classList.add('active');
+    }
+
+    function togglePasswordVisibility(id, btn) {
+      const input = document.getElementById(id);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerText = '🙈';
+      } else {
+        input.type = 'password';
+        btn.innerText = '👁️';
+      }
+    }
+
+    async function loadFromSupabase() {
+      try {
+        const url = `${SUPABASE_URL}/rest/v1/bot_config?id=eq.animevist_main&select=*`;
+        const res = await fetch(url, {
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${SUPABASE_KEY}`
+          }
+        });
+        const rows = await res.json();
+        if (rows && rows.length > 0) {
+          currentConfig = rows[0].config;
+          const tg = currentConfig.telegram || {};
+          const app = currentConfig.app || {};
+          const ann = currentConfig.announcer || {};
+
+          document.getElementById('cfg_token').value = tg.bot_token || '';
+          document.getElementById('cfg_channel').value = tg.channel_id || '';
+          document.getElementById('cfg_chat').value = app.chat_invite_url || '';
+          document.getElementById('cfg_admin').value = tg.admin_id || '';
+          document.getElementById('cfg_releases_enabled').checked = ann.enable_series_releases !== false;
+          document.getElementById('cfg_news_enabled').checked = ann.enable_anime_news !== false;
+
+          document.getElementById('kpiChannel').innerText = tg.channel_id || 'Не задан';
+          document.getElementById('overviewLastSync').innerText = rows[0].updated_at ? new Date(rows[0].updated_at).toLocaleString('ru-RU') : 'Только что';
+
+          document.getElementById('headerStatusText').innerText = 'Supabase активна';
+          document.getElementById('headerDot').className = 'status-dot';
+
+          // Check Telegram Bot
+          if (tg.bot_token) {
+            checkTelegramBot(tg.bot_token);
+          }
+        } else {
+          showToast("Конфиг пока не найден в базе. Нажмите 'Сохранить настройки'.", "info");
+        }
+      } catch (e) {
+        showToast("Ошибка загрузки из Supabase: " + e.message, "error");
+      }
+    }
+
+    async function checkTelegramBot(token) {
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/getMe`);
+        const data = await res.json();
+        if (data.ok) {
+          const u = '@' + data.result.username;
+          document.getElementById('kpiBotUser').innerText = u;
+          document.getElementById('kpiBotId').innerText = `ID: ${data.result.id} (${data.result.first_name})`;
+        } else {
+          document.getElementById('kpiBotUser').innerText = 'Ошибка токена';
+        }
+      } catch (e) {
+        document.getElementById('kpiBotUser').innerText = 'API Telegram недоступен';
+      }
+    }
+
+    async function saveToSupabase() {
+      if (!currentConfig) currentConfig = {};
+      const tg = currentConfig.telegram || {};
+      const app = currentConfig.app || {};
+      const ann = currentConfig.announcer || {};
+
+      tg.bot_token = document.getElementById('cfg_token').value.trim();
+      tg.channel_id = document.getElementById('cfg_channel').value.trim();
+      tg.admin_id = document.getElementById('cfg_admin').value.trim();
+      app.chat_invite_url = document.getElementById('cfg_chat').value.trim();
+      ann.enable_series_releases = document.getElementById('cfg_releases_enabled').checked;
+      ann.enable_anime_news = document.getElementById('cfg_news_enabled').checked;
+
+      currentConfig.telegram = tg;
+      currentConfig.app = app;
+      currentConfig.announcer = ann;
+
+      showToast("Сохранение в Supabase...", "info");
+      try {
+        const url = `${SUPABASE_URL}/rest/v1/bot_config`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${SUPABASE_KEY}`,
+            "Content-Type": "application/json",
+            "Prefer": "resolution=merge-duplicates"
+          },
+          body: JSON.stringify([{ id: "animevist_main", config: currentConfig }])
+        });
+
+        if (res.ok) {
+          showToast("Конфигурация успешно сохранена в Supabase!", "success");
+          loadFromSupabase();
+        } else {
+          showToast("Ошибка сохранения: HTTP " + res.status, "error");
+        }
+      } catch (e) {
+        showToast("Сетевая ошибка сохранения", "error");
+      }
+    }
+
+    async function sendTestMessage() {
+      const token = document.getElementById('cfg_token').value.trim();
+      const channel = document.getElementById('cfg_channel').value.trim();
+      if (!token || !channel) {
+        showToast("Сначала укажите токен и ID канала в настройках!", "error");
+        return;
+      }
+      showToast("Отправка проверочного сообщения через Telegram API...", "info");
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: channel,
+            text: "🤖 <b>AnimeVist — Тест подключения!</b>\\n\\nВеб-панель GitHub Pages успешно связалась с вашим каналом через Supabase.",
+            parse_mode: "HTML"
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showToast("Сообщение успешно отправлено в Telegram-канал!", "success");
+        } else {
+          showToast(`Ошибка Telegram: ${data.description}`, "error", 5000);
+        }
+      } catch (e) {
+        showToast("Ошибка отправки запроса в Telegram API", "error");
+      }
+    }
+
+    async function sendDirectMessage() {
+      const text = document.getElementById('customMsgText').value.trim();
+      if (!text) {
+        showToast("Пожалуйста, введите текст сообщения", "error");
+        return;
+      }
+      const token = document.getElementById('cfg_token').value.trim();
+      const channel = document.getElementById('cfg_channel').value.trim();
+      const disablePreview = document.getElementById('customMsgDisablePreview').checked;
+
+      showToast("Публикация в канал...", "info");
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: channel,
+            text: text,
+            parse_mode: "HTML",
+            disable_web_page_preview: disablePreview
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showToast("Сообщение успешно опубликовано в канале!", "success");
+          document.getElementById('customMsgText').value = '';
+        } else {
+          showToast(`Ошибка: ${data.description}`, "error", 5000);
+        }
+      } catch (e) {
+        showToast("Ошибка связи с Telegram API", "error");
+      }
+    }
+
+    async function autoDetectChannel() {
+      const token = document.getElementById('cfg_token').value.trim();
+      if (!token) {
+        showToast("Сначала введите токен бота!", "error");
+        return;
+      }
+      showToast("Поиск канала в обновлениях бота...", "info");
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/getUpdates`);
+        const data = await res.json();
+        if (data.ok && data.result) {
+          for (let u of data.result.reverse()) {
+            if (u.channel_post) {
+              const c = u.channel_post.chat;
+              document.getElementById('cfg_channel').value = c.id;
+              showToast(`Канал найден: ${c.title} (${c.id})`, "success");
+              saveToSupabase();
+              return;
+            }
+          }
+          showToast("Отправьте любое сообщение в канал и повторите поиск", "info");
+        } else {
+          showToast("Ошибка: " + (data.description || "Не удалось получить обновления"), "error");
+        }
+      } catch (e) {
+        showToast("Ошибка проверки обновлений", "error");
+      }
+    }
+
+    // Initial load
+    loadFromSupabase();
+  </script>
+</body>
+</html>
