@@ -16,23 +16,41 @@ if hasattr(sys.stdout, 'reconfigure'):
 if hasattr(sys.stderr, 'reconfigure'):
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
-from telegram_sender import TelegramSender, load_config
+from telegram_sender import (
+    TelegramSender,
+    load_config,
+    load_seen_from_supabase,
+    save_seen_to_supabase
+)
 
 SEEN_NEWS_FILE = os.path.join(os.path.dirname(__file__), 'seen_news.json')
 
 def load_seen_news():
+    seen = set()
     if os.path.exists(SEEN_NEWS_FILE):
         try:
             with open(SEEN_NEWS_FILE, 'r', encoding='utf-8') as f:
-                return set(json.load(f))
+                seen.update(json.load(f))
         except Exception:
-            return set()
-    return set()
+            pass
+    try:
+        remote_seen = load_seen_from_supabase(category='news')
+        seen.update(remote_seen)
+    except Exception:
+        pass
+    return seen
 
 def save_seen_news(seen_set):
-    with open(SEEN_NEWS_FILE, 'w', encoding='utf-8') as f:
-        items = list(seen_set)[-500:]
-        json.dump(items, f, ensure_ascii=False, indent=2)
+    try:
+        with open(SEEN_NEWS_FILE, 'w', encoding='utf-8') as f:
+            items = list(seen_set)[-500:]
+            json.dump(items, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+    try:
+        save_seen_to_supabase(seen_set, category='news')
+    except Exception:
+        pass
 
 def strip_bbcode(text):
     text = re.sub(r'\[.*?\]', '', text)
