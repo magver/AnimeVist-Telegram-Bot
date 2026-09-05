@@ -1,19 +1,12 @@
 @echo off
-chcp 65001 > nul
 title AnimeVist Standalone Automation Service
 cd /d "%~dp0"
 
-echo ========================================================
-echo   ANIME VIST — АВТОНОМНЫЙ TELEGRAM БОТ И АВТОМАТИЗАЦИЯ
-echo ========================================================
-echo.
-
-python --version >nul 2>&1
-if %errorlevel% neq 0 (
-    echo [ОШИБКА] Python 3 не обнаружен в системе!
-    echo Установите Python с python.org и отметьте галочку "Add to PATH".
-    pause
-    exit /b 1
+where python >nul 2>nul
+if errorlevel 1 (
+    if exist "%LOCALAPPDATA%\Programs\Python\Python311\python.exe" (
+        set "PATH=%LOCALAPPDATA%\Programs\Python\Python311;%LOCALAPPDATA%\Programs\Python\Python311\Scripts;%PATH%"
+    )
 )
 
 python main.py
