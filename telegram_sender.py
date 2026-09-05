@@ -444,6 +444,18 @@ class TelegramSender:
     def get_me(self):
         return self._make_request("getMe", {})
 
+    def get_chat(self, chat_id=None):
+        target_chat = chat_id or self.channel_id
+        if not self.bot_token or not target_chat:
+            return {"ok": False, "description": "bot_token or chat_id not configured"}
+        return self._make_request("getChat", {"chat_id": target_chat})
+
+    def get_chat_member_count(self, chat_id=None):
+        target_chat = chat_id or self.channel_id
+        if not self.bot_token or not target_chat:
+            return {"ok": False, "description": "bot_token or chat_id not configured"}
+        return self._make_request("getChatMemberCount", {"chat_id": target_chat})
+
     def _make_request(self, method, payload):
         url = f"{self.base_url}/{method}"
         data = json.dumps(payload).encode('utf-8')

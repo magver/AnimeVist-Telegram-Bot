@@ -16,20 +16,29 @@ on:
           - 'pin_navigator'
           - 'test_bot_connection'
       genre:
-        description: 'Тема подборки (только для publish_compilation, оставьте пустым для авто-выбора):'
+        description: 'Тема подборки (только для publish_compilation, auto = следующая по очереди):'
         required: false
         default: 'auto'
         type: choice
         options:
           - 'auto'
-          - 'cyberpunk'
-          - 'psychological'
-          - 'fantasy'
-          - 'romance'
-          - 'dark_fantasy'
-          - 'isekai'
-          - 'classics'
-          - 'comedy'
+          - 'must_watch'
+          - 'hidden_gems'
+          - 'mindfuck'
+          - 'cyberpunk_scifi'
+          - 'epic_fantasy'
+          - 'soul_romance'
+          - 'pure_comedy'
+          - 'isekai_special'
+      count:
+        description: 'Количество тайтлов в подборке (будут объединены в единый постер-коллаж):'
+        required: false
+        default: '4'
+        type: choice
+        options:
+          - '3'
+          - '4'
+          - '5'
 
 jobs:
   execute-action:
@@ -45,20 +54,25 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
       - name: Execute selected action
         run: |
           ACTION="${{ github.event.inputs.action }}"
           GENRE="${{ github.event.inputs.genre }}"
-          echo "Executing action: $ACTION with genre: $GENRE"
+          COUNT="${{ github.event.inputs.count }}"
+          echo "Executing action: $ACTION with genre: $GENRE, count: $COUNT"
           if [ "$ACTION" = "check_releases" ]; then
             python series_announcer.py
           elif [ "$ACTION" = "check_news" ]; then
             python news_announcer.py
           elif [ "$ACTION" = "publish_compilation" ]; then
             if [ "$GENRE" = "auto" ] || [ -z "$GENRE" ]; then
-              python compilations_announcer.py
+              python compilations_announcer.py --count="$COUNT"
             else
-              python compilations_announcer.py --genre="$GENRE"
+              python compilations_announcer.py --genre="$GENRE" --count="$COUNT"
             fi
           elif [ "$ACTION" = "publish_patchnote" ]; then
             python patchnote_publisher.py
@@ -72,7 +86,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add seen_episodes.json seen_news.json seen_compilations.json config.json || true
+          git add seen_episodes.json seen_news.json seen_compilations.json seen_compilation_animes.json last_compilation_time.json config.json || true
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else

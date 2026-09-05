@@ -33,7 +33,7 @@ from telegram_sender import (
 )
 from series_announcer import run_series_check
 from news_announcer import run_news_check
-from compilations_announcer import run_compilation_post, list_available_themes, THEMES
+from compilations_announcer import run_compilation_post, list_available_themes, THEMES, load_last_compilation_time
 from patchnote_publisher import publish_patchnote_from_github
 from pinned_navigator import publish_pinned_navigator
 
@@ -591,27 +591,27 @@ HTML_PAGE = """<!DOCTYPE html>
     <section id="tab-overview" class="tab-content active">
       <div class="grid-kpi">
         <div class="kpi-card">
-          <div class="kpi-header"><span>TELEGRAM BOT</span><span>🤖</span></div>
-          <div class="kpi-value" id="kpiBotUser">Загрузка...</div>
-          <div class="kpi-desc" id="kpiBotId">ID: —</div>
+          <div class="kpi-header"><span>👥 АУДИТОРИЯ КАНАЛА</span><span>📢</span></div>
+          <div class="kpi-value" style="color:#60a5fa;" id="kpiAudience">—</div>
+          <div class="kpi-desc" id="kpiAudienceSub">Канал: AnimeVist</div>
         </div>
 
         <div class="kpi-card">
-          <div class="kpi-header"><span>ЦЕЛЕВОЙ КАНАЛ</span><span>📢</span></div>
-          <div class="kpi-value" id="kpiChannel">—</div>
-          <div class="kpi-desc">Официальный вещатель</div>
+          <div class="kpi-header"><span>📺 ВЫПУЩЕНО СЕРИЙ</span><span>🎬</span></div>
+          <div class="kpi-value" style="color:var(--success);" id="kpiEpisodes">—</div>
+          <div class="kpi-desc" id="kpiEpisodesSub">Мониторинг: каждые 5 мин</div>
         </div>
 
         <div class="kpi-card">
-          <div class="kpi-header"><span>ДЕМОН 24/7</span><span>⏱️</span></div>
-          <div class="kpi-value" style="color:var(--success);" id="kpiDaemonStatus">Активен</div>
-          <div class="kpi-desc" id="kpiInterval">Интервал: 300 сек</div>
+          <div class="kpi-header"><span>📰 ЛЕНТА НОВОСТЕЙ</span><span>⚡</span></div>
+          <div class="kpi-value" style="color:#f59e0b;" id="kpiNews">—</div>
+          <div class="kpi-desc" id="kpiNewsSub">Shikimori • MAL • ANN</div>
         </div>
 
         <div class="kpi-card">
-          <div class="kpi-header"><span>ОБЛАЧНАЯ БАЗА</span><span>🐘</span></div>
-          <div class="kpi-value" style="color:var(--success);" id="kpiStorageMode">Supabase Live</div>
-          <div class="kpi-desc" id="kpiLastSync">Синхронизация: —</div>
+          <div class="kpi-header"><span>🌟 ТОП-ПОДБОРКИ</span><span>🖼️</span></div>
+          <div class="kpi-value" style="color:#c084fc;" id="kpiCompilations">HD Коллажи</div>
+          <div class="kpi-desc" id="kpiCompilationsSub">Каждые 6 часов</div>
         </div>
       </div>
 
@@ -645,7 +645,7 @@ HTML_PAGE = """<!DOCTYPE html>
               <div class="tile-footer"><span>Ручной запуск</span><span class="btn btn-outline btn-sm">Старт ➔</span></div>
             </div>
 
-            <div class="action-tile" onclick="switchTab('tab-actions', document.querySelectorAll('.tab-btn')[1])">
+            <div class="action-tile" onclick="switchTab('tab-actions', document.querySelectorAll('.tab-btn')[1]); focusCompilation();">
               <div class="tile-top">
                 <div class="tile-icon">🌟</div>
                 <div>
@@ -672,33 +672,39 @@ HTML_PAGE = """<!DOCTYPE html>
         </div>
 
         <div class="card">
-          <div class="card-title">📡 Состояние Циклов Автопостинга</div>
+          <div class="card-title">📊 Пульт Контент-Менеджера и Пульс Канала</div>
           <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:18px;">
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
-              <span style="color:var(--text-secondary);">Фоновый поток:</span>
-              <strong style="color:var(--success);" id="daemonThreadState">Работает непрерывно</strong>
+              <span style="color:var(--text-secondary);">Статус вещания:</span>
+              <strong style="color:var(--success);" id="cmStatus">🟢 Автономно 24/7</strong>
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
-              <span style="color:var(--text-secondary);">Последний опрос:</span>
-              <span style="font-family:var(--font-mono); color:#fff;" id="overviewLastCheck">Только что</span>
+              <span style="color:var(--text-secondary);">Целевой канал:</span>
+              <span style="font-family:var(--font-mono); color:#fff;" id="cmChannelTitle">AnimeVist</span>
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
-              <span style="color:var(--text-secondary);">Подборки (интервал):</span>
-              <span style="font-family:var(--font-mono); color:var(--accent-cyan);" id="overviewCompInterval">Каждые 6 часов</span>
+              <span style="color:var(--text-secondary);">Формат подборок:</span>
+              <span style="font-family:var(--font-mono); color:var(--accent-cyan);">Единый HD-коллаж (3-5 шт)</span>
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
-              <span style="color:var(--text-secondary);">Время работы сервера:</span>
-              <span style="font-family:var(--font-mono); color:#fff;" id="overviewUptime">0 мин</span>
+              <span style="color:var(--text-secondary);">База данных Supabase:</span>
+              <span style="font-family:var(--font-mono); color:var(--success);" id="cmDbStatus">Синхронизировано</span>
             </div>
           </div>
 
-          <div style="display:flex; gap:10px;">
-            <button class="btn btn-secondary btn-block" onclick="autoDetectChannel()">
-              🔍 Найти ID канала автоматически
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <button class="btn btn-primary" onclick="switchTab('tab-actions', document.querySelectorAll('.tab-btn')[1]); focusCustomPost();">
+              ✍️ Создать пост
             </button>
-            <button class="btn btn-outline btn-block" onclick="toggleDaemon()">
-              ⏸️ Пауза / Пуск демона
+            <button class="btn btn-secondary" onclick="switchTab('tab-actions', document.querySelectorAll('.tab-btn')[1]); focusCompilation();">
+              🌟 Выпустить подборку
             </button>
+            <button class="btn btn-outline" onclick="runAction('releases')">
+              📺 Проверить серии
+            </button>
+            <a id="btnOpenChannel" href="https://t.me/animevist" target="_blank" class="btn btn-outline" style="text-align:center; text-decoration:none;">
+              📢 Открыть канал
+            </a>
           </div>
         </div>
       </div>
@@ -710,21 +716,35 @@ HTML_PAGE = """<!DOCTYPE html>
         <!-- Compilations & Instant Triggers -->
         <div class="card">
           <div class="card-title">🌟 Публикация Топ-Подборки Аниме (#подборка)</div>
-          <div class="card-subtitle">Выберите жанр/тему для формирования иллюстрированного поста с высоким рейтингом:</div>
+          <div class="card-subtitle">Формирует единый постер-коллаж и подробное описание без повторов:</div>
 
           <div class="form-group">
             <label class="form-label">Тема подборки:</label>
             <select id="compilationGenreSelect">
-              <option value="auto">🔄 Автоматический выбор (следующая по очереди)</option>
-              <option value="cyberpunk">🌆 Киберпанк & Фантастика</option>
-              <option value="psychological">🧠 Психологические триллеры & Детективы</option>
-              <option value="fantasy">⚔️ Эпическое фэнтези 8.5+</option>
-              <option value="romance">💖 Романтика & Повседневность</option>
-              <option value="dark_fantasy">🗡 Тёмное фэнтези & Экшен</option>
-              <option value="isekai">🌀 Захватывающие исекаи & Попаданцы</option>
-              <option value="classics">🏆 Золотая классика аниме</option>
-              <option value="comedy">😂 Безумные комедии для настроения</option>
+              <option value="auto">🔄 Автоматический выбор (по очереди без повторов)</option>
+              <option value="must_watch">🏆 Золотая классика и шедевры (8.5+)</option>
+              <option value="hidden_gems">💎 Недооценённые алмазы и скрытые жемчужины</option>
+              <option value="mindfuck">🧠 Игры разума, психологические триллеры и детективы</option>
+              <option value="cyberpunk_scifi">🌆 Киберпанк, космос и фантастика</option>
+              <option value="epic_fantasy">⚔️ Эпическое фэнтези и приключения</option>
+              <option value="soul_romance">💖 Трогательная романтика и драма</option>
+              <option value="pure_comedy">😂 Отборные комедии и позитив</option>
+              <option value="isekai_special">🌀 Захватывающие исекаи и попаданцы</option>
             </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Количество аниме в подборке (в 1 коллаже):</label>
+            <select id="compilationCountSelect">
+              <option value="3">3 аниме (крупный постер)</option>
+              <option value="4" selected>4 аниме (рекомендуется)</option>
+              <option value="5">5 аниме (панорамный коллаж)</option>
+            </select>
+          </div>
+
+          <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:16px; font-size:0.8rem; color:#67e8f9; display:flex; align-items:center; gap:8px;">
+            <span>🖼</span>
+            <span>Все обложки склеиваются в <b>единый горизонтальный HD-коллаж</b> с номерами 1..N и шапкой AnimeVist!</span>
           </div>
 
           <button class="btn btn-primary btn-block" onclick="publishCompilation()" style="margin-bottom:20px;">
@@ -755,11 +775,28 @@ HTML_PAGE = """<!DOCTYPE html>
         <!-- Custom Post Studio -->
         <div class="card">
           <div class="card-title">✍️ Студия Кастомного Поста в Канал</div>
-          <div class="card-subtitle">Создайте произвольный пост с текстом (HTML), фото и инлайн-кнопкой:</div>
+          <div class="card-subtitle">Создайте пост с форматированием, фото и кнопкой без ручного HTML-кодинга:</div>
 
           <div class="form-group">
-            <label class="form-label">Текст публикации (поддерживает &lt;b&gt;, &lt;i&gt;, &lt;a&gt;, &lt;code&gt;):</label>
-            <textarea id="customText" rows="5" placeholder="Привет! 🎬 Мы добавили новую подборку тайтлов..." oninput="updateCustomPreview()"></textarea>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <label class="form-label" style="margin-bottom:0;">Текст публикации:</label>
+              <button class="btn btn-outline btn-sm" type="button" onclick="autoFormatAnimeVistPost('customText')" style="background:linear-gradient(135deg, rgba(59,130,246,0.2) 0%, rgba(147,51,234,0.2) 100%); border-color:rgba(147,51,234,0.4); color:#c084fc; font-weight:600;">
+                ✨ Оформить в стиле AnimeVist
+              </button>
+            </div>
+
+            <!-- Visual Formatting Toolbar -->
+            <div class="editor-toolbar" style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px; background:var(--bg-surface); padding:6px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 10px; font-weight:700;" onclick="insertTag('customText', 'b')" title="Жирный">B</button>
+              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 10px; font-style:italic;" onclick="insertTag('customText', 'i')" title="Курсив">I</button>
+              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertLinkPrompt('customText')" title="Вставить ссылку">🔗 Ссылка</button>
+              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertTag('customText', 'blockquote')" title="Цитата">💬 Цитата</button>
+              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertSnippet('customText', '⭐️ <b>Рейтинг:</b> 8.6 / 10 (Shikimori)\n')" title="Вставить рейтинг">⭐️ Рейтинг</button>
+              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertSnippet('customText', '🎬 <b>Студия:</b> MAPPA\n📅 <b>Премьера:</b> 2026\n')" title="Студия и дата">🎬 Студия/Дата</button>
+              <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertSnippet('customText', '\n\n#новости #анонс #animevist')" title="Хештеги">🏷 Хештеги</button>
+            </div>
+
+            <textarea id="customText" rows="6" placeholder="Вставьте любой сырой текст или заметку — и нажмите «✨ Оформить в стиле AnimeVist», либо используйте кнопки панели форматирования..." oninput="updateCustomPreview()"></textarea>
           </div>
 
           <div class="form-group">
@@ -770,16 +807,16 @@ HTML_PAGE = """<!DOCTYPE html>
           <div class="grid-2" style="margin-bottom:0; gap:10px;">
             <div class="form-group">
               <label class="form-label">Текст кнопки (опционально):</label>
-              <input type="text" id="customBtnText" placeholder="Смотреть онлайн" oninput="updateCustomPreview()">
+              <input type="text" id="customBtnText" placeholder="Смотреть в AnimeVist" oninput="updateCustomPreview()">
             </div>
             <div class="form-group">
               <label class="form-label">Ссылка кнопки (URL):</label>
-              <input type="text" id="customBtnUrl" placeholder="https://t.me/..." oninput="updateCustomPreview()">
+              <input type="text" id="customBtnUrl" placeholder="https://t.me/animevist" oninput="updateCustomPreview()">
             </div>
           </div>
 
           <!-- Preview -->
-          <div class="form-label" style="margin-top:10px;">Предварительный просмотр:</div>
+          <div class="form-label" style="margin-top:10px;">Предварительный просмотр поста:</div>
           <div class="preview-card">
             <img id="previewImg" class="preview-img" alt="Постер">
             <div id="previewText" class="preview-text">Текст вашего сообщения появится здесь...</div>
@@ -788,7 +825,7 @@ HTML_PAGE = """<!DOCTYPE html>
 
           <div style="margin-top:15px;">
             <button class="btn btn-primary btn-block" onclick="sendCustomPost()">
-              🚀 Отправить пост в канал
+              🚀 Опубликовать кастомный пост в канал
             </button>
           </div>
         </div>
@@ -1033,20 +1070,38 @@ HTML_PAGE = """<!DOCTYPE html>
         if (data.bot) {
           document.getElementById('headerStatusText').innerText = `@${data.bot.username} Онлайн`;
           document.getElementById('headerDot').className = 'status-dot';
-          document.getElementById('kpiBotUser').innerText = `@${data.bot.username}`;
-          document.getElementById('kpiBotId').innerText = `ID: ${data.bot.id} (${data.bot.first_name})`;
         } else {
           document.getElementById('headerStatusText').innerText = 'Ошибка подключения к боту';
           document.getElementById('headerDot').className = 'status-dot error';
-          document.getElementById('kpiBotUser').innerText = 'Не подключен';
         }
 
-        document.getElementById('kpiChannel').innerText = tg.channel_id || 'Не указан';
-        document.getElementById('kpiInterval').innerText = `Серии: ${ann.check_interval_seconds || 300} сек`;
-        document.getElementById('overviewLastCheck').innerText = data.last_check || 'Еще не выполнялся';
-        document.getElementById('overviewCompInterval').innerText = `Каждые ${ann.compilations_interval_hours || 6} ч`;
-        document.getElementById('overviewUptime').innerText = `${data.uptime_minutes || 0} мин`;
-        document.getElementById('kpiLastSync').innerText = cloud.last_sync || 'Недавно';
+        // Live audience metric
+        if (data.member_count !== undefined && data.member_count !== null) {
+          document.getElementById('kpiAudience').innerText = `${data.member_count} подписч.`;
+        } else {
+          document.getElementById('kpiAudience').innerText = 'Канал активен';
+        }
+
+        if (data.chat && data.chat.title) {
+          document.getElementById('kpiAudienceSub').innerText = `${data.chat.title}`;
+          document.getElementById('cmChannelTitle').innerText = `${data.chat.title} (${tg.channel_id || ''})`;
+          if (data.chat.invite_link) {
+            document.getElementById('btnOpenChannel').href = data.chat.invite_link;
+          }
+        } else if (tg.channel_id) {
+          document.getElementById('cmChannelTitle').innerText = `${tg.channel_id}`;
+        }
+
+        // Content Manager Metrics
+        const stats = data.stats || {};
+        document.getElementById('kpiEpisodes').innerText = `${stats.episodes || 0} серий`;
+        document.getElementById('kpiEpisodesSub').innerText = `Интервал: ${ann.check_interval_seconds || 300} сек`;
+
+        document.getElementById('kpiNews').innerText = `${stats.news || 0} новостей`;
+        document.getElementById('kpiNewsSub').innerText = `Shikimori • MAL • ANN`;
+
+        document.getElementById('kpiCompilations').innerText = `HD-коллажи`;
+        document.getElementById('kpiCompilationsSub').innerText = `Каждые ${ann.compilations_interval_hours || 6} ч`;
 
         // Config form
         document.getElementById('cfg_token').value = tg.bot_token || '';
@@ -1124,12 +1179,13 @@ HTML_PAGE = """<!DOCTYPE html>
 
     async function publishCompilation() {
       const genre = document.getElementById('compilationGenreSelect').value;
-      showToast("Публикация подборки аниме в Telegram...", "info");
+      const count = parseInt(document.getElementById('compilationCountSelect').value) || 4;
+      showToast(`Публикация подборки (${count} аниме) в Telegram...`, "info");
       try {
         const res = await fetch('/api/action', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ action: 'compilation', genre: genre === 'auto' ? null : genre })
+          body: JSON.stringify({ action: 'compilation', genre: genre === 'auto' ? null : genre, count: count })
         });
         const data = await res.json();
         if (data.ok) {
@@ -1141,6 +1197,112 @@ HTML_PAGE = """<!DOCTYPE html>
       } catch (e) {
         showToast("Ошибка публикации подборки", "error");
       }
+    }
+
+    /* Visual Editor & Magic Formatter Helpers */
+    function insertTag(textAreaId, tagName) {
+      const el = document.getElementById(textAreaId);
+      if (!el) return;
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+      const val = el.value;
+      const selected = val.substring(start, end);
+      const openTag = `<${tagName}>`;
+      const closeTag = `</${tagName}>`;
+      const replacement = selected ? `${openTag}${selected}${closeTag}` : `${openTag}Текст${closeTag}`;
+      el.value = val.substring(0, start) + replacement + val.substring(end);
+      el.focus();
+      el.setSelectionRange(start + openTag.length, start + replacement.length - closeTag.length);
+      updateCustomPreview();
+    }
+
+    function insertSnippet(textAreaId, snippet) {
+      const el = document.getElementById(textAreaId);
+      if (!el) return;
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+      const val = el.value;
+      el.value = val.substring(0, start) + snippet + val.substring(end);
+      el.focus();
+      el.setSelectionRange(start + snippet.length, start + snippet.length);
+      updateCustomPreview();
+    }
+
+    function insertLinkPrompt(textAreaId) {
+      const url = prompt("Введите ссылку (URL):", "https://");
+      if (!url) return;
+      const text = prompt("Введите текст ссылки (анкор):", "Подробнее в AnimeVist");
+      if (!text) return;
+      insertSnippet(textAreaId, `<a href="${url}">${text}</a>`);
+    }
+
+    function autoFormatAnimeVistPost(textAreaId) {
+      const el = document.getElementById(textAreaId);
+      if (!el) return;
+      let raw = el.value.trim();
+      if (!raw) {
+        showToast("Сначала вставьте или напечатайте текст для оформления", "error");
+        return;
+      }
+
+      const lines = raw.split(/\\r?\\n/).map(l => l.trim()).filter(l => l.length > 0);
+      if (lines.length === 0) return;
+
+      let title = lines[0].replace(/^[«"']|[»"']$/g, '').trim();
+      title = title.replace(/^(Анонс|Новость|Релиз|Новый сезон|Премьера):\\s*/i, '');
+
+      let studio = '';
+      let date = '';
+      let score = '';
+      let genre = '';
+      let bodyLines = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i];
+        if (/^(студия|studio):\\s*(.*)/i.test(line)) {
+          studio = line.replace(/^(студия|studio):\\s*/i, '').trim();
+        } else if (/^(премьера|дата|релиз|выход|год|date|release):\\s*(.*)/i.test(line)) {
+          date = line.replace(/^(премьера|дата|релиз|выход|год|date|release):\\s*/i, '').trim();
+        } else if (/^(рейтинг|оценка|score|rating):\\s*(.*)/i.test(line)) {
+          score = line.replace(/^(рейтинг|оценка|score|rating):\\s*/i, '').trim();
+        } else if (/^(жанр|жанры|genres?):\\s*(.*)/i.test(line)) {
+          genre = line.replace(/^(жанр|жанры|genres?):\\s*/i, '').trim();
+        } else if (!line.startsWith('#')) {
+          bodyLines.push(line);
+        }
+      }
+
+      let formatted = `🔥 <b>«${title}»</b>\n\n`;
+
+      if (studio) formatted += `🎬 <b>Студия:</b> ${studio}\n`;
+      if (date) formatted += `📅 <b>Премьера:</b> ${date}\n`;
+      if (score) formatted += `⭐️ <b>Рейтинг:</b> ${score}\n`;
+      if (genre) formatted += `🎭 <b>Жанр:</b> ${genre}\n`;
+      if (studio || date || score || genre) formatted += `\n`;
+
+      if (bodyLines.length > 0) {
+        const bodyText = bodyLines.join('\n\n');
+        formatted += `${bodyText}\n\n`;
+      }
+
+      formatted += `━━━━━━━━━━━━━━━\n`;
+      formatted += `💬 Чат комьюнити: @animevist_chat\n`;
+      formatted += `🤖 Бот и каталог: @animevist_bot\n\n`;
+      formatted += `#новости #анонс #animevist`;
+
+      el.value = formatted;
+      updateCustomPreview();
+      showToast("Текст автоматически оформлен в стиле AnimeVist!", "success");
+    }
+
+    function focusCustomPost() {
+      const el = document.getElementById('customText');
+      if (el) el.focus();
+    }
+
+    function focusCompilation() {
+      const el = document.getElementById('compilationGenreSelect');
+      if (el) el.focus();
     }
 
     function updateCustomPreview() {
@@ -1366,10 +1528,38 @@ class DashboardHandler(BaseHTTPRequestHandler):
         elif path == "/api/status":
             sender = TelegramSender()
             me = sender.get_me()
+            chat_info = sender.get_chat()
+            member_count_res = sender.get_chat_member_count()
             config = load_config()
             uptime_min = int((time.time() - server_start_time) / 60)
+
+            episodes_count = 0
+            news_count = 0
+            compilations_count = 0
+            try:
+                if os.path.exists('seen_episodes.json'):
+                    episodes_count = len(json.load(open('seen_episodes.json', 'r', encoding='utf-8')))
+                if os.path.exists('seen_news.json'):
+                    news_count = len(json.load(open('seen_news.json', 'r', encoding='utf-8')))
+                if os.path.exists('seen_compilation_animes.json'):
+                    compilations_count = len(json.load(open('seen_compilation_animes.json', 'r', encoding='utf-8')))
+            except Exception:
+                pass
+
+            last_comp = load_last_compilation_time()
+            comp_hours = float(config.get('announcer', {}).get('compilations_interval_hours', 6))
+            next_comp_sec = max(0, int((last_comp + comp_hours * 3600) - time.time())) if last_comp > 0 else 0
+
             resp = {
                 "bot": me.get('result') if me.get('ok') else None,
+                "chat": chat_info.get('result') if chat_info.get('ok') else None,
+                "member_count": member_count_res.get('result') if member_count_res.get('ok') else None,
+                "stats": {
+                    "episodes": episodes_count,
+                    "news": news_count,
+                    "compilations": compilations_count
+                },
+                "next_compilation_sec": next_comp_sec,
                 "config": config,
                 "last_check": last_check_time,
                 "daemon_running": daemon_running,
@@ -1530,8 +1720,9 @@ class DashboardHandler(BaseHTTPRequestHandler):
         elif path == "/api/action":
             act = data.get('action')
             genre = data.get('genre')
+            count = int(data.get('count', 4))
 
-            def run_bg(action_name, genre_param):
+            def run_bg(action_name, genre_param, count_param):
                 try:
                     if action_name == 'releases':
                         log_event("Ручной запуск сканирования новых серий...")
@@ -1542,8 +1733,8 @@ class DashboardHandler(BaseHTTPRequestHandler):
                         cnt = run_news_check()
                         log_event(f"Сбор новостей завершен. Опубликовано: {cnt}", "success")
                     elif action_name == 'compilation':
-                        log_event(f"Ручной запуск публикации подборки ({genre_param or 'авто'})...")
-                        res_c = run_compilation_post(genre_key=genre_param)
+                        log_event(f"Ручной запуск публикации подборки ({genre_param or 'авто'}, {count_param} аниме)...")
+                        res_c = run_compilation_post(genre_key=genre_param, count=count_param)
                         if res_c.get('ok'):
                             log_event(f"Подборка успешно опубликована: {res_c.get('theme')}", "success")
                         else:
@@ -1559,7 +1750,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 except Exception as e:
                     log_event(f"Ошибка выполнения действия [{action_name}]: {e}", "error")
 
-            threading.Thread(target=run_bg, args=(act, genre), daemon=True).start()
+            threading.Thread(target=run_bg, args=(act, genre, count), daemon=True).start()
             self._send_json({"ok": True})
         else:
             self.send_response(404)

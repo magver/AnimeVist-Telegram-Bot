@@ -125,17 +125,19 @@ def interactive_menu():
             for idx, t in enumerate(themes, 1):
                 print(f"  {idx}. {t['name']} ({t['key']})")
             t_choice = input(f"Выберите тему [0-{len(themes)}]: ").strip()
+            c_input = input("Количество аниме в подборке [3, 4, 5] (по умолчанию 4): ").strip()
+            chosen_count = int(c_input) if c_input in ['3', '4', '5'] else 4
             if t_choice == '0' or not t_choice:
-                run_compilation_post()
+                run_compilation_post(count=chosen_count)
             else:
                 try:
                     chosen_idx = int(t_choice) - 1
                     if 0 <= chosen_idx < len(themes):
-                        run_compilation_post(genre_key=themes[chosen_idx]['key'])
+                        run_compilation_post(genre_key=themes[chosen_idx]['key'], count=chosen_count)
                     else:
-                        run_compilation_post()
+                        run_compilation_post(count=chosen_count)
                 except ValueError:
-                    run_compilation_post()
+                    run_compilation_post(count=chosen_count)
         elif choice == '5':
             print("\n1. Взять релиз автоматически из GitHub Releases")
             print("2. Ввести версию и описание вручную")
@@ -172,6 +174,7 @@ def main():
     parser.add_argument('--releases', action='store_true', help="Run single series check")
     parser.add_argument('--news', action='store_true', help="Run single news check")
     parser.add_argument('--compilation', nargs='?', const='auto', default=None, help="Publish top anime compilation (optional genre key)")
+    parser.add_argument('--count', type=int, default=4, help="Number of anime in compilation (3, 4, or 5)")
     parser.add_argument('--patchnote', action='store_true', help="Publish latest patchnote from GitHub")
     parser.add_argument('--pinned', action='store_true', help="Publish pinned navigation post")
 
@@ -187,7 +190,7 @@ def main():
         run_news_check()
     elif args.compilation:
         genre = None if args.compilation == 'auto' else args.compilation
-        run_compilation_post(genre_key=genre)
+        run_compilation_post(genre_key=genre, count=args.count)
     elif args.patchnote:
         publish_patchnote_from_github()
     elif args.pinned:

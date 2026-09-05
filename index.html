@@ -283,27 +283,27 @@
     <section id="tab-overview" class="tab-content active">
       <div class="grid-kpi">
         <div class="kpi-card">
-          <div class="kpi-header"><span>TELEGRAM BOT</span><span>🤖</span></div>
-          <div class="kpi-value" id="kpiBotUser">Проверка...</div>
-          <div class="kpi-desc" id="kpiBotId">ID: —</div>
+          <div class="kpi-header"><span>👥 АУДИТОРИЯ КАНАЛА</span><span>📢</span></div>
+          <div class="kpi-value" style="color:#60a5fa;" id="kpiAudience">—</div>
+          <div class="kpi-desc" id="kpiAudienceSub">Канал: AnimeVist</div>
         </div>
 
         <div class="kpi-card">
-          <div class="kpi-header"><span>ЦЕЛЕВОЙ КАНАЛ</span><span>📢</span></div>
-          <div class="kpi-value" id="kpiChannel">—</div>
-          <div class="kpi-desc">Официальный вещатель</div>
+          <div class="kpi-header"><span>📺 ВЫПУЩЕНО СЕРИЙ</span><span>🎬</span></div>
+          <div class="kpi-value" style="color:var(--success);" id="kpiEpisodes">—</div>
+          <div class="kpi-desc" id="kpiEpisodesSub">Мониторинг: каждые 5 мин</div>
         </div>
 
         <div class="kpi-card">
-          <div class="kpi-header"><span>ОБЛАЧНАЯ БАЗА</span><span>🐘</span></div>
-          <div class="kpi-value" style="color:var(--success);" id="kpiStorageMode">Supabase Live</div>
-          <div class="kpi-desc" id="kpiLastSync">zuciuwunelfqhhhohhyn</div>
+          <div class="kpi-header"><span>📰 ЛЕНТА НОВОСТЕЙ</span><span>⚡</span></div>
+          <div class="kpi-value" style="color:#f59e0b;" id="kpiNews">—</div>
+          <div class="kpi-desc" id="kpiNewsSub">Shikimori • MAL • ANN</div>
         </div>
 
         <div class="kpi-card">
-          <div class="kpi-header"><span>ПЛАНИРОВЩИК 24/7</span><span>⏱️</span></div>
-          <div class="kpi-value" style="color:#38bdf8;" id="kpiScheduler">GitHub Actions</div>
-          <div class="kpi-desc">Каждые 15 минут</div>
+          <div class="kpi-header"><span>🌟 ТОП-ПОДБОРКИ</span><span>🖼️</span></div>
+          <div class="kpi-value" style="color:#c084fc;" id="kpiCompilations">HD Коллажи</div>
+          <div class="kpi-desc" id="kpiCompilationsSub">Каждые 6 часов</div>
         </div>
       </div>
 
@@ -364,33 +364,39 @@
         </div>
 
         <div class="card">
-          <div class="card-title">🐘 Статус Синхронизации Supabase</div>
+          <div class="card-title">📊 Пульт Контент-Менеджера и Пульс Канала</div>
           <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:18px;">
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
-              <span style="color:var(--text-secondary);">Облачный хост базы:</span>
-              <strong style="color:var(--success);">zuciuwunelfqhhhohhyn.supabase.co</strong>
+              <span style="color:var(--text-secondary);">Статус вещания:</span>
+              <strong style="color:var(--success);" id="cmStatus">🟢 Автономно 24/7 (GitHub Actions)</strong>
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
-              <span style="color:var(--text-secondary);">Таблица настроек:</span>
-              <span style="font-family:var(--font-mono); color:#fff;">public.bot_config</span>
+              <span style="color:var(--text-secondary);">Целевой канал:</span>
+              <span style="font-family:var(--font-mono); color:#fff;" id="cmChannelTitle">AnimeVist</span>
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
-              <span style="color:var(--text-secondary);">Таблица истории серий:</span>
-              <span style="font-family:var(--font-mono); color:var(--accent-cyan);">public.bot_seen_items</span>
+              <span style="color:var(--text-secondary);">Формат подборок:</span>
+              <span style="font-family:var(--font-mono); color:var(--accent-cyan);">Единый HD-коллаж (3-5 шт)</span>
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
-              <span style="color:var(--text-secondary);">Последнее сохранение:</span>
-              <span style="font-family:var(--font-mono); color:#fff;" id="overviewLastSync">Загрузка...</span>
+              <span style="color:var(--text-secondary);">База данных Supabase:</span>
+              <span style="font-family:var(--font-mono); color:var(--success);" id="cmDbStatus">Синхронизировано</span>
             </div>
           </div>
 
-          <div style="display:flex; gap:10px;">
-            <button class="btn btn-secondary btn-block" onclick="loadFromSupabase()">
-              📥 Загрузить свежие данные
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <button class="btn btn-primary" onclick="switchTab('tab-broadcast', document.querySelectorAll('.tab-btn')[1]); focusCustomPost();">
+              ✍️ Создать пост
             </button>
-            <button class="btn btn-primary btn-block" onclick="sendTestMessage()">
-              💬 Проверить Telegram-бота
+            <button class="btn btn-secondary" onclick="switchTab('tab-compilations', document.querySelectorAll('.tab-btn')[2]);">
+              🌟 Выпустить подборку
             </button>
+            <button class="btn btn-outline" onclick="switchTab('tab-actions', document.querySelectorAll('.tab-btn')[4]);">
+              ⚡ Модули в 1 клик
+            </button>
+            <a id="btnOpenChannel" href="https://t.me/animevist" target="_blank" class="btn btn-outline" style="text-align:center; text-decoration:none;">
+              📢 Открыть канал
+            </a>
           </div>
         </div>
       </div>
@@ -400,11 +406,28 @@
     <section id="tab-broadcast" class="tab-content">
       <div class="card" style="max-width: 800px; margin: 0 auto;">
         <div class="card-title">✍️ Студия Кастомного Поста в Telegram-Канал</div>
-        <div class="card-subtitle">Создайте форматированное сообщение с картинкой и инлайн-кнопкой прямо из браузера:</div>
+        <div class="card-subtitle">Создайте пост с форматированием, фото и кнопкой без ручного HTML-кодинга:</div>
 
         <div class="form-group">
-          <label class="form-label">Текст сообщения (HTML &lt;b&gt;, &lt;i&gt;, &lt;a&gt;, &lt;code&gt;):</label>
-          <textarea id="customMsgText" rows="6" placeholder="Привет! 🎬 Мы добавили новую подборку тайтлов..." oninput="updateLivePreview()"></textarea>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label class="form-label" style="margin-bottom:0;">Текст публикации:</label>
+            <button class="btn btn-outline btn-sm" type="button" onclick="autoFormatAnimeVistPost('customMsgText')" style="background:linear-gradient(135deg, rgba(59,130,246,0.2) 0%, rgba(147,51,234,0.2) 100%); border-color:rgba(147,51,234,0.4); color:#c084fc; font-weight:600;">
+              ✨ Оформить в стиле AnimeVist
+            </button>
+          </div>
+
+          <!-- Visual Formatting Toolbar -->
+          <div class="editor-toolbar" style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px; background:var(--bg-surface); padding:6px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+            <button type="button" class="btn btn-outline btn-sm" style="padding:3px 10px; font-weight:700;" onclick="insertTag('customMsgText', 'b')" title="Жирный">B</button>
+            <button type="button" class="btn btn-outline btn-sm" style="padding:3px 10px; font-style:italic;" onclick="insertTag('customMsgText', 'i')" title="Курсив">I</button>
+            <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertLinkPrompt('customMsgText')" title="Вставить ссылку">🔗 Ссылка</button>
+            <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertTag('customMsgText', 'blockquote')" title="Цитата">💬 Цитата</button>
+            <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertSnippet('customMsgText', '⭐️ <b>Рейтинг:</b> 8.6 / 10 (Shikimori)\n')" title="Вставить рейтинг">⭐️ Рейтинг</button>
+            <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertSnippet('customMsgText', '🎬 <b>Студия:</b> MAPPA\n📅 <b>Премьера:</b> 2026\n')" title="Студия и дата">🎬 Студия/Дата</button>
+            <button type="button" class="btn btn-outline btn-sm" style="padding:3px 8px;" onclick="insertSnippet('customMsgText', '\n\n#новости #анонс #animevist')" title="Хештеги">🏷 Хештеги</button>
+          </div>
+
+          <textarea id="customMsgText" rows="6" placeholder="Вставьте любой сырой текст или заметку — и нажмите «✨ Оформить в стиле AnimeVist», либо используйте кнопки панели форматирования..." oninput="updateLivePreview()"></textarea>
         </div>
 
         <div class="form-group">
@@ -415,15 +438,15 @@
         <div class="grid-2" style="margin-bottom:0; gap:10px;">
           <div class="form-group">
             <label class="form-label">Текст кнопки (опционально):</label>
-            <input type="text" id="customBtnText" placeholder="Смотреть онлайн" oninput="updateLivePreview()">
+            <input type="text" id="customBtnText" placeholder="Смотреть в AnimeVist" oninput="updateLivePreview()">
           </div>
           <div class="form-group">
             <label class="form-label">Ссылка кнопки (URL):</label>
-            <input type="text" id="customBtnUrl" placeholder="https://t.me/..." oninput="updateLivePreview()">
+            <input type="text" id="customBtnUrl" placeholder="https://t.me/animevist" oninput="updateLivePreview()">
           </div>
         </div>
 
-        <div class="form-label" style="margin-top:12px;">Предварительный просмотр:</div>
+        <div class="form-label" style="margin-top:12px;">Предварительный просмотр поста:</div>
         <div class="preview-card">
           <img id="livePreviewImg" class="preview-img" alt="Постер">
           <div id="livePreviewText" class="preview-text">Текст вашего сообщения появится здесь...</div>
@@ -442,20 +465,34 @@
     <section id="tab-compilations" class="tab-content">
       <div class="card" style="max-width: 800px; margin: 0 auto;">
         <div class="card-title">🌟 Публикатор Топ-Подборок Аниме (#подборка)</div>
-        <div class="card-subtitle">Выберите интересующий жанр и опубликуйте готовую иллюстрированную подборку прямо сейчас:</div>
+        <div class="card-subtitle">Формирует единый постер-коллаж и подробное описание без повторов:</div>
 
         <div class="form-group">
           <label class="form-label">Жанр / Тема подборки:</label>
           <select id="webCompilationThemeSelect" onchange="previewSelectedTheme(this.value)">
-            <option value="cyberpunk">🌆 Киберпанк & Фантастика</option>
-            <option value="psychological">🧠 Психологические триллеры & Детективы</option>
-            <option value="fantasy">⚔️ Эпическое фэнтези 8.5+</option>
-            <option value="romance">💖 Романтика & Повседневность</option>
-            <option value="dark_fantasy">🗡 Тёмное фэнтези & Экшен</option>
-            <option value="isekai">🌀 Захватывающие исекаи & Попаданцы</option>
-            <option value="classics">🏆 Золотая классика аниме</option>
-            <option value="comedy">😂 Безумные комедии для настроения</option>
+            <option value="must_watch">🏆 Золотая классика и шедевры (8.5+)</option>
+            <option value="hidden_gems">💎 Недооценённые алмазы и скрытые жемчужины</option>
+            <option value="mindfuck">🧠 Игры разума, психологические триллеры и детективы</option>
+            <option value="cyberpunk_scifi">🌆 Киберпанк, космос и фантастика</option>
+            <option value="epic_fantasy">⚔️ Эпическое фэнтези и приключения</option>
+            <option value="soul_romance">💖 Трогательная романтика и драма</option>
+            <option value="pure_comedy">😂 Отборные комедии и позитив</option>
+            <option value="isekai_special">🌀 Захватывающие исекаи и попаданцы</option>
           </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Количество аниме в подборке (в 1 коллаже):</label>
+          <select id="webCompilationCountSelect" onchange="previewSelectedTheme(document.getElementById('webCompilationThemeSelect').value)">
+            <option value="3">3 аниме (крупный постер)</option>
+            <option value="4" selected>4 аниме (рекомендуется)</option>
+            <option value="5">5 аниме (панорамный коллаж)</option>
+          </select>
+        </div>
+
+        <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:16px; font-size:0.8rem; color:#67e8f9; display:flex; align-items:center; gap:8px;">
+          <span>🖼</span>
+          <span>Все обложки склеиваются в <b>единый горизонтальный HD-коллаж</b> с номерами 1..N и шапкой AnimeVist!</span>
         </div>
 
         <div class="form-label">Предпросмотр карточки подборки:</div>
@@ -644,100 +681,108 @@
     let currentConfig = null;
 
     const THEMES_DATA = {
-      cyberpunk: {
-        title: "ТОП-4: Культовый Киберпанк и Фантастика 🌆",
-        desc: "Мрачное будущее, передовые технологии и неоновые мегаполисы:",
-        tags: "#киберпанк #фантастика",
-        poster: "https://shikimori.one/system/animes/original/42310.jpg",
-        items: [
-          "1️⃣ <b>«Киберпанк: Бегущие по краю»</b> / <i>Cyberpunk: Edgerunners</i>\\n⭐️ <b>8.62</b> | 🎭 Экшен, Фантастика\\n📝 Парень из трущоб теряет всё и становится наемником в безжалостном Найт-Сити.",
-          "2️⃣ <b>«Психопаспорт»</b> / <i>Psycho-Pass</i>\\n⭐️ <b>8.34</b> | 🎭 Детектив, Триллер\\n📝 Система «Сивилла» вычисляет преступный коэффициент еще до совершения преступления.",
-          "3️⃣ <b>«Призрак в доспехах»</b> / <i>Ghost in the Shell</i>\\n⭐️ <b>8.28</b> | 🎭 Экшен, Меха\\n📝 Майор Мотоко Кусанаги расследует киберпреступления на грани человечности.",
-          "4️⃣ <b>«Эрго Прокси»</b> / <i>Ergo Proxy</i>\\n⭐️ <b>7.91</b> | 🎭 Детектив, Психология\\n📝 Загадки города-купола, где андроиды внезапно обретают душу."
-        ]
-      },
-      psychological: {
-        title: "ТОП-4: Психологические Триллеры и Детективы 🧠",
-        desc: "Напряженные сюжеты, игры разума и неожиданные сюжетные твисты:",
-        tags: "#триллер #психология #детектив",
-        poster: "https://shikimori.one/system/animes/original/1535.jpg",
-        items: [
-          "1️⃣ <b>«Тетрадь смерти»</b> / <i>Death Note</i>\\n⭐️ <b>8.62</b> | 🎭 Мистика, Детектив\\n📝 Интеллектуальная дуэль школьника с тетрадью бога смерти и гениального сыщика L.",
-          "2️⃣ <b>«Монстр»</b> / <i>Monster</i>\\n⭐️ <b>8.87</b> | 🎭 Драма, Триллер\\n📝 Хирург спасает жизнь мальчику, не подозревая, что взрастил чудовище.",
-          "3️⃣ <b>«Врата Штейна»</b> / <i>Steins;Gate</i>\\n⭐️ <b>9.07</b> | 🎭 Фантастика, Триллер\\n📝 Случайное изобретение машины времени в микроволновке втягивает друзей в заговор.",
-          "4️⃣ <b>«Из нового света»</b> / <i>Shinsekai yori</i>\\n⭐️ <b>8.27</b> | 🎭 Драма, Фантастика\\n📝 Утопическое общество телекинетиков скрывает леденящую тайну."
-        ]
-      },
-      fantasy: {
-        title: "ТОП-4: Шедевры Фэнтези с Оценкой 8.5+ ⚔️",
-        desc: "Грандиозные миры, магия и незабываемые приключения:",
-        tags: "#фэнтези #приключения #эпик",
+      must_watch: {
+        title: "ТОП-4: Золотая Классика и Шедевры 🏆",
+        desc: "Легендарные тайтлы с оценкой 8.5+, которые обязан посмотреть каждый:",
+        tags: "#классика #шедевр #топ_аниме",
         poster: "https://shikimori.one/system/animes/original/52991.jpg",
         items: [
-          "1️⃣ <b>«Провожающая в последний путь Фрирен»</b> / <i>Sousou no Frieren</i>\\n⭐️ <b>9.25</b> | 🎭 Фэнтези, Драма\\n📝 Бессмертная эльфийка отправляется в путь, чтобы понять человеческие чувства.",
-          "2️⃣ <b>«Стальной алхимик: Братство»</b> / <i>Fullmetal Alchemist</i>\\n⭐️ <b>9.11</b> | 🎭 Сёнэн, Фэнтези\\n📝 Братья Элрики ищут философский камень, чтобы вернуть утраченные тела.",
-          "3️⃣ <b>«Охотник х Охотник (2011)»</b> / <i>Hunter x Hunter</i>\\n⭐️ <b>9.04</b> | 🎭 Экшен, Приключения\\n📝 Гон отправляется на смертельно опасный экзамен Охотников ради поисков отца.",
-          "4️⃣ <b>«Клеймор»</b> / <i>Claymore</i>\\n⭐️ <b>7.80</b> | 🎭 Тёмное фэнтези, Экшен\\n📝 Воительницы-полудемоны с серебряными глазами очищают континент от чудовищ."
+          "1️⃣ <b>«Провожающая в последний путь Фрирен»</b> / <i>Sousou no Frieren</i>\n⭐️ <b>9.25</b> | 🎭 Фэнтези, Приключения\n📝 Бессмертная эльфийка отправляется в путь, чтобы понять мимолетность человеческой жизни.",
+          "2️⃣ <b>«Стальной алхимик: Братство»</b> / <i>Fullmetal Alchemist</i>\n⭐️ <b>9.11</b> | 🎭 Сёнэн, Фэнтези\n📝 Братья Элрики ищут философский камень, чтобы вернуть утраченные тела.",
+          "3️⃣ <b>«Врата Штейна»</b> / <i>Steins;Gate</i>\n⭐️ <b>9.07</b> | 🎭 Фантастика, Триллер\n📝 Случайное изобретение машины времени втягивает друзей в опаснейший заговор.",
+          "4️⃣ <b>«Охотник х Охотник (2011)»</b> / <i>Hunter x Hunter</i>\n⭐️ <b>9.04</b> | 🎭 Экшен, Приключения\n📝 Гон отправляется на смертельно опасный экзамен ради поисков отца.",
+          "5️⃣ <b>«Ковбой Бибоп»</b> / <i>Cowboy Bebop</i>\n⭐️ <b>8.75</b> | 🎭 Фантастика, Детектив\n📝 Охотники за головами бороздят просторы Солнечной системы под звуки джаза."
         ]
       },
-      romance: {
-        title: "ТОП-4: Романтика, от которой Теплеет на Душе 💖",
-        desc: "Искренние чувства, неловкие признания и ламповая атмосфера:",
-        tags: "#романтика #повседневность #комедия",
-        poster: "https://shikimori.one/system/animes/original/37999.jpg",
+      hidden_gems: {
+        title: "ТОП-4: Недооценённые Алмазы и Скрытые Шедевры 💎",
+        desc: "Великолепные тайтлы, которые незаслуженно обделили массовым вниманием:",
+        tags: "#скрытыйшедевр #недооцененное #топ",
+        poster: "https://shikimori.one/system/animes/original/32281.jpg",
         items: [
-          "1️⃣ <b>«Госпожа Кагуя: В любви как на войне»</b> / <i>Kaguya-sama</i>\\n⭐️ <b>8.89</b> | 🎭 Комедия, Романтика\\n📝 Два гения студсовета ведут войну умов за первое признание в чувствах.",
-          "2️⃣ <b>«Хоримия»</b> / <i>Horimiya</i>\\n⭐️ <b>8.19</b> | 🎭 Школа, Романтика\\n📝 Два разных старшеклассника открывают друг другу свои тайные стороны.",
-          "3️⃣ <b>«Как и ожидалось, моя школьная жизнь не задалась»</b> / <i>Oregairu</i>\\n⭐️ <b>8.24</b> | 🎭 Драма, Романтика\\n📝 Циничный школьник Хатиман против воли разбирается с чужими проблемами.",
-          "4️⃣ <b>«Кланнад: Продолжение истории»</b> / <i>Clannad: After Story</i>\\n⭐️ <b>8.93</b> | 🎭 Драма, Романтика\\n📝 Трогательная до слез история взросления, семьи и настоящей любви."
+          "1️⃣ <b>«Пинг-понг»</b> / <i>Ping Pong the Animation</i>\n⭐️ <b>8.60</b> | 🎭 Спорт, Драма\n📝 Шедевр Масааки Юасы о дружбе, призвании и взрослении через настольный теннис.",
+          "2️⃣ <b>«Город, в котором меня нет»</b> / <i>Boku dake ga Inai Machi</i>\n⭐️ <b>8.31</b> | 🎭 Детектив, Триллер\n📝 Мангака возвращается в тело 10-летнего себя, чтобы предотвратить трагедию.",
+          "3️⃣ <b>«Дороро»</b> / <i>Dororo</i>\n⭐️ <b>8.24</b> | 🎭 Исторический, Экшен\n📝 Юноша с протезами вместо тела возвращает свои органы, истребляя демонов.",
+          "4️⃣ <b>«Связь сердец»</b> / <i>Kokoro Connect</i>\n⭐️ <b>7.85</b> | 🎭 Мистика, Психология\n📝 Пятеро друзей внезапно начинают непроизвольно меняться телами.",
+          "5️⃣ <b>«Парад смерти»</b> / <i>Death Parade</i>\n⭐️ <b>8.18</b> | 🎭 Психология, Драма\n📝 Бар Quindecim, где души умерших играют на жизнь и раскрывают свою истинную суть."
         ]
       },
-      dark_fantasy: {
-        title: "ТОП-4: Бескомпромиссное Тёмное Фэнтези и Экшен 🗡",
-        desc: "Суровые законы выживания, жестокие схватки и неоднозначные герои:",
-        tags: "#тёмное_фэнтези #экшен #драма",
+      mindfuck: {
+        title: "ТОП-4: Игры Разума и Психологические Триллеры 🧠",
+        desc: "Напряженные сюжеты, заговоры и неожиданные сюжетные твисты:",
+        tags: "#триллер #психология #игрыразума",
+        poster: "https://shikimori.one/system/animes/original/1535.jpg",
+        items: [
+          "1️⃣ <b>«Тетрадь смерти»</b> / <i>Death Note</i>\n⭐️ <b>8.62</b> | 🎭 Мистика, Детектив\n📝 Интеллектуальная дуэль школьника с тетрадью бога смерти и гениального сыщика L.",
+          "2️⃣ <b>«Монстр»</b> / <i>Monster</i>\n⭐️ <b>8.87</b> | 🎭 Драма, Триллер\n📝 Хирург спасает жизнь мальчику, не подозревая, что взрастил монстра.",
+          "3️⃣ <b>«Идеальная грусть»</b> / <i>Perfect Blue</i>\n⭐️ <b>8.53</b> | 🎭 Психология, Триллер\n📝 Бывшая поп-идол теряет грань между реальностью и психозом из-за преследователя.",
+          "4️⃣ <b>«Эрго Прокси»</b> / <i>Ergo Proxy</i>\n⭐️ <b>7.91</b> | 🎭 Детектив, Киберпанк\n📝 Загадки города-купола Ромдо, где андроиды внезапно обретают душу.",
+          "5️⃣ <b>«Из нового света»</b> / <i>Shinsekai yori</i>\n⭐️ <b>8.27</b> | 🎭 Драма, Фантастика\n📝 Утопическое общество телекинетиков скрывает леденящую тайну."
+        ]
+      },
+      cyberpunk_scifi: {
+        title: "ТОП-4: Культовый Киберпанк и Фантастика 🌆",
+        desc: "Мрачное будущее, высокие технологии и неоновые мегаполисы:",
+        tags: "#киберпанк #фантастика #меха",
+        poster: "https://shikimori.one/system/animes/original/42310.jpg",
+        items: [
+          "1️⃣ <b>«Киберпанк: Бегущие по краю»</b> / <i>Cyberpunk: Edgerunners</i>\n⭐️ <b>8.62</b> | 🎭 Экшен, Фантастика\n📝 Парень из трущоб становится наемником в безжалостном Найт-Сити.",
+          "2️⃣ <b>«Психопаспорт»</b> / <i>Psycho-Pass</i>\n⭐️ <b>8.34</b> | 🎭 Детектив, Триллер\n📝 Система «Сивилла» вычисляет преступный коэффициент еще до совершения преступления.",
+          "3️⃣ <b>«Призрак в доспехах»</b> / <i>Ghost in the Shell</i>\n⭐️ <b>8.28</b> | 🎭 Экшен, Меха\n📝 Майор Мотоко Кусанаги расследует киберпреступления на грани человечности.",
+          "4️⃣ <b>«Акира»</b> / <i>Akira</i>\n⭐️ <b>8.15</b> | 🎭 Фантастика, Экшен\n📝 Байкер в Нео-Токио пробуждает колоссальную разрушительную силу.",
+          "5️⃣ <b>«Виви: Песнь флюоритового глаза»</b> / <i>Vivy: Fluorite Eye's Song</i>\n⭐️ <b>8.40</b> | 🎭 Музыка, Фантастика\n📝 Андроид-певица должна предотвратить войну человечества против искусственного интеллекта."
+        ]
+      },
+      epic_fantasy: {
+        title: "ТОП-4: Эпическое Фэнтези и Магические Приключения ⚔️",
+        desc: "Грандиозные сражения, масштабные миры и судьбы королевств:",
+        tags: "#фэнтези #приключения #эпик",
         poster: "https://shikimori.one/system/animes/original/37521.jpg",
         items: [
-          "1️⃣ <b>«Сага о Винланде»</b> / <i>Vinland Saga</i>\\n⭐️ <b>8.75</b> | 🎭 Экшен, Приключения\\n📝 Юный Торфинн жаждет мести за отца в кровавую эпоху викингов.",
-          "2️⃣ <b>«Берсерк (1997)»</b> / <i>Berserk</i>\\n⭐️ <b>8.57</b> | 🎭 Тёмное фэнтези, Военное\\n📝 Одинокий наемник Гатс встречает Гриффита и вступает в Отряд Сокола.",
-          "3️⃣ <b>«Атака титанов»</b> / <i>Attack on Titan</i>\\n⭐️ <b>8.55</b> | 🎭 Экшен, Детектив\\n📝 Остатки человечества ведут отчаянную войну с гигантскими людоедами.",
-          "4️⃣ <b>«Магическая битва»</b> / <i>Jujutsu Kaisen</i>\\n⭐️ <b>8.59</b> | 🎭 Сверхъестественное, Экшен\\n📝 Юдзи проглатывает проклятый палец древнего демона ради друзей."
+          "1️⃣ <b>«Сага о Винланде»</b> / <i>Vinland Saga</i>\n⭐️ <b>8.75</b> | 🎭 Экшен, Приключения\n📝 Юный Торфинн жаждет мести за отца в кровавую эпоху викингов.",
+          "2️⃣ <b>«Берсерк (1997)»</b> / <i>Berserk</i>\n⭐️ <b>8.57</b> | 🎭 Тёмное фэнтези, Драма\n📝 Одинокий наемник Гатс встречает Гриффита и вступает в Отряд Сокола.",
+          "3️⃣ <b>«Атака титанов»</b> / <i>Attack on Titan</i>\n⭐️ <b>8.55</b> | 🎭 Экшен, Детектив\n📝 Остатки человечества ведут войну на выживание с гигантскими людоедами.",
+          "4️⃣ <b>«Клеймор»</b> / <i>Claymore</i>\n⭐️ <b>7.80</b> | 🎭 Тёмное фэнтези, Экшен\n📝 Воительницы-полудемоны с серебряными глазами очищают континент от чудовищ.",
+          "5️⃣ <b>«Магическая битва»</b> / <i>Jujutsu Kaisen</i>\n⭐️ <b>8.59</b> | 🎭 Экшен, Сверхъестественное\n📝 Юдзи поглощает палец древнего демона ради спасения друзей."
         ]
       },
-      isekai: {
-        title: "ТОП-4: Захватывающие Исекаи с Необычным Сюжетом 🌀",
-        desc: "Попаданцы в другие миры, где всё пошло не по стандартному сценарию:",
+      soul_romance: {
+        title: "ТОП-4: Трогательная Романтика и Драма 💖",
+        desc: "Искренние чувства, неловкие признания и сильные эмоции:",
+        tags: "#романтика #драма #чувства",
+        poster: "https://shikimori.one/system/animes/original/37999.jpg",
+        items: [
+          "1️⃣ <b>«Госпожа Кагуя: В любви как на войне»</b> / <i>Kaguya-sama</i>\n⭐️ <b>8.89</b> | 🎭 Комедия, Романтика\n📝 Два гения студсовета ведут войну умов за первое признание в чувствах.",
+          "2️⃣ <b>«Твоё имя»</b> / <i>Kimi no Na wa</i>\n⭐️ <b>8.84</b> | 🎭 Драма, Романтика\n📝 Парень из Токио и девушка из деревни начинают меняться телами во сне.",
+          "3️⃣ <b>«Хоримия»</b> / <i>Horimiya</i>\n⭐️ <b>8.19</b> | 🎭 Школа, Романтика\n📝 Два разных старшеклассника открывают друг другу свои тайные стороны.",
+          "4️⃣ <b>«Форма голоса»</b> / <i>Koe no Katachi</i>\n⭐️ <b>8.93</b> | 🎭 Драма, Школа\n📝 Бывший задира ищет искупления перед глухой девушкой.",
+          "5️⃣ <b>«Кланнад: Продолжение истории»</b> / <i>Clannad: After Story</i>\n⭐️ <b>8.93</b> | 🎭 Драма, Романтика\n📝 Трогательная до слез история взросления, семьи и настоящей любви."
+        ]
+      },
+      pure_comedy: {
+        title: "ТОП-4: Отборные Комедии и Позитив 😂",
+        desc: "Море юмора, безумных ситуаций и гарантированный заряд смеха:",
+        tags: "#комедия #позитив #пародия",
+        poster: "https://shikimori.one/system/animes/original/918.jpg",
+        items: [
+          "1️⃣ <b>«Гинтама»</b> / <i>Gintama</i>\n⭐️ <b>8.93</b> | 🎭 Пародия, Экшен\n📝 Самураи, инопланетяне и мастер абсурдного юмора Гинтоки Саката.",
+          "2️⃣ <b>«Необъятный океан»</b> / <i>Grand Blue</i>\n⭐️ <b>8.44</b> | 🎭 Комедия, Студенты\n📝 Студенческая жизнь дайвинг-клуба, полная вечеринок и крепкой дружбы.",
+          "3️⃣ <b>«Несладкая жизнь псионика Сайки К.»</b> / <i>Saiki Kusuo</i>\n⭐️ <b>8.41</b> | 🎭 Комедия, Сверхъестественное\n📝 Могущественный экстрасенс мечтает о тихой жизни среди чудаков.",
+          "4️⃣ <b>«Этот замечательный мир! (KonoSuba)»</b> / <i>KonoSuba</i>\n⭐️ <b>8.10</b> | 🎭 Комедия, Исекай\n📝 Казума берет с собой бесполезную богиню Акву и чудаковатую команду.",
+          "5️⃣ <b>«Моб Психо 100»</b> / <i>Mob Psycho 100</i>\n⭐️ <b>8.48</b> | 🎭 Экшен, Комедия\n📝 Скромный школьник с чудовищной психической силой пытается жить обычной жизнью."
+        ]
+      },
+      isekai_special: {
+        title: "ТОП-4: Захватывающие Исекаи и Попаданцы 🌀",
+        desc: "Попаданцы в фантастические миры, где всё пошло не по шаблону:",
         tags: "#исекай #фэнтези #приключения",
         poster: "https://shikimori.one/system/animes/original/39535.jpg",
         items: [
-          "1️⃣ <b>«Реинкарнация безработного»</b> / <i>Mushoku Tensei</i>\\n⭐️ <b>8.65</b> | 🎭 Магия, Приключения\\n📝 34-летний затворник получает второй шанс прожить достойную жизнь с мечом и магией.",
-          "2️⃣ <b>«Re:Zero — жизнь с нуля в другом мире»</b> / <i>Re:Zero</i>\\n⭐️ <b>8.23</b> | 🎭 Триллер, Драма\\n📝 Субару возвращается во времени только после своей гибели.",
-          "3️⃣ <b>«Этот замечательный мир! (KonoSuba)»</b> / <i>KonoSuba</i>\\n⭐️ <b>8.10</b> | 🎭 Комедия, Пародия\\n📝 Казума берет с собой бесполезную богиню Акву и чудаковатую пати.",
-          "4️⃣ <b>«О моём перерождении в слизь»</b> / <i>Tensei Slime</i>\\n⭐️ <b>8.12</b> | 🎭 Фэнтези, Сёнэн\\n📝 Офисный клерк перерождается слизью и строит процветающую федерацию монстров."
-        ]
-      },
-      classics: {
-        title: "ТОП-4: Золотая Классика, которую Обязан Посмотреть Каждый 🏆",
-        desc: "Легендарные тайтлы, навсегда изменившие мировую анимацию:",
-        tags: "#классика #шедевр #топ_аниме",
-        poster: "https://shikimori.one/system/animes/original/1.jpg",
-        items: [
-          "1️⃣ <b>«Ковбой Бибоп»</b> / <i>Cowboy Bebop</i>\\n⭐️ <b>8.75</b> | 🎭 Фантастика, Вестерн\\n📝 Охотники за головами бороздят Солнечную систему под звуки джаза.",
-          "2️⃣ <b>«Евангелион»</b> / <i>Neon Genesis Evangelion</i>\\n⭐️ <b>8.36</b> | 🎭 Меха, Психология\\n📝 Подростки пилотируют биороботов против таинственных Ангелов.",
-          "3️⃣ <b>«Гуррен-Лаганн»</b> / <i>Tengen Toppa Gurren Lagann</i>\\n⭐️ <b>8.63</b> | 🎭 Экшен, Меха\\n📝 Симон и Камина бурят путь наверх сквозь пространство.",
-          "4️⃣ <b>«Крутой учитель Онидзука»</b> / <i>Great Teacher Onizuka</i>\\n⭐️ <b>8.70</b> | 🎭 Комедия, Школа\\n📝 Бывший байкер становится учителем самого проблемного класса."
-        ]
-      },
-      comedy: {
-        title: "ТОП-4: Безумные Комедии для Отличного Настроения 😂",
-        desc: "Море отборного юмора, ярких персонажей и гарантированный заряд смеха:",
-        tags: "#комедия #пародия #позитив",
-        poster: "https://shikimori.one/system/animes/original/918.jpg",
-        items: [
-          "1️⃣ <b>«Гинтама»</b> / <i>Gintama</i>\\n⭐️ <b>8.93</b> | 🎭 Пародия, Экшен\\n📝 Самураи, инопланетяне и мастер абсурдного юмора Гинтоки Саката.",
-          "2️⃣ <b>«Необъятный океан»</b> / <i>Grand Blue</i>\\n⭐️ <b>8.44</b> | 🎭 Комедия, Студенты\\n📝 Студенческая жизнь дайвинг-клуба, полная вечеринок и крепкой дружбы.",
-          "3️⃣ <b>«Несладкая жизнь псионика Сайки К.»</b> / <i>Saiki Kusuo</i>\\n⭐️ <b>8.41</b> | 🎭 Комедия, Сверхъестественное\\n📝 Могущественный экстрасенс мечтает о тихой жизни среди чудаков.",
-          "4️⃣ <b>«Моб Психо 100»</b> / <i>Mob Psycho 100</i>\\n⭐️ <b>8.48</b> | 🎭 Экшен, Комедия\\n📝 Скромный школьник с чудовищной психической силой пытается жить обычной жизнью."
+          "1️⃣ <b>«Реинкарнация безработного»</b> / <i>Mushoku Tensei</i>\n⭐️ <b>8.65</b> | 🎭 Магия, Приключения\n📝 34-летний затворник получает второй шанс прожить достойную жизнь с мечом и магией.",
+          "2️⃣ <b>«Re:Zero — жизнь с нуля в другом мире»</b> / <i>Re:Zero</i>\n⭐️ <b>8.23</b> | 🎭 Триллер, Драма\n📝 Субару возвращается во времени только после своей мучительной гибели.",
+          "3️⃣ <b>«О моём перерождении в слизь»</b> / <i>Tensei Slime</i>\n⭐️ <b>8.12</b> | 🎭 Фэнтези, Сёнэн\n📝 Офисный клерк перерождается слизью и строит процветающую федерацию монстров.",
+          "4️⃣ <b>«Повелитель»</b> / <i>Overlord</i>\n⭐️ <b>7.90</b> | 🎭 Экшен, Тёмное фэнтези\n📝 Игрок остается запертым в теле скелета-мага и начинает захват мира.",
+          "5️⃣ <b>«Восхождение героя щита»</b> / <i>Tate no Yuusha</i>\n⭐️ <b>7.94</b> | 🎭 Драма, Фэнтези\n📝 Преданный союзниками герой щита поднимается с самого дна."
         ]
       }
     };
@@ -805,14 +850,17 @@
     }
 
     function previewSelectedTheme(themeKey) {
-      const t = THEMES_DATA[themeKey] || THEMES_DATA['cyberpunk'];
+      const t = THEMES_DATA[themeKey] || THEMES_DATA['must_watch'] || THEMES_DATA['cyberpunk_scifi'];
       const appName = (currentConfig && currentConfig.app && currentConfig.app.name) || 'AnimeVist';
-      
+      const countEl = document.getElementById('webCompilationCountSelect');
+      const count = countEl ? parseInt(countEl.value) || 4 : 4;
+      const displayItems = t.items.slice(0, count);
+
       const lines = [
-        `🌟 <b>${t.title}</b>`,
+        `🌟 <b>${t.title.replace('ТОП-4', `ТОП-${count}`)}</b>`,
         `<i>${t.desc}</i>`,
         '',
-        ...t.items,
+        ...displayItems,
         '',
         `✨ <i>Смотрите эти тайтлы в высоком качестве в приложении ${appName}!</i>`,
         `#подборка #топ_аниме ${t.tags} #чтопосмотреть #${appName.toLowerCase()}`
@@ -832,19 +880,22 @@
       }
 
       const key = document.getElementById('webCompilationThemeSelect').value;
-      const t = THEMES_DATA[key] || THEMES_DATA['cyberpunk'];
+      const t = THEMES_DATA[key] || THEMES_DATA['must_watch'];
       const appName = (currentConfig && currentConfig.app && currentConfig.app.name) || 'AnimeVist';
+      const countEl = document.getElementById('webCompilationCountSelect');
+      const count = countEl ? parseInt(countEl.value) || 4 : 4;
+      const displayItems = t.items.slice(0, count);
 
       const lines = [
-        `🌟 <b>${t.title}</b>\n`,
+        `🌟 <b>${t.title.replace('ТОП-4', `ТОП-${count}`)}</b>\n`,
         `<i>${t.desc}</i>\n`,
-        ...t.items.map(it => it.replace(/\\n/g, '\n') + '\n'),
+        ...displayItems.map(it => it.replace(/\\n/g, '\n') + '\n'),
         `✨ <i>Смотрите эти тайтлы в высоком качестве в приложении ${appName}!</i>\n`,
         `#подборка #топ_аниме ${t.tags} #чтопосмотреть #${appName.toLowerCase()}`
       ];
       const caption = lines.join('\n');
 
-      showToast("Публикация подборки в Telegram...", "info");
+      showToast(`Публикация подборки (${count} аниме) в Telegram...`, "info");
       try {
         const res = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
           method: 'POST',
@@ -954,13 +1005,13 @@
           document.getElementById('cfg_interval').value = ann.check_interval_seconds || 300;
           document.getElementById('cfg_comp_hours').value = ann.compilations_interval_hours || 6;
 
-          document.getElementById('kpiChannel').innerText = tg.channel_id || 'Не задан';
-          document.getElementById('overviewLastSync').innerText = rows[0].updated_at ? new Date(rows[0].updated_at).toLocaleString('ru-RU') : 'Только что';
-
           document.getElementById('headerStatusText').innerText = 'Supabase активна';
           document.getElementById('headerDot').className = 'status-dot';
 
-          if (tg.bot_token) checkTelegramBot(tg.bot_token);
+          if (tg.bot_token) {
+            checkTelegramBotAndChannel(tg.bot_token, tg.channel_id);
+          }
+          fetchSupabaseContentStats();
           previewSelectedTheme(document.getElementById('webCompilationThemeSelect').value);
         } else {
           showToast("Конфиг пока не найден в базе. Нажмите 'Сохранить настройки'.", "info");
@@ -970,20 +1021,163 @@
       }
     }
 
-    async function checkTelegramBot(token) {
+    async function checkTelegramBotAndChannel(token, channel) {
       try {
-        const res = await fetch(`https://api.telegram.org/bot${token}/getMe`);
-        const data = await res.json();
-        if (data.ok) {
-          const u = '@' + data.result.username;
-          document.getElementById('kpiBotUser').innerText = u;
-          document.getElementById('kpiBotId').innerText = `ID: ${data.result.id} (${data.result.first_name})`;
-        } else {
-          document.getElementById('kpiBotUser').innerText = 'Ошибка токена';
+        const resMe = await fetch(`https://api.telegram.org/bot${token}/getMe`);
+        const dataMe = await resMe.json();
+        if (dataMe.ok) {
+          document.getElementById('headerStatusText').innerText = `@${dataMe.result.username} Онлайн`;
+          document.getElementById('headerDot').className = 'status-dot';
         }
-      } catch (e) {
-        document.getElementById('kpiBotUser').innerText = 'API Telegram недоступен';
+
+        if (channel) {
+          const resMembers = await fetch(`https://api.telegram.org/bot${token}/getChatMemberCount?chat_id=${channel}`);
+          const dataMembers = await resMembers.json();
+          if (dataMembers.ok) {
+            document.getElementById('kpiAudience').innerText = `${dataMembers.result} подписч.`;
+          } else {
+            document.getElementById('kpiAudience').innerText = 'Канал активен';
+          }
+
+          const resChat = await fetch(`https://api.telegram.org/bot${token}/getChat?chat_id=${channel}`);
+          const dataChat = await resChat.json();
+          if (dataChat.ok && dataChat.result.title) {
+            document.getElementById('kpiAudienceSub').innerText = dataChat.result.title;
+            document.getElementById('cmChannelTitle').innerText = `${dataChat.result.title} (${channel})`;
+            if (dataChat.result.invite_link) {
+              document.getElementById('btnOpenChannel').href = dataChat.result.invite_link;
+            }
+          } else {
+            document.getElementById('cmChannelTitle').innerText = channel;
+          }
+        }
+      } catch (e) {}
+    }
+
+    async function fetchSupabaseContentStats() {
+      try {
+        const epRes = await fetch(`${SUPABASE_URL}/rest/v1/bot_seen_items?category=eq.episode&select=item_id`, {
+          headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+        });
+        const epData = await epRes.json();
+        if (Array.isArray(epData)) {
+          document.getElementById('kpiEpisodes').innerText = `${epData.length} серий`;
+        }
+
+        const newsRes = await fetch(`${SUPABASE_URL}/rest/v1/bot_seen_items?category=eq.news&select=item_id`, {
+          headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+        });
+        const newsData = await newsRes.json();
+        if (Array.isArray(newsData)) {
+          document.getElementById('kpiNews').innerText = `${newsData.length} новостей`;
+        }
+
+        const ann = (currentConfig && currentConfig.announcer) || {};
+        document.getElementById('kpiEpisodesSub').innerText = `Интервал: ${ann.check_interval_seconds || 300} сек`;
+        document.getElementById('kpiCompilations').innerText = `HD-коллажи`;
+        document.getElementById('kpiCompilationsSub').innerText = `Каждые ${ann.compilations_interval_hours || 6} ч`;
+      } catch (e) {}
+    }
+
+    /* Visual Editor & Magic Formatter Helpers */
+    function insertTag(textAreaId, tagName) {
+      const el = document.getElementById(textAreaId);
+      if (!el) return;
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+      const val = el.value;
+      const selected = val.substring(start, end);
+      const openTag = `<${tagName}>`;
+      const closeTag = `</${tagName}>`;
+      const replacement = selected ? `${openTag}${selected}${closeTag}` : `${openTag}Текст${closeTag}`;
+      el.value = val.substring(0, start) + replacement + val.substring(end);
+      el.focus();
+      el.setSelectionRange(start + openTag.length, start + replacement.length - closeTag.length);
+      updateLivePreview();
+    }
+
+    function insertSnippet(textAreaId, snippet) {
+      const el = document.getElementById(textAreaId);
+      if (!el) return;
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+      const val = el.value;
+      el.value = val.substring(0, start) + snippet + val.substring(end);
+      el.focus();
+      el.setSelectionRange(start + snippet.length, start + snippet.length);
+      updateLivePreview();
+    }
+
+    function insertLinkPrompt(textAreaId) {
+      const url = prompt("Введите ссылку (URL):", "https://");
+      if (!url) return;
+      const text = prompt("Введите текст ссылки (анкор):", "Подробнее в AnimeVist");
+      if (!text) return;
+      insertSnippet(textAreaId, `<a href="${url}">${text}</a>`);
+    }
+
+    function autoFormatAnimeVistPost(textAreaId) {
+      const el = document.getElementById(textAreaId);
+      if (!el) return;
+      let raw = el.value.trim();
+      if (!raw) {
+        showToast("Сначала вставьте или напечатайте текст для оформления", "error");
+        return;
       }
+
+      const lines = raw.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+      if (lines.length === 0) return;
+
+      let title = lines[0].replace(/^[«"']|[»"']$/g, '').trim();
+      title = title.replace(/^(Анонс|Новость|Релиз|Новый сезон|Премьера):\s*/i, '');
+
+      let studio = '';
+      let date = '';
+      let score = '';
+      let genre = '';
+      let bodyLines = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i];
+        if (/^(студия|studio):\s*(.*)/i.test(line)) {
+          studio = line.replace(/^(студия|studio):\s*/i, '').trim();
+        } else if (/^(премьера|дата|релиз|выход|год|date|release):\s*(.*)/i.test(line)) {
+          date = line.replace(/^(премьера|дата|релиз|выход|год|date|release):\s*/i, '').trim();
+        } else if (/^(рейтинг|оценка|score|rating):\s*(.*)/i.test(line)) {
+          score = line.replace(/^(рейтинг|оценка|score|rating):\s*/i, '').trim();
+        } else if (/^(жанр|жанры|genres?):\s*(.*)/i.test(line)) {
+          genre = line.replace(/^(жанр|жанры|genres?):\s*/i, '').trim();
+        } else if (!line.startsWith('#')) {
+          bodyLines.push(line);
+        }
+      }
+
+      let formatted = `🔥 <b>«${title}»</b>\n\n`;
+
+      if (studio) formatted += `🎬 <b>Студия:</b> ${studio}\n`;
+      if (date) formatted += `📅 <b>Премьера:</b> ${date}\n`;
+      if (score) formatted += `⭐️ <b>Рейтинг:</b> ${score}\n`;
+      if (genre) formatted += `🎭 <b>Жанр:</b> ${genre}\n`;
+      if (studio || date || score || genre) formatted += `\n`;
+
+      if (bodyLines.length > 0) {
+        const bodyText = bodyLines.join('\n\n');
+        formatted += `${bodyText}\n\n`;
+      }
+
+      formatted += `━━━━━━━━━━━━━━━\n`;
+      formatted += `💬 Чат комьюнити: @animevist_chat\n`;
+      formatted += `🤖 Бот и каталог: @animevist_bot\n\n`;
+      formatted += `#новости #анонс #animevist`;
+
+      el.value = formatted;
+      updateLivePreview();
+      showToast("Текст автоматически оформлен в стиле AnimeVist!", "success");
+    }
+
+    function focusCustomPost() {
+      const el = document.getElementById('customMsgText');
+      if (el) el.focus();
     }
 
     async function saveToSupabase() {
