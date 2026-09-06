@@ -5894,31 +5894,31 @@ const THEMES_DATA = {
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
 
-      // 1. Multi-stop vibrant aesthetic diagonal gradient
+      // 1. Multi-stop soft, light aesthetic pastel gradient
       const bgGrad = ctx.createLinearGradient(0, 0, totalW, totalH);
-      bgGrad.addColorStop(0, '#311b62');     // Royal violet
-      bgGrad.addColorStop(0.28, '#6d28d9');  // Purple
-      bgGrad.addColorStop(0.58, '#db2777');  // Fuchsia / magenta
-      bgGrad.addColorStop(0.85, '#f97316');  // Sunset amber / orange
-      bgGrad.addColorStop(1, '#0ea5e9');     // Cyan
+      bgGrad.addColorStop(0, '#c7d2fe');     // Soft celestial periwinkle
+      bgGrad.addColorStop(0.28, '#ddd6fe');  // Soft wisteria lilac
+      bgGrad.addColorStop(0.55, '#fbcfe8');  // Delicate blush pink
+      bgGrad.addColorStop(0.82, '#fed7aa');  // Warm soft peach
+      bgGrad.addColorStop(1, '#bae6fd');     // Airy sky cyan
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, totalW, totalH);
 
-      // 2. Soft luminous ambient aurora orbs
+      // 2. Gentle translucent ambient aurora orbs
       const g1 = ctx.createRadialGradient(totalW, 0, 10, totalW, 0, totalW * 0.5);
-      g1.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
+      g1.addColorStop(0, 'rgba(186, 230, 253, 0.45)');
       g1.addColorStop(1, 'transparent');
       ctx.fillStyle = g1;
       ctx.fillRect(0, 0, totalW, totalH);
 
       const g2 = ctx.createRadialGradient(0, totalH, 10, 0, totalH, totalW * 0.5);
-      g2.addColorStop(0, 'rgba(236, 72, 153, 0.45)');
+      g2.addColorStop(0, 'rgba(251, 207, 232, 0.45)');
       g2.addColorStop(1, 'transparent');
       ctx.fillStyle = g2;
       ctx.fillRect(0, 0, totalW, totalH);
 
       const g3 = ctx.createRadialGradient(totalW * 0.5, totalH * 0.5, 10, totalW * 0.5, totalH * 0.5, totalW * 0.4);
-      g3.addColorStop(0, 'rgba(251, 191, 36, 0.30)');
+      g3.addColorStop(0, 'rgba(254, 240, 138, 0.30)');
       g3.addColorStop(1, 'transparent');
       ctx.fillStyle = g3;
       ctx.fillRect(0, 0, totalW, totalH);
@@ -5985,11 +5985,11 @@ const THEMES_DATA = {
           posY = padY + cardH + gap;
         }
 
-        // Soft realistic layered drop shadow on gradient background
+        // Soft realistic ambient drop shadow on light gradient
         ctx.save();
-        ctx.shadowColor = 'rgba(10, 10, 20, 0.45)';
-        ctx.shadowBlur = 24;
-        ctx.shadowOffsetY = 10;
+        ctx.shadowColor = 'rgba(15, 23, 42, 0.18)';
+        ctx.shadowBlur = 20;
+        ctx.shadowOffsetY = 8;
         ctx.fillStyle = '#111827';
         roundRect(ctx, posX, posY, cardW, cardH, 14);
         ctx.fill();
