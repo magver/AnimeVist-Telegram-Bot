@@ -4592,7 +4592,7 @@ def create_compilation_collage(items_or_urls, title_text, output_filename="compi
         canvas.paste(b_shadow, (pos_x + 9, pos_y + 9), b_shadow)
         canvas.paste(badge, (pos_x + 12, pos_y + 12), badge)
 
-        # 6. Top-Right Title & Rating Badge (in top right corner of the poster!)
+        # 6. Top-Right Title & Rating Badge (in top right corner of the poster, +30% size)
         raw_ru = it.get('ru', '') or it.get('en', '')
         score_val = str(it.get('score', ''))
         if raw_ru or score_val:
@@ -4600,22 +4600,26 @@ def create_compilation_collage(items_or_urls, title_text, output_filename="compi
             display_title = (raw_ru[:max_chars-2] + '..') if len(raw_ru) > max_chars else raw_ru
             score_text = score_val if score_val else '—'
 
-            font_tr_title = _get_font(13 if card_w >= 400 else 12, bold=True)
-            font_tr_score = _get_font(12 if card_w >= 400 else 11, bold=True)
+            # +30% fonts: 13->17, 12->16, 11->15
+            font_tr_title = _get_font(17 if card_w >= 400 else 16, bold=True)
+            font_tr_score = _get_font(16 if card_w >= 400 else 15, bold=True)
 
             dummy_draw = ImageDraw.Draw(canvas)
             t_bbox = dummy_draw.textbbox((0, 0), display_title, font=font_tr_title)
             title_w = t_bbox[2] - t_bbox[0]
             s_bbox = dummy_draw.textbbox((0, 0), score_text, font=font_tr_score)
             score_num_w = s_bbox[2] - s_bbox[0]
-            score_w = score_num_w + 16
+            star_r_out = 7.2  # 5.5 * 1.3
+            star_r_in = 3.4   # 2.6 * 1.3
+            star_space = 22
+            score_w = score_num_w + star_space
 
-            pad_tr_x = 11
-            pad_tr_y = 6
+            pad_tr_x = 13
+            pad_tr_y = 8
             content_w = max(title_w, score_w)
             tr_w = content_w + pad_tr_x * 2
-            tr_h = 48
-            tr_r = 8
+            tr_h = 58
+            tr_r = 9
 
             tr_x = pos_x + card_w - 12 - tr_w
             tr_y = pos_y + 12
@@ -4629,10 +4633,10 @@ def create_compilation_collage(items_or_urls, title_text, output_filename="compi
 
             # Vector Star + Rating (right-aligned in badge)
             score_num_x = tr_w - pad_tr_x - score_num_w
-            star_cx = score_num_x - 9
-            star_cy = pad_tr_y + 26
-            draw_vector_star(tr_draw, star_cx, star_cy, r_outer=5.5, r_inner=2.6, color=(251, 191, 36, 255))
-            tr_draw.text((score_num_x, pad_tr_y + 19), score_text, fill=(251, 191, 36, 255), font=font_tr_score)
+            star_cx = score_num_x - 12
+            star_cy = pad_tr_y + 32
+            draw_vector_star(tr_draw, star_cx, star_cy, r_outer=star_r_out, r_inner=star_r_in, color=(251, 191, 36, 255))
+            tr_draw.text((score_num_x, pad_tr_y + 24), score_text, fill=(251, 191, 36, 255), font=font_tr_score)
 
             tr_shadow = Image.new("RGBA", (tr_w + 6, tr_h + 6), (0, 0, 0, 0))
             trs_draw = ImageDraw.Draw(tr_shadow)
