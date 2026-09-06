@@ -4401,43 +4401,39 @@ def draw_vector_star(draw, cx, cy, r_outer=7.2, r_inner=3.4, color=(251, 191, 36
 
 def create_light_colorful_background(width, height):
     """
-    Creates a beautiful, radiant, light, colorful pastel aurora gradient background:
-    Soft lavender, delicate rose/peach, sky azure, and pearl cream.
+    Creates a beautiful, radiant, stylish multi-stop gradient background:
+    Royal violet -> electric purple -> vibrant magenta -> sunset amber -> cyan
+    with soft luminous aurora orbs.
     """
-    base = Image.new("RGBA", (width, height), (248, 250, 252, 255))
-    
-    grad = Image.new("RGBA", (width, height))
-    draw_g = ImageDraw.Draw(grad)
+    base = Image.new("RGBA", (width, height))
+    draw = ImageDraw.Draw(base)
+    stops = [
+        (49, 27, 98),    # Deep royal violet
+        (109, 40, 217),  # Vibrant purple
+        (219, 39, 119),  # Vibrant fuchsia rose
+        (249, 115, 22),  # Warm amber orange
+        (14, 165, 233)   # Electric sky cyan
+    ]
     for y in range(height):
-        factor = y / height
-        if factor < 0.5:
-            sub_f = factor / 0.5
-            r = int(224 + (252 - 224) * sub_f)
-            g = int(231 + (231 - 231) * sub_f)
-            b = int(255 + (243 - 255) * sub_f)
-        else:
-            sub_f = (factor - 0.5) / 0.5
-            r = int(252 + (224 - 252) * sub_f)
-            g = int(231 + (242 - 231) * sub_f)
-            b = int(243 + (254 - 243) * sub_f)
-        draw_g.line([(0, y), (width, y)], fill=(r, g, b, 255))
-    
-    base = Image.alpha_composite(base, grad)
+        for x in range(0, width, 4):
+            factor = (x * 0.45 + y * 0.55) / (width * 0.45 + height * 0.55)
+            seg = factor * 4.0
+            idx = min(int(seg), 3)
+            f = seg - idx
+            cA = stops[idx]
+            cB = stops[idx + 1]
+            r = int(cA[0] + (cB[0] - cA[0]) * f)
+            g = int(cA[1] + (cB[1] - cA[1]) * f)
+            b = int(cA[2] + (cB[2] - cA[2]) * f)
+            draw.rectangle([x, y, x + 3, y], fill=(r, g, b, 255))
 
-    # Glowing colorful aurora orbs
+    # Soft glowing ambient orbs
     orbs = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     draw_o = ImageDraw.Draw(orbs)
-    
-    orb_r1 = int(min(width, height) * 0.45)
-    draw_o.ellipse((-50, -50, orb_r1 * 2 - 50, orb_r1 * 2 - 50), fill=(186, 230, 253, 140))
-    
-    orb_r2 = int(min(width, height) * 0.45)
-    draw_o.ellipse((width - orb_r2 * 2 + 50, height - orb_r2 * 2 + 50, width + 50, height + 50), fill=(233, 213, 255, 140))
-    
-    draw_o.ellipse((width - 250, -40, width + 150, 360), fill=(254, 215, 170, 120))
-    draw_o.ellipse((-40, height - 350, 350, height + 40), fill=(165, 243, 252, 110))
-
-    orbs = orbs.filter(ImageFilter.GaussianBlur(55))
+    draw_o.ellipse((width - 320, -60, width + 120, 380), fill=(56, 189, 248, 140))
+    draw_o.ellipse((-80, height - 380, 380, height + 80), fill=(236, 72, 153, 140))
+    draw_o.ellipse((width // 2 - 180, height // 2 - 180, width // 2 + 180, height // 2 + 180), fill=(251, 191, 36, 90))
+    orbs = orbs.filter(ImageFilter.GaussianBlur(65))
     base = Image.alpha_composite(base, orbs)
 
     return base
@@ -4541,11 +4537,11 @@ def create_compilation_collage(items_or_urls, title_text, output_filename="compi
             break
         pos_x, pos_y = cards_coords[idx - 1]
 
-        # 1. Soft realistic layered drop shadow on light background
+        # 1. Soft realistic layered drop shadow on gradient background
         shadow = Image.new("RGBA", (card_w + 24, card_h + 24), (0, 0, 0, 0))
         s_draw = ImageDraw.Draw(shadow)
-        s_draw.rounded_rectangle((12, 12, card_w + 12, card_h + 12), radius=r + 2, fill=(15, 23, 42, 45))
-        shadow = shadow.filter(ImageFilter.GaussianBlur(12))
+        s_draw.rounded_rectangle((12, 12, card_w + 12, card_h + 12), radius=r + 2, fill=(10, 10, 20, 80))
+        shadow = shadow.filter(ImageFilter.GaussianBlur(14))
         canvas.paste(shadow, (pos_x - 12, pos_y - 8), shadow)
 
         # 2. Resize and sharpen poster
