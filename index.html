@@ -552,7 +552,7 @@
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
               <span style="color:var(--text-secondary);">Формат подборок:</span>
-              <span style="font-family:var(--font-mono); color:var(--accent-cyan);">HD-коллаж (3–5 аниме / панорама)</span>
+              <span style="font-family:var(--font-mono); color:var(--accent-cyan);">HD-коллаж (сетка 2+1, 2+2, 3+2)</span>
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
               <span style="color:var(--text-secondary);">База данных Supabase:</span>
@@ -670,7 +670,7 @@
 
         <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-sm); padding:10px 12px; margin:12px 0 16px 0; font-size:0.8rem; color:#67e8f9; display:flex; align-items:center; gap:8px;">
           <span>🖼</span>
-          <span>Обложки объединяются в <b>единый HD-коллаж</b> (панорамный ряд 3–5 постеров) с номерами и шапкой!</span>
+          <span>Обложки объединяются в <b>единый HD-коллаж</b> (сетка 2+1, 2+2, 3+2) с названиями и рейтингом в углу!</span>
         </div>
 
         <div class="form-group">
@@ -696,9 +696,9 @@
         <div class="form-group">
           <label class="form-label">Количество аниме в подборке (в 1 коллаже):</label>
           <select id="webCompilationCountSelect" onchange="previewSelectedTheme(document.getElementById('webCompilationThemeSelect').value)">
-            <option value="3">3 аниме (крупный постер)</option>
-            <option value="4" selected>4 аниме (рекомендуется)</option>
-            <option value="5">5 аниме (панорамный коллаж)</option>
+            <option value="3">3 аниме (сетка 2+1)</option>
+            <option value="4" selected>4 аниме (сетка 2+2, рекомендуется)</option>
+            <option value="5">5 аниме (сетка 3+2)</option>
           </select>
           <button type="button" class="btn btn-secondary" onclick="rerollWebCompilation()" style="margin-top:8px; width:100%; display:flex; align-items:center; justify-content:center; gap:6px;">
             <span>🎲</span> <span>Подобрать другие аниме (Случайная ротация)</span>
@@ -5847,37 +5847,47 @@ const THEMES_DATA = {
       const ctx = canvas.getContext('2d');
       const n = items.length;
 
-      let cols, rows, cardW, cardH, gap, padX, padY, headerH;
-      if (n <= 5) {
-        cols = n;
-        rows = 1;
-        cardW = 380;
-        cardH = 550;
+      let cols, rows, cardW, cardH, gap, padX, padY, headerH, row1Count, row2Count;
+      if (n === 3) {
+        row1Count = 2;
+        row2Count = 1;
+        cols = 2;
+        rows = 2;
+        cardW = 440;
+        cardH = 620;
         gap = 24;
-        padX = 36;
-        padY = 28;
-        headerH = 88;
-      } else if (n <= 7) {
-        cols = 4;
+      } else if (n === 4) {
+        row1Count = 2;
+        row2Count = 2;
+        cols = 2;
         rows = 2;
-        cardW = 320;
-        cardH = 460;
-        gap = 20;
-        padX = 36;
-        padY = 28;
-        headerH = 88;
+        cardW = 440;
+        cardH = 620;
+        gap = 24;
+      } else if (n === 5) {
+        row1Count = 3;
+        row2Count = 2;
+        cols = 3;
+        rows = 2;
+        cardW = 380;
+        cardH = 535;
+        gap = 22;
       } else {
-        cols = 5;
+        cols = (n + 1) >> 1;
+        row1Count = cols;
+        row2Count = n - cols;
         rows = 2;
-        cardW = 320;
-        cardH = 460;
-        gap = 20;
-        padX = 36;
-        padY = 28;
-        headerH = 88;
+        cardW = 380;
+        cardH = 535;
+        gap = 22;
       }
 
-      const totalW = padX * 2 + cols * cardW + (cols - 1) * gap;
+      padX = 36;
+      padY = 26;
+      headerH = 88;
+
+      const row1W = row1Count * cardW + (row1Count - 1) * gap;
+      const totalW = padX * 2 + row1W;
       const totalH = headerH + padY * 2 + rows * cardH + (rows - 1) * gap;
 
       canvas.width = totalW;
@@ -5968,25 +5978,17 @@ const THEMES_DATA = {
       if (genId !== collageGenerationId) return;
 
       loadedImages.forEach(({ img, item, idx }) => {
-        let r, c;
-        if (n <= 5) {
-          r = 0;
-          c = idx;
-        } else if (n === 7) {
-          if (idx < 4) {
-            r = 0;
-            c = idx;
-          } else {
-            r = 1;
-            c = (idx - 4) + 0.5;
-          }
+        let posX, posY;
+        if (idx < row1Count) {
+          posX = padX + idx * (cardW + gap);
+          posY = headerH + padY;
         } else {
-          r = Math.floor(idx / 5);
-          c = idx % 5;
+          const row2W = row2Count * cardW + (row2Count - 1) * gap;
+          const row2StartX = padX + (row1W - row2W) / 2;
+          const i2 = idx - row1Count;
+          posX = row2StartX + i2 * (cardW + gap);
+          posY = headerH + padY + cardH + gap;
         }
-
-        const posX = padX + c * (cardW + gap);
-        const posY = headerH + padY + r * (cardH + gap);
 
         // Shadow
         ctx.save();
@@ -6032,38 +6034,15 @@ const THEMES_DATA = {
           ctx.fillText(item.ru.substring(0, 18), posX + cardW / 2, posY + cardH / 2);
         }
 
-        // Vignette
-        const vigGrad = ctx.createLinearGradient(posX, posY + cardH - 110, posX, posY + cardH);
-        vigGrad.addColorStop(0, 'rgba(0,0,0,0)');
-        vigGrad.addColorStop(0.6, 'rgba(0,0,0,0.85)');
-        vigGrad.addColorStop(1, 'rgba(0,0,0,0.98)');
-        ctx.fillStyle = vigGrad;
-        ctx.fillRect(posX, posY + cardH - 110, cardW, 110);
-
-        // Title and score on card bottom
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 16px "Inter", sans-serif';
-        ctx.textAlign = 'left';
-        let shortTitle = item.ru;
-        if (shortTitle.length > 24) shortTitle = shortTitle.substring(0, 22) + '..';
-        ctx.fillText(shortTitle, posX + 14, posY + cardH - 36);
-
-        ctx.fillStyle = '#f59e0b';
-        ctx.font = 'bold 14px "Inter", sans-serif';
-        ctx.fillText(`⭐️ ${item.score}`, posX + 14, posY + cardH - 14);
+        // Card Border (subtle)
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+        ctx.lineWidth = 1;
+        roundRect(ctx, posX, posY, cardW, cardH, 14);
+        ctx.stroke();
 
         ctx.restore();
 
-        // Modern Glassmorphic Rank Badge (Pill with accent dot: [ • 01 ])
-        ctx.save();
-        const numStr = (idx + 1) < 10 ? `0${idx + 1}` : `${idx + 1}`;
-        const bW = 56;
-        const bH = 28;
-        const bX = posX + 12;
-        const bY = posY + 12;
-        const bR = 8;
-
-        // Luxury metallic color themes per rank
+        // Colors per rank
         let dotColor = '#818cf8';
         let strokeColor = 'rgba(129, 140, 248, 0.7)';
         let textColor = '#f1f5f9';
@@ -6081,24 +6060,29 @@ const THEMES_DATA = {
           textColor = '#fce7f3';
         }
 
-        // Badge drop shadow
+        // 1. Top-Left Modern Glassmorphic Rank Badge (Pill with accent dot: [ • 01 ])
+        ctx.save();
+        const numStr = (idx + 1) < 10 ? `0${idx + 1}` : `${idx + 1}`;
+        const bW = 56;
+        const bH = 28;
+        const bX = posX + 12;
+        const bY = posY + 12;
+        const bR = 8;
+
         ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
         ctx.shadowBlur = 6;
         ctx.shadowOffsetY = 2;
 
-        // Background frosted dark glass
         ctx.fillStyle = 'rgba(11, 15, 28, 0.9)';
         roundRect(ctx, bX, bY, bW, bH, bR);
         ctx.fill();
 
-        // Border stroke
         ctx.shadowBlur = 0;
         ctx.strokeStyle = strokeColor;
         ctx.lineWidth = 1;
         roundRect(ctx, bX, bY, bW, bH, bR);
         ctx.stroke();
 
-        // Glowing accent dot
         ctx.fillStyle = dotColor;
         ctx.shadowColor = dotColor;
         ctx.shadowBlur = 5;
@@ -6106,13 +6090,82 @@ const THEMES_DATA = {
         ctx.arc(bX + 14, bY + bH / 2, 3.5, 0, Math.PI * 2);
         ctx.fill();
 
-        // Rank number
         ctx.shadowBlur = 0;
         ctx.fillStyle = textColor;
         ctx.font = 'bold 13px "Inter", -apple-system, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(numStr, bX + 34, bY + bH / 2 + 0.5);
+        ctx.restore();
+
+        // 2. Top-Right Title & Rating Badge (in top right corner of the poster!)
+        ctx.save();
+        const rawRu = item.ru || item.en || '';
+        const maxChars = cardW >= 400 ? 22 : 18;
+        const displayTitle = rawRu.length > maxChars ? (rawRu.substring(0, maxChars - 2) + '..') : rawRu;
+        const scoreVal = String(item.score || '—');
+
+        const fontTitleSize = cardW >= 400 ? 13 : 12;
+        const fontScoreSize = cardW >= 400 ? 12 : 11;
+        ctx.font = `bold ${fontTitleSize}px "Inter", -apple-system, sans-serif`;
+        const titleW = ctx.measureText(displayTitle).width;
+
+        ctx.font = `bold ${fontScoreSize}px "Inter", -apple-system, sans-serif`;
+        const scoreNumW = ctx.measureText(scoreVal).width;
+        const scoreW = scoreNumW + 16; // 16px for star icon + gap
+
+        const padTrX = 11;
+        const padTrY = 6;
+        const contentW = Math.max(titleW, scoreW);
+        const trW = contentW + padTrX * 2;
+        const trH = 48;
+        const trR = 8;
+
+        const trX = posX + cardW - 12 - trW;
+        const trY = posY + 12;
+
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+        ctx.shadowBlur = 6;
+        ctx.shadowOffsetY = 2;
+
+        ctx.fillStyle = 'rgba(11, 15, 28, 0.9)';
+        roundRect(ctx, trX, trY, trW, trH, trR);
+        ctx.fill();
+
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 1;
+        roundRect(ctx, trX, trY, trW, trH, trR);
+        ctx.stroke();
+
+        // Title (right-aligned in badge)
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${fontTitleSize}px "Inter", -apple-system, sans-serif`;
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'top';
+        ctx.fillText(displayTitle, trX + trW - padTrX, trY + padTrY);
+
+        // Vector Star + Rating (right-aligned in badge)
+        const scoreNumX = trX + trW - padTrX;
+        const starCenterX = scoreNumX - scoreNumW - 9;
+        const starCenterY = trY + padTrY + 25;
+
+        ctx.fillStyle = '#fbbf24';
+        ctx.beginPath();
+        for (let s = 0; s < 10; s++) {
+          const angle = -Math.PI / 2 + s * Math.PI / 5;
+          const r = s % 2 === 0 ? 5.5 : 2.6;
+          const sx = starCenterX + r * Math.cos(angle);
+          const sy = starCenterY + r * Math.sin(angle);
+          if (s === 0) ctx.moveTo(sx, sy);
+          else ctx.lineTo(sx, sy);
+        }
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = `bold ${fontScoreSize}px "Inter", -apple-system, sans-serif`;
+        ctx.fillText(scoreVal, scoreNumX, trY + padTrY + 19);
         ctx.restore();
       });
 
