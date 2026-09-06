@@ -4734,7 +4734,7 @@ def get_compilation_preview(theme_key=None, count=4, refresh=True):
         theme_key = 'must_watch'
 
     try:
-        count = max(3, min(10, int(count)))
+        count = max(3, min(5, int(count)))
     except (ValueError, TypeError):
         count = 4
 
@@ -4758,6 +4758,10 @@ def get_compilation_preview(theme_key=None, count=4, refresh=True):
 
 def run_compilation_post(genre_key=None, count=4, dry_run=False):
     sender = TelegramSender()
+    try:
+        count = max(3, min(5, int(count)))
+    except (ValueError, TypeError):
+        count = 4
 
     # Auto-pick next theme if not specified
     if not genre_key or genre_key == 'auto' or genre_key not in THEMES:
@@ -4824,7 +4828,7 @@ if __name__ == '__main__':
             genre = arg.split('=', 1)[1]
         elif arg.startswith('--count='):
             try:
-                count = int(arg.split('=', 1)[1])
+                count = max(3, min(5, int(arg.split('=', 1)[1])))
             except ValueError:
                 pass
         elif arg in THEMES:
