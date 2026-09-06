@@ -5882,51 +5882,45 @@ const THEMES_DATA = {
         gap = 22;
       }
 
-      padX = 36;
-      padY = 26;
-      headerH = 88;
+      padX = 28;
+      padY = 28;
 
       const row1W = row1Count * cardW + (row1Count - 1) * gap;
       const totalW = padX * 2 + row1W;
-      const totalH = headerH + padY * 2 + rows * cardH + (rows - 1) * gap;
+      const totalH = padY * 2 + rows * cardH + (rows - 1) * gap;
 
       canvas.width = totalW;
       canvas.height = totalH;
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
 
-      // Draw background
+      // 1. Multi-stop light pastel aurora gradient
       const bgGrad = ctx.createLinearGradient(0, 0, totalW, totalH);
-      bgGrad.addColorStop(0, '#0a0f1d');
-      bgGrad.addColorStop(0.5, '#0f172a');
-      bgGrad.addColorStop(1, '#080c14');
+      bgGrad.addColorStop(0, '#edf2f7');
+      bgGrad.addColorStop(0.35, '#e0e7ff');
+      bgGrad.addColorStop(0.68, '#fce7f3');
+      bgGrad.addColorStop(1, '#e0f2fe');
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, totalW, totalH);
 
-      // Glow circle
-      const radGrad = ctx.createRadialGradient(totalW * 0.5, headerH, 10, totalW * 0.5, headerH, totalW * 0.6);
-      radGrad.addColorStop(0, 'rgba(99, 102, 241, 0.22)');
-      radGrad.addColorStop(1, 'transparent');
-      ctx.fillStyle = radGrad;
+      // 2. Soft colorful glowing aurora orbs
+      const g1 = ctx.createRadialGradient(0, 0, 10, 0, 0, totalW * 0.45);
+      g1.addColorStop(0, 'rgba(186, 230, 253, 0.65)');
+      g1.addColorStop(1, 'transparent');
+      ctx.fillStyle = g1;
       ctx.fillRect(0, 0, totalW, totalH);
 
-      // Header title
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 28px "Inter", -apple-system, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(`🌟 AnimeVist  •  ТОП-${n}: ${titleText}`, totalW / 2, 48);
+      const g2 = ctx.createRadialGradient(totalW, totalH, 10, totalW, totalH, totalW * 0.45);
+      g2.addColorStop(0, 'rgba(233, 213, 255, 0.65)');
+      g2.addColorStop(1, 'transparent');
+      ctx.fillStyle = g2;
+      ctx.fillRect(0, 0, totalW, totalH);
 
-      // Separator line
-      const lineGrad = ctx.createLinearGradient(padX, 74, totalW - padX, 74);
-      lineGrad.addColorStop(0, 'rgba(99, 102, 241, 0)');
-      lineGrad.addColorStop(0.5, 'rgba(236, 72, 153, 0.85)');
-      lineGrad.addColorStop(1, 'rgba(6, 182, 212, 0)');
-      ctx.strokeStyle = lineGrad;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(padX, 74);
-      ctx.lineTo(totalW - padX, 74);
-      ctx.stroke();
+      const g3 = ctx.createRadialGradient(totalW, 0, 10, totalW, 0, totalW * 0.4);
+      g3.addColorStop(0, 'rgba(254, 215, 170, 0.55)');
+      g3.addColorStop(1, 'transparent');
+      ctx.fillStyle = g3;
+      ctx.fillRect(0, 0, totalW, totalH);
 
       function roundRect(context, x, y, width, height, radius) {
         context.beginPath();
@@ -5938,7 +5932,7 @@ const THEMES_DATA = {
         context.lineTo(x + radius, y + height);
         context.quadraticCurveTo(x, y + height, x, y + height - radius);
         context.lineTo(x, y + radius);
-        context.quadraticCurveTo(x, y, x + radius, y);
+        context.quadraticCurveTo(x, y + radius, x + radius, y);
         context.closePath();
       }
 
@@ -5981,20 +5975,20 @@ const THEMES_DATA = {
         let posX, posY;
         if (idx < row1Count) {
           posX = padX + idx * (cardW + gap);
-          posY = headerH + padY;
+          posY = padY;
         } else {
           const row2W = row2Count * cardW + (row2Count - 1) * gap;
           const row2StartX = padX + (row1W - row2W) / 2;
           const i2 = idx - row1Count;
           posX = row2StartX + i2 * (cardW + gap);
-          posY = headerH + padY + cardH + gap;
+          posY = padY + cardH + gap;
         }
 
-        // Shadow
+        // Soft realistic layered drop shadow on light background
         ctx.save();
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.75)';
-        ctx.shadowBlur = 18;
-        ctx.shadowOffsetY = 8;
+        ctx.shadowColor = 'rgba(15, 23, 42, 0.20)';
+        ctx.shadowBlur = 24;
+        ctx.shadowOffsetY = 10;
         ctx.fillStyle = '#111827';
         roundRect(ctx, posX, posY, cardW, cardH, 14);
         ctx.fill();
@@ -6034,15 +6028,15 @@ const THEMES_DATA = {
           ctx.fillText(item.ru.substring(0, 18), posX + cardW / 2, posY + cardH / 2);
         }
 
-        // Card Border (subtle)
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
-        ctx.lineWidth = 1;
+        // Picture-frame border
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+        ctx.lineWidth = 2;
         roundRect(ctx, posX, posY, cardW, cardH, 14);
         ctx.stroke();
 
         ctx.restore();
 
-        // Colors per rank
+        // Rank tier colors
         let dotColor = '#818cf8';
         let strokeColor = 'rgba(129, 140, 248, 0.7)';
         let textColor = '#f1f5f9';
@@ -6060,20 +6054,25 @@ const THEMES_DATA = {
           textColor = '#fce7f3';
         }
 
+        // Font sizes: matched for title and number badge (17px / 16px)
+        const fontTitleSize = cardW >= 400 ? 17 : 16;
+        const fontScoreSize = cardW >= 400 ? 16 : 15;
+
         // 1. Top-Left Modern Glassmorphic Rank Badge (Pill with accent dot: [ • 01 ])
+        // Font size MATCHES title font size (17px / 16px bold)
         ctx.save();
         const numStr = (idx + 1) < 10 ? `0${idx + 1}` : `${idx + 1}`;
-        const bW = 56;
-        const bH = 28;
+        const bW = 66;
+        const bH = 36;
         const bX = posX + 12;
         const bY = posY + 12;
-        const bR = 8;
+        const bR = 9;
 
         ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
         ctx.shadowBlur = 6;
         ctx.shadowOffsetY = 2;
 
-        ctx.fillStyle = 'rgba(11, 15, 28, 0.9)';
+        ctx.fillStyle = 'rgba(11, 15, 28, 0.92)';
         roundRect(ctx, bX, bY, bW, bH, bR);
         ctx.fill();
 
@@ -6087,26 +6086,24 @@ const THEMES_DATA = {
         ctx.shadowColor = dotColor;
         ctx.shadowBlur = 5;
         ctx.beginPath();
-        ctx.arc(bX + 14, bY + bH / 2, 3.5, 0, Math.PI * 2);
+        ctx.arc(bX + 16, bY + bH / 2, 4, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.shadowBlur = 0;
         ctx.fillStyle = textColor;
-        ctx.font = 'bold 13px "Inter", -apple-system, sans-serif';
+        ctx.font = `bold ${fontTitleSize}px "Inter", -apple-system, sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(numStr, bX + 34, bY + bH / 2 + 0.5);
+        ctx.fillText(numStr, bX + 41, bY + bH / 2 + 0.5);
         ctx.restore();
 
         // 2. Top-Right Title & Rating Badge (in top right corner of the poster!)
         ctx.save();
         const rawRu = item.ru || item.en || '';
-        const maxChars = cardW >= 400 ? 22 : 18;
+        const maxChars = cardW >= 400 ? 20 : 17;
         const displayTitle = rawRu.length > maxChars ? (rawRu.substring(0, maxChars - 2) + '..') : rawRu;
         const scoreVal = String(item.score || '—');
 
-        // +30% font sizes: 13 -> 17, 12 -> 16, 11 -> 15
-        const fontTitleSize = cardW >= 400 ? 17 : 16;
         const fontScoreSize = cardW >= 400 ? 16 : 15;
         ctx.font = `bold ${fontTitleSize}px "Inter", -apple-system, sans-serif`;
         const titleW = ctx.measureText(displayTitle).width;
