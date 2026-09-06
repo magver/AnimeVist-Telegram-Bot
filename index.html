@@ -5713,6 +5713,8 @@ const THEMES_DATA = {
       return `https://wsrv.nl/?url=${encodeURIComponent(url)}&w=600&output=jpg&q=95`;
     }
 
+    const emojisNum = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
+
     function formatCompilationCaption(t, items, count, appName) {
       const cleanTitle = t.title.replace(/ТОП[\s\-\d:]*/gi, '').trim();
       const n = items.length;
@@ -6395,8 +6397,6 @@ const THEMES_DATA = {
             checkTelegramBotAndChannel(tg.bot_token, tg.channel_id);
           }
           fetchSupabaseContentStats();
-          await syncCompilationCooldownWithSupabase();
-          previewSelectedTheme(document.getElementById('webCompilationThemeSelect').value);
         } else {
           document.getElementById('headerStatusText').innerText = 'База пуста';
           showToast("Конфиг пока не найден в базе. Нажмите 'Сохранить настройки'.", "info");
@@ -6405,6 +6405,18 @@ const THEMES_DATA = {
         document.getElementById('headerStatusText').innerText = 'Ошибка связи с Supabase';
         document.getElementById('headerDot').className = 'status-dot error';
         showToast("Ошибка загрузки из Supabase: " + e.message, "error");
+        return;
+      }
+
+      // Safe UI initialization isolated from network status
+      try {
+        await syncCompilationCooldownWithSupabase();
+        const selectEl = document.getElementById('webCompilationThemeSelect');
+        if (selectEl) {
+          previewSelectedTheme(selectEl.value || 'must_watch');
+        }
+      } catch (e) {
+        console.warn("Compilation preview init error:", e);
       }
     }
 
