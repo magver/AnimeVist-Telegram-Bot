@@ -684,6 +684,8 @@
             <option value="soul_romance">💖 Трогательная романтика и драма</option>
             <option value="pure_comedy">😂 Отборные комедии и позитив</option>
             <option value="isekai_special">🌀 Захватывающие исекаи и попаданцы</option>
+            <option value="shonen_hype">🔥 Сёнэн, ураганный экшен и культовые битвы</option>
+            <option value="dark_horror">🩸 Мрачный хоррор, выживание и тёмное фэнтези</option>
           </select>
           <div id="cooldownBadge" style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:var(--radius-sm); padding:6px 10px; margin-top:6px; font-size:0.75rem; color:#6ee7b7; display:flex; align-items:center; gap:6px;">
             <span>🛡️</span>
@@ -1241,6 +1243,231 @@ const THEMES_DATA = {
                 "genres": "Action, Drama, Psychological",
                 "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx120377-ayZPoxiWt4Li.jpg",
                 "hook": "Взрывная трагедия парня из трущоб в безжалостном Найт-Сити."
+            },
+            {
+                "id": 35737,
+                "ru": "Плутон",
+                "en": "PLUTO",
+                "score": "8.40",
+                "genres": "Sci-Fi, Детектив",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx99088-LTJskMD1wbbQ.png",
+                "hook": "Робот-детектив расследует серию загадочных убийств сильнейших роботов планеты."
+            },
+            {
+                "id": 170,
+                "ru": "Слэм-данк",
+                "en": "Slam Dunk",
+                "score": "8.30",
+                "genres": "Спорт, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx170-cmD8A0vZsp6g.jpg",
+                "hook": "Хулиган Сакураги приходит в баскетбол ради девушки и открывает в себе невероятный талант."
+            },
+            {
+                "id": 19647,
+                "ru": "Первый шаг",
+                "en": "Hajime No Ippo: The Fighting! - Rising -",
+                "score": "8.50",
+                "genres": "Спорт, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx19647-cIy7ShTL6e9h.jpg",
+                "hook": "Застенчивый школьник находит спасение в боксе и начинает путь к поясу чемпиона."
+            },
+            {
+                "id": 467,
+                "ru": "Призрак в доспехах: Синдром одиночки",
+                "en": "Ghost in the Shell: Stand Alone Complex",
+                "score": "8.20",
+                "genres": "Sci-Fi, Киберпанк",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx467-mBTtIoR13qs2.jpg",
+                "hook": "Майор Мотоко Кусанаги и 9-й отдел ведут борьбу с изощрённым хакером Смеющимся человеком."
+            },
+            {
+                "id": 3786,
+                "ru": "Евангелион 3.0+1.0",
+                "en": "Evangelion: 3.0+1.0 Thrice Upon a Time",
+                "score": "8.50",
+                "genres": "Меха, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx3786-Tpt9iM72dxTv.jpg",
+                "hook": "Грандиозный и трогательный финал легендарной эпопеи Синдзи Икари."
+            },
+            {
+                "id": 50594,
+                "ru": "Судзумэ, закрывающая двери",
+                "en": "Suzume",
+                "score": "8.10",
+                "genres": "Фэнтези, Приключения",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx142770-dDaDIRnsv5jN.jpg",
+                "hook": "Девушка и парень-хранитель путешествуют по Японии, закрывая двери бедствий."
+            },
+            {
+                "id": 38826,
+                "ru": "Дитя погоды",
+                "en": "Weathering With You",
+                "score": "8.10",
+                "genres": "Романтика, Фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx106286-5COcpd0J9VbL.png",
+                "hook": "Сбежавший в Токио подросток встречает девушку, способную разгонять тучи силой молитвы."
+            },
+            {
+                "id": 36098,
+                "ru": "Я хочу съесть твою поджелудочную",
+                "en": "I Want to Eat Your Pancreas",
+                "score": "8.40",
+                "genres": "Драма, Романтика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx99750-pNyly9d3MEgV.jpg",
+                "hook": "Скрытный парень узнаёт о смертельной болезни одноклассницы и проводит с ней последние дни."
+            },
+            {
+                "id": 918,
+                "ru": "Гинтама",
+                "en": "Gintama",
+                "score": "8.50",
+                "genres": "Комедия, Сёнэн",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx918-iOaeBVUn4uK7.jpg",
+                "hook": "Безумная жизнь ленивого самурая Гинтоки в оккупированном пришельцами Эдо."
+            },
+            {
+                "id": 52034,
+                "ru": "Звёздное дитя",
+                "en": "OSHI NO KO",
+                "score": "8.40",
+                "genres": "Драма, Детектив",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx150672-WqmmwZ4nMzAy.png",
+                "hook": "Обратная сторона японского шоу-бизнеса сквозь призму мести и реинкарнации."
+            },
+            {
+                "id": 52701,
+                "ru": "Подземелье вкусностей",
+                "en": "Delicious in Dungeon",
+                "score": "8.50",
+                "genres": "Фэнтези, Приключения",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx153518-IVXPDY5ph3kO.jpg",
+                "hook": "Отряд авантюристов спускается в смертоносное подземелье, готовя монстров на обед."
+            },
+            {
+                "id": 5,
+                "ru": "Ковбой Бибоп: Достучаться до небес",
+                "en": "Cowboy Bebop: The Movie - Knockin' on Heaven's Door",
+                "score": "8.20",
+                "genres": "Sci-Fi, Боевик",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5-NozHwXWdNLCz.jpg",
+                "hook": "Спайк Шпигель и команда Бибопа охотятся за террористом с биооружием на Марсе."
+            },
+            {
+                "id": 52093,
+                "ru": "Триган: Ураган",
+                "en": "TRIGUN STAMPEDE",
+                "score": "7.70",
+                "genres": "Sci-Fi, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx151040-9QXRpaprfNmL.png",
+                "hook": "Пацифист Вэш Ураган путешествует по пустынной планете, спасая людей от разрушений."
+            },
+            {
+                "id": 37520,
+                "ru": "Дороро",
+                "en": "Dororo",
+                "score": "8.10",
+                "genres": "Экшен, Исторический",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101347-TGaDwEYqLfm1.jpg",
+                "hook": "Юноша, лишённый тела из-за сделки отца с демонами, ищет чудовищ, чтобы вернуть себя."
+            },
+            {
+                "id": 31478,
+                "ru": "Великий из бродячих псов",
+                "en": "Bungo Stray Dogs",
+                "score": "7.70",
+                "genres": "Экшен, Детектив",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21311-hAXyT8Yoh6G9.jpg",
+                "hook": "Детективное агентство с литературными суперсилами противостоит портовой мафии."
+            },
+            {
+                "id": 10800,
+                "ru": "Яркая Чихая",
+                "en": "Chihayafuru",
+                "score": "8.00",
+                "genres": "Драма, Спорт",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10800-hofcUL0YEL7O.png",
+                "hook": "Девушка стремится стать королевой традиционной японской карточной игры Карута."
+            },
+            {
+                "id": 12189,
+                "ru": "Хёка",
+                "en": "Hyouka",
+                "score": "7.90",
+                "genres": "Детектив, Повседневность",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx12189-zj5AWUYO53Fv.jpg",
+                "hook": "Энергосберегающий парень Хотаро раскрывает школьные бытовые тайны ради любопытной подруги."
+            },
+            {
+                "id": 37965,
+                "ru": "Почувствуй ветер",
+                "en": "Run with the Wind",
+                "score": "8.30",
+                "genres": "Спорт, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101903-ncgPJbbA5Nou.jpg",
+                "hook": "Десять студентов с нуля готовятся к сложнейшему марафонскому забегу Хаконэ Экидэн."
+            },
+            {
+                "id": 11771,
+                "ru": "Баскетбол Куроко",
+                "en": "Kuroko's Basketball",
+                "score": "7.80",
+                "genres": "Спорт, Сёнэн",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11771-uvr44RAwRxPw.jpg",
+                "hook": "«Призрачный шестой игрок» Поколения Чудес ведет команду Сэйрин к национальному триумфу."
+            },
+            {
+                "id": 43,
+                "ru": "Призрак в доспехах (1995)",
+                "en": "Ghost in the Shell",
+                "score": "8.00",
+                "genres": "Киберпанк, Философия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx43-Y6EjeEMM14dj.png",
+                "hook": "Культовый шедевр Мамору Осии о майоре Кусанаги и природе искусственного разума."
+            },
+            {
+                "id": 47,
+                "ru": "Акира",
+                "en": "Akira",
+                "score": "7.90",
+                "genres": "Sci-Fi, Киберпанк",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx47-4CR68arv452h.jpg",
+                "hook": "Легендарный визуальный прорыв о Нео-Токио, байкерах и высвобождении колоссальной телекинетической силы."
+            },
+            {
+                "id": 12355,
+                "ru": "Волчьи дети Амэ и Юки",
+                "en": "Wolf Children",
+                "score": "8.30",
+                "genres": "Драма, Фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx12355-wNsvhEsXEgrH.png",
+                "hook": "Одинокая мать растит двоих детей-полуволков, ищущих свое место в мире."
+            },
+            {
+                "id": 28805,
+                "ru": "Ученик чудовища",
+                "en": "The Boy and the Beast",
+                "score": "7.90",
+                "genres": "Приключения, Фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20981-D6PAJAOC4jPc.jpg",
+                "hook": "Сбежавший мальчик попадает в мир духов и становится учеником вспыльчивого воина-медведя."
+            },
+            {
+                "id": 36936,
+                "ru": "Мирай из будущего",
+                "en": "Mirai",
+                "score": "7.10",
+                "genres": "Фэнтези, Семья",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx100749-7Tptl7EAMAWH.jpg",
+                "hook": "Мальчик Кун ревнует родителей к новорожденной сестренке и встречает ее повзрослевшую версию из будущего."
+            },
+            {
+                "id": 38594,
+                "ru": "На твоей волне",
+                "en": "Ride Your Wave",
+                "score": "7.60",
+                "genres": "Романтика, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx105018-XM7rFyryltjb.jpg",
+                "hook": "Девушка-серфингистка видит дух погибшего возлюбленного-пожарного в воде при пении их любимой песни."
             }
         ]
     },
@@ -1591,6 +1818,204 @@ const THEMES_DATA = {
                 "genres": "Horror, Mystery, Psychological",
                 "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2596-7VmcTkkQmOST.jpg",
                 "hook": "Мистический психологический триллер от создателей «Лэйн» о травмах детства."
+            },
+            {
+                "id": 10893,
+                "ru": "Радости скорби",
+                "en": "Kyousougiga",
+                "score": "6.80",
+                "genres": "Фэнтези, Семейный",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10893-B511LX2N4aYm.jpg",
+                "hook": "Девочка с гигантским молотом попадает в Зазеркальный Киото в поисках своей матери."
+            },
+            {
+                "id": 10357,
+                "ru": "Человечество увяло",
+                "en": "Humanity Has Declined",
+                "score": "7.50",
+                "genres": "Комедия, Фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10357-JJvq6G2S01kl.png",
+                "hook": "Ироничная сатира на закате человеческой эры, где новыми хозяевами мира стали феи."
+            },
+            {
+                "id": 49738,
+                "ru": "Повесть о доме Тайра",
+                "en": "The Heike Story",
+                "score": "7.70",
+                "genres": "Исторический, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx138714-dLyXT5qyTYbr.jpg",
+                "hook": "Юная провидица становится свидетельницей падения великого самурайского клана."
+            },
+            {
+                "id": 39792,
+                "ru": "Руки прочь от кинокружка!",
+                "en": "Keep Your Hands Off Eizouken!",
+                "score": "8.00",
+                "genres": "Комедия, Повседневность",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx109298-suwdIUbJEPJx.png",
+                "hook": "Три увлечённые школьницы создают собственный независимый аниме-шедевр."
+            },
+            {
+                "id": 40834,
+                "ru": "Рейтинг короля",
+                "en": "Ranking of Kings",
+                "score": "8.30",
+                "genres": "Фэнтези, Приключения",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113717-9sNnN8WRgK15.jpg",
+                "hook": "Глухонемой слабый принц Бодзи доказывает миру, что храброе сердце сильнее любого меча."
+            },
+            {
+                "id": 33337,
+                "ru": "АККА: Инспекция по 13 округам",
+                "en": "ACCA: 13-Territory Inspection Dept.",
+                "score": "7.50",
+                "genres": "Детектив, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21823-0XTjZ0Rtm7va.jpg",
+                "hook": "Невозмутимый чиновник расследует слухи о государственном перевороте за чашкой чая."
+            },
+            {
+                "id": 22789,
+                "ru": "Баракамон",
+                "en": "Barakamon",
+                "score": "8.20",
+                "genres": "Комедия, Повседневность",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20722-2KAeq72E95dr.png",
+                "hook": "Вспыльчивый каллиграф отправляется на сельский остров и учится радоваться простым мелочам."
+            },
+            {
+                "id": 10162,
+                "ru": "Брошенный кролик",
+                "en": "Bunny Drop",
+                "score": "8.10",
+                "genres": "Повседневность, Семейный",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10162-w4SG5oQSQwMn.jpg",
+                "hook": "30-летний холостяк берёт на воспитание внебрачную дочь своего покойного дедушки."
+            },
+            {
+                "id": 16918,
+                "ru": "Серебряная ложка",
+                "en": "Silver Spoon",
+                "score": "7.90",
+                "genres": "Повседневность, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16918-0biAxYFR29mw.png",
+                "hook": "Городской отличник сбегает от ожиданий семьи в строгую сельскохозяйственную школу."
+            },
+            {
+                "id": 48953,
+                "ru": "Тетрадь дружбы Нацумэ",
+                "en": "Natsume Yuujinchou × Kumamoto-ken: Hitoyoshi Kuma de no Yasashii Jikan",
+                "score": "6.60",
+                "genres": "Мистика, Повседневность",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b188619-zBWxqUo3oWXo.png",
+                "hook": "Одинокий юноша возвращает имена духам, записанным в наследственной тетради бабушки."
+            },
+            {
+                "id": 40729,
+                "ru": "Мегалобокс 2: Кочевник",
+                "en": "MEGALOBOX 2: NOMAD",
+                "score": "8.10",
+                "genres": "Спорт, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113359-FnjG2VppJF9f.png",
+                "hook": "Постаревший и потерянный боксёр возвращается на ринг ради искупления грехов прошлого."
+            },
+            {
+                "id": 1454,
+                "ru": "Когти зверя",
+                "en": "Kemonozume",
+                "score": "7.10",
+                "genres": "Экшен, Романтика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1454-fyg2zIQz5Qsj.png",
+                "hook": "Охотник на чудовищ влюбляется в девушку, способную превращаться в плотоядного монстра."
+            },
+            {
+                "id": 5420,
+                "ru": "Эрин, заклинательница зверей",
+                "en": "Erin",
+                "score": "8.00",
+                "genres": "Фэнтези, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5420-hOjyV2QC1yIG.jpg",
+                "hook": "Трогательная история девочки, научившейся понимать язык опаснейших боевых ящеров."
+            },
+            {
+                "id": 239,
+                "ru": "Граф Монте-Кристо",
+                "en": "Gankutsuou: The Count of Monte Cristo",
+                "score": "7.90",
+                "genres": "Детектив, Sci-Fi",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx239-eldiiZxky1Ul.png",
+                "hook": "Уникальная визуальная стилистика романа Дюма в футуристическом космическом Париже."
+            },
+            {
+                "id": 721,
+                "ru": "Принцесса Тютю",
+                "en": "Princess Tutu",
+                "score": "8.10",
+                "genres": "Сказка, Махо-сёдзё",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx721-9tJpM47RBPJm.jpg",
+                "hook": "Маленькая утка превращается в девочку-балерину, чтобы собрать осколки сердца принца."
+            },
+            {
+                "id": 6774,
+                "ru": "Трапеция",
+                "en": "Welcome to Irabu's Office",
+                "score": "7.60",
+                "genres": "Психология, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx6774-9yybYg3VePJU.png",
+                "hook": "Эксцентричный психиатр Ирабу лечит неврозы пациентов самыми безумными методами."
+            },
+            {
+                "id": 43439,
+                "ru": "Дом теней",
+                "en": "SHADOWS HOUSE",
+                "score": "7.70",
+                "genres": "Мистика, Детектив",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx125038-BCfEvry0QBXW.png",
+                "hook": "Живые куклы прислуживают безликим аристократам-теням в особняке, полном мрачных тайн."
+            },
+            {
+                "id": 9289,
+                "ru": "Азбука цветов",
+                "en": "Hanasaku Iroha ~Blossoms for Tomorrow~",
+                "score": "7.70",
+                "genres": "Повседневность, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx9289-2Y14iZ2pMqeX.jpg",
+                "hook": "16-летняя Охана работает горничной в традиционной гостинице на горячих источниках."
+            },
+            {
+                "id": 31376,
+                "ru": "Полёт ведьмы",
+                "en": "Flying Witch",
+                "score": "7.40",
+                "genres": "Повседневность, Магия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21284-vQcCLIWt1o5O.png",
+                "hook": "Юная ведьма Макото переезжает к родственникам в деревню и постигает тихую магию природы."
+            },
+            {
+                "id": 13333,
+                "ru": "Тари Тари",
+                "en": "Tari Tari",
+                "score": "7.00",
+                "genres": "Повседневность, Музыка",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx13333-yDRfFOMbrbf0.png",
+                "hook": "Пятеро непохожих старшеклассников объединяются в клуб хорового пения."
+            },
+            {
+                "id": 16417,
+                "ru": "Лавочка Тамако",
+                "en": "Tamako Market",
+                "score": "7.30",
+                "genres": "Повседневность, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx16417-r8Njy5UnwvDE.png",
+                "hook": "Дочь торговца моти Тамако и говорящая птица Дзерамоти в торговом квартале Усагияма."
+            },
+            {
+                "id": 17909,
+                "ru": "Эксцентричное семейство",
+                "en": "The Eccentric Family",
+                "score": "7.70",
+                "genres": "Фэнтези, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx17909-BXyd04Lj8F6M.jpg",
+                "hook": "Семья оборотней-тануки в Киото балансирует между летающими тэнгу и клубом гурманов Пятницы."
             }
         ]
     },
@@ -1905,6 +2330,168 @@ const THEMES_DATA = {
                 "genres": "Adventure, Mystery, Psychological",
                 "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx790-YTUCvBKX8ZWK.jpg",
                 "hook": "Философский киберпанк-детектив о природе души искусственного интеллекта."
+            },
+            {
+                "id": 35120,
+                "ru": "Человек-дьявол: Плакса",
+                "en": "Devilman Crybaby",
+                "score": "7.60",
+                "genres": "Хоррор, Триллер",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx98460-bLtH2c3jd6sV.png",
+                "hook": "Чистосердечный парень сливается с демоном, пытаясь спасти мир от апокалипсиса."
+            },
+            {
+                "id": 5040,
+                "ru": "Один на вылет",
+                "en": "One Outs",
+                "score": "8.10",
+                "genres": "Спорт, Психология",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5040-9ruuekq2LZKJ.png",
+                "hook": "Гениальный игрок-манипулятор превращает бейсбол в психологическую войну умов."
+            },
+            {
+                "id": 658,
+                "ru": "Акаги",
+                "en": "Akagi",
+                "score": "7.70",
+                "genres": "Психология, Триллер",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx658-vfMTeXswhOzl.png",
+                "hook": "Хладнокровный юный гений маджонга бросает вызов криминальным авторитетам Якудзы."
+            },
+            {
+                "id": 26599,
+                "ru": "Школьная жизнь!",
+                "en": "Gakkougurashi!",
+                "score": "7.65",
+                "genres": "Хоррор, Психология",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Милая школьная жизнь клуба оказывается отчаянной иллюзией посреди зомби-апокалипсиса."
+            },
+            {
+                "id": 16592,
+                "ru": "Данганронпа",
+                "en": "Danganronpa: The Animation",
+                "score": "6.90",
+                "genres": "Детектив, Триллер",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16592-mFn1gfMXlKtw.jpg",
+                "hook": "Элитные школьники заперты медведем Монокумой и вынуждены судить друг друга за убийства."
+            },
+            {
+                "id": 33263,
+                "ru": "Обезглавливающий цикл",
+                "en": "Kubikiri Cycle: The Blue Savant and the Nonsense User",
+                "score": "7.70",
+                "genres": "Детектив, Психология",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b21803-BAQClgq6Q0DP.jpg",
+                "hook": "На изолированном острове гениев происходит серия загадочных обезглавливаний."
+            },
+            {
+                "id": 39017,
+                "ru": "Ложные выводы",
+                "en": "In/Spectre",
+                "score": "6.80",
+                "genres": "Детектив, Мистика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx107201-zQYOPotwmSXO.png",
+                "hook": "Богиня мудрости духов и бессмертный парень сочиняют правдоподобную ложь ради порядка."
+            },
+            {
+                "id": 32827,
+                "ru": "Би: Начало",
+                "en": "B: The Beginning",
+                "score": "6.90",
+                "genres": "Детектив, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx21665-QnenQOaxzhpf.jpg",
+                "hook": "Гениальный следователь Кит Флик расследует ритуальные убийства неуловимого Карателя «Би»."
+            },
+            {
+                "id": 26,
+                "ru": "Технолайз",
+                "en": "Texhnolyze",
+                "score": "7.60",
+                "genres": "Киберпанк, Трагедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx26-ADSztyHBNO39.jpg",
+                "hook": "Мрачное падение человечества в подземном городе Люкс сквозь судьбу бойца с протезами."
+            },
+            {
+                "id": 8425,
+                "ru": "Госик",
+                "en": "Gosick",
+                "score": "7.70",
+                "genres": "Детектив, Исторический",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx8425-Bn14ayPjnq9o.jpg",
+                "hook": "Кукольная гениальная Викторика щелкает неразрешимые тайны Европы в библиотечной башне."
+            },
+            {
+                "id": 93692,
+                "ru": "Патриотизм Мориарти",
+                "en": "Moriarty the Patriot",
+                "score": "8.15",
+                "genres": "Детектив, Триллер",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Уильям Джеймс Мориарти очищает викторианский Лондон от прогнившей аристократии."
+            },
+            {
+                "id": 63369,
+                "ru": "Буря потерь",
+                "en": "Zetsuen no Tempest",
+                "score": "7.90",
+                "genres": "Мистика, Детектив",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Два друга заключают союз с заточенной сильнейшей волшебницей ради мести за сестру."
+            },
+            {
+                "id": 28619,
+                "ru": "Загадочные истории Ранпо",
+                "en": "Rampo Kitan: Game of Laplace",
+                "score": "6.10",
+                "genres": "Детектив, Психология",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21189-ENdHxDI7278o.jpg",
+                "hook": "Юный гений Кобаяси берется за расследование гротескных преступлений."
+            },
+            {
+                "id": 10568,
+                "ru": "Записная книжка бога",
+                "en": "Heaven's Memo Pad",
+                "score": "7.10",
+                "genres": "Детектив, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10568-QZbLhgMAQC76.jpg",
+                "hook": "Хикикомори-детектив Алиса раскрывает преступления подпольного мира с экрана монитора."
+            },
+            {
+                "id": 22145,
+                "ru": "Тёмный дворецкий: Книга цирка",
+                "en": "Black Butler: Book of Circus",
+                "score": "7.90",
+                "genres": "Мистика, Детектив",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx20606-58LzabjtVrwt.jpg",
+                "hook": "Сиэль и Себастьян проникают в бродячий цирк «Ноев ковчег» в поисках пропавших детей."
+            },
+            {
+                "id": 40752,
+                "ru": "Красавчики-детективы",
+                "en": "Pretty Boy Detective Club",
+                "score": "6.90",
+                "genres": "Детектив, Эстетика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113428-jsyIdAHk5K6q.png",
+                "hook": "Пятеро одаренных эксцентричных юношей расследуют эстетичные тайны академии."
+            },
+            {
+                "id": 7662,
+                "ru": "Детектив-медиум Якумо",
+                "en": "Psychic Detective Yakumo",
+                "score": "6.80",
+                "genres": "Мистика, Детектив",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx7662-uW1oWpFeENgf.png",
+                "hook": "Студент с алым левым глазом видит призраков и раскрывает нераскрытые преступления."
+            },
+            {
+                "id": 10798,
+                "ru": "Ан-го",
+                "en": "UN-GO",
+                "score": "7.00",
+                "genres": "Детектив, Sci-Fi",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10798-C8caHKEm5uTa.jpg",
+                "hook": "«Пораженческий детектив» Синдзюро Юки и загадочный демон Инга расследуют заговоры послевоенного Токио."
             }
         ]
     },
@@ -2192,6 +2779,177 @@ const THEMES_DATA = {
                 "genres": "Action, Sci-Fi",
                 "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21256-ErFGk90Kr5Ab.jpg",
                 "hook": "Охота за нелегальными катушками бесконечной энергии из таинственного 4-го измерения."
+            },
+            {
+                "id": 23281,
+                "ru": "Психопаспорт 2",
+                "en": "PSYCHO-PASS 2",
+                "score": "7.10",
+                "genres": "Киберпанк, Детектив",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20513-pVQqYhMwBGoh.jpg",
+                "hook": "Аканэ Цунэмори сталкивается с преступником, которого всевидящая система Сивилла не замечает."
+            },
+            {
+                "id": 12029,
+                "ru": "Космический линкор Ямато 2199",
+                "en": "Star Blazers: Space Battleship Yamato 2199",
+                "score": "8.00",
+                "genres": "Sci-Fi, Космос",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx12029-qIY5Bkh4sFKx.png",
+                "hook": "Последняя надежда вымирающей Земли отправляется в путешествие за спасительным очистителем."
+            },
+            {
+                "id": 49828,
+                "ru": "Гандам: Ведьма с Меркурия",
+                "en": "Mobile Suit Gundam: The Witch from Mercury",
+                "score": "7.80",
+                "genres": "Меха, Sci-Fi",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx139274-0NJTOKWHdDew.png",
+                "hook": "Девушка с окраины солнечной системы поступает в академию пилотов мобильных доспехов."
+            },
+            {
+                "id": 62805,
+                "ru": "Гандам: Железнокровные сироты",
+                "en": "Mobile Suit Gundam: Iron-Blooded Orphans-Urdr Hunt",
+                "score": "5.40",
+                "genres": "Меха, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx114842-AMEG5qd5h6Fw.jpg",
+                "hook": "Марсианские дети-наёмники восстают против жестокого гнёта Земной федерации."
+            },
+            {
+                "id": 1347,
+                "ru": "Кризис каждый день",
+                "en": "Bubblegum Crisis",
+                "score": "7.00",
+                "genres": "Киберпанк, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx1347-4NzCZYQQwIjb.jpg",
+                "hook": "Четыре наёмницы в высокотехнологичных бронекостюмах истребляют вышедших из-под контроля бумеров."
+            },
+            {
+                "id": 35759,
+                "ru": "Рыцари Сидонии: Финал",
+                "en": "Knights of Sidonia: Love Woven in the Stars",
+                "score": "7.30",
+                "genres": "Sci-Fi, Меха",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx99730-pG6lazHo6pKG.jpg",
+                "hook": "Решающая битва людей-пилотов мобильных стражей против колоссальных космических Гауна."
+            },
+            {
+                "id": 2581,
+                "ru": "Гандам 00",
+                "en": "Mobile Suit Gundam 00",
+                "score": "7.80",
+                "genres": "Меха, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2581-MLEf00dNAfqY.jpg",
+                "hook": "Организация Celestial Being искореняет мировые войны с помощью превосходящих роботов Гандам."
+            },
+            {
+                "id": 522,
+                "ru": "Метрополис",
+                "en": "Metropolis",
+                "score": "7.40",
+                "genres": "Sci-Fi, Киберпанк",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx522-4Sp8QlrufkG5.jpg",
+                "hook": "Шедевр Ринтаро и Осаму Тэдзуки о расслоении гигантского города и прекрасном роботе Тиме."
+            },
+            {
+                "id": 1462,
+                "ru": "Воспоминания о будущем",
+                "en": "Memories",
+                "score": "7.50",
+                "genres": "Sci-Fi, Антология",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1462-wHe4bW5b6XRE.png",
+                "hook": "Три визуально безупречные научно-фантастические новеллы от Кацухиро Отомо."
+            },
+            {
+                "id": 937,
+                "ru": "Яблочное зёрнышко",
+                "en": "Appleseed",
+                "score": "5.90",
+                "genres": "Киберпанк, Меха",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx937-2SYiMKI3qPkp.jpg",
+                "hook": "Элитный спецназовец Дюнан и ее напарник-киборг Бриарей защищают утопический Олимп."
+            },
+            {
+                "id": 10793,
+                "ru": "Корона грешника",
+                "en": "Guilty Crown",
+                "score": "6.90",
+                "genres": "Sci-Fi, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10793-KCysCbrVNqK9.jpg",
+                "hook": "Школьник обретает «Силу Королей», позволяющую извлекать оружие из сердец людей."
+            },
+            {
+                "id": 400,
+                "ru": "Звёздный рыцарь Аутло",
+                "en": "Outlaw Star",
+                "score": "7.50",
+                "genres": "Космос, Приключения",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx400-CJ2duQT3dCX1.png",
+                "hook": "Джин Старвинд и его команда на уникальном космическом корабле ищут Галактическую жилу."
+            },
+            {
+                "id": 27631,
+                "ru": "Пожиратель богов",
+                "en": "God Eater",
+                "score": "6.90",
+                "genres": "Экшен, Sci-Fi",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20849-TvJpY8iLEcYG.jpg",
+                "hook": "Элитные бойцы с живым оружием «Дзинги» сражаются против неуязвимых чудовищ Арагами."
+            },
+            {
+                "id": 21575,
+                "ru": "Призрак в доспехах: У истоков",
+                "en": "Ghost in the Shell: Arise Specials",
+                "score": "5.60",
+                "genres": "Киберпанк, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/20776.jpg",
+                "hook": "Молодая майор Кусанаги собирает будущую легендарную команду 9-го отдела."
+            },
+            {
+                "id": 2000,
+                "ru": "Старик Зет",
+                "en": "Roujin Z",
+                "score": "6.80",
+                "genres": "Sci-Fi, Сатира",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2000-BFVMqByhjMNW.jpg",
+                "hook": "Вышедшая из-под контроля медицинская кровать с ИИ берет старика в заложники и штурмует город."
+            },
+            {
+                "id": 3572,
+                "ru": "Макросс Фронтир",
+                "en": "Macross Frontier",
+                "score": "7.60",
+                "genres": "Меха, Космос",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx3572-qYJhokKdsnZR.png",
+                "hook": "Колониальный флот сталкивается с биомеханическими инсектоидами Ваджра под песни Ранки Ли."
+            },
+            {
+                "id": 2560,
+                "ru": "К Тесле",
+                "en": "Toward the Terra",
+                "score": "6.10",
+                "genres": "Sci-Fi, Космос",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2560-fGJFfEvVBGMB.png",
+                "hook": "Гонимые обществом мутанты Мю ведут многолетнюю борьбу за возвращение на колыбель-Землю."
+            },
+            {
+                "id": 90,
+                "ru": "Гандам Крыло",
+                "en": "Mobile Suit Gundam Wing",
+                "score": "7.10",
+                "genres": "Меха, Военный",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b90-umBjF3yaeIdo.png",
+                "hook": "Пятеро юных пилотов на Гандамах отправляются на Землю ради освобождения космических колоний."
+            },
+            {
+                "id": 1095,
+                "ru": "Полиция будущего: Фильм",
+                "en": "Patlabor: The Movie",
+                "score": "7.60",
+                "genres": "Sci-Fi, Меха",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1095-uHF4BmIHLzbG.png",
+                "hook": "Элитный отряд робо-патруля расследует смертельный компьютерный вирус в строительных лейборах."
             }
         ]
     },
@@ -2488,6 +3246,168 @@ const THEMES_DATA = {
                 "genres": "Action, Adventure, Fantasy",
                 "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21221-exaYgjct2K2c.jpg",
                 "hook": "Пастырь Сорей путешествует по охваченному скверной миру ради спасения душ."
+            },
+            {
+                "id": 33050,
+                "ru": "Судьба: Прикосновение небес",
+                "en": "Fate/stay night [Heaven’s Feel] III. spring song",
+                "score": "8.50",
+                "genres": "Тёмное фэнтези, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21719-MSdTlkno0Z0u.jpg",
+                "hook": "Мрачнейшая ветка Войны за Грааль, где любовь требует пожертвовать целым миром."
+            },
+            {
+                "id": 6954,
+                "ru": "Граница пустоты: Сад грешников",
+                "en": "the Garden of sinners Chapter 8: The Final Chapter",
+                "score": "7.10",
+                "genres": "Мистика, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx6954-uMdvQ3Vy74Oa.png",
+                "hook": "Девушка с мистическими глазами восприятия смерти расследует паранормальные преступления."
+            },
+            {
+                "id": 207,
+                "ru": "Летопись войн острова Лодосс",
+                "en": "Record of Lodoss War",
+                "score": "7.00",
+                "genres": "Классическое фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx207-B2lxEFGigYgd.png",
+                "hook": "Золотой стандарт западного фэнтези: рыцари, эльфы и драконы в борьбе со злом."
+            },
+            {
+                "id": 41025,
+                "ru": "Для тебя, Бессмертный",
+                "en": "To Your Eternity",
+                "score": "8.10",
+                "genres": "Фэнтези, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx114535-y3NnjexcqKG1.jpg",
+                "hook": "Бессмертная безымянная сфера познаёт человеческие чувства сквозь череду потерь."
+            },
+            {
+                "id": 51020,
+                "ru": "Хельк",
+                "en": "Helck",
+                "score": "7.10",
+                "genres": "Фэнтези, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx145140-tHT8TT2XSsOh.jpg",
+                "hook": "Могучий человек Хельк участвует в турнире на звание владыки демонов, чтобы уничтожить людей."
+            },
+            {
+                "id": 36862,
+                "ru": "Созданный в Бездне: Рассвет души",
+                "en": "Made in Abyss: Dawn of the Deep Soul",
+                "score": "8.50",
+                "genres": "Фэнтези, Приключения",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx100643-fPH9OgEKKvcI.jpg",
+                "hook": "Спуск Рико и Рэга на 5-й уровень Бездны и роковое противостояние с Бондрюдом."
+            },
+            {
+                "id": 49387,
+                "ru": "Сага о Винланде 2",
+                "en": "Vinland Saga Season 2",
+                "score": "8.80",
+                "genres": "Исторический, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx136430-gsBsJjA7hGh9.jpg",
+                "hook": "Торфинн проходит путь от раба и убийцы к истинному пониманию ненасилия и мира."
+            },
+            {
+                "id": 35062,
+                "ru": "Невеста чародея",
+                "en": "The Ancient Magus' Bride",
+                "score": "7.80",
+                "genres": "Фэнтези, Магия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx98436-n7sK6POCd0XV.png",
+                "hook": "Сирота Чисэ Хатори обретает новый дом и магическую силу рядом с нечеловеком Элиасом."
+            },
+            {
+                "id": 34279,
+                "ru": "Хроники войны Гранкреста",
+                "en": "Record of Grancrest War",
+                "score": "6.90",
+                "genres": "Фэнтези, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97768-atbPjYJNXnIo.jpg",
+                "hook": "Юный рыцарь Тео и гениальная волшебница Силука объединяют расколотый войнами континент."
+            },
+            {
+                "id": 153,
+                "ru": "Двенадцать королевств",
+                "en": "The Twelve Kingdoms",
+                "score": "7.70",
+                "genres": "Классическое фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx153-pLhZPQCYk7hl.png",
+                "hook": "Школьница переносится в древний мир 12 монархий, управляемых мудрыми зверями Киринами."
+            },
+            {
+                "id": 21843,
+                "ru": "Ярость Бахамута: Генезис",
+                "en": "Rage of Bahamut: Genesis",
+                "score": "7.40",
+                "genres": "Фэнтези, Приключения",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20590-LuMDAd75Kg3C.jpg",
+                "hook": "Дерзкий авантюрист Фаваро и беглая демоница Амира в эпическом фэнтези-роуд-муви."
+            },
+            {
+                "id": 39575,
+                "ru": "Сомали и дух леса",
+                "en": "Somali and the Forest Spirit",
+                "score": "7.60",
+                "genres": "Фэнтези, Семейный",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx108617-PgoYLgWzzm0c.png",
+                "hook": "Одинокий бессердечный Голем защищает человеческую девочку в мире сказочных монстров."
+            },
+            {
+                "id": 28497,
+                "ru": "Герои шести лепестков",
+                "en": "Rokka -Braves of the Six Flowers-",
+                "score": "7.00",
+                "genres": "Фэнтези, Детектив",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20955-MeZp4OtwKGl1.jpg",
+                "hook": "Семь избранных героев собираются победить бога зла, но один из них — самозванец-предатель."
+            },
+            {
+                "id": 167,
+                "ru": "Выброшенная принцесса",
+                "en": "Scrapped Princess",
+                "score": "7.10",
+                "genres": "Фэнтези, Приключения",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b167-qwMN7Wmlen5s.jpg",
+                "hook": "Пасифика Касулл объявлена «Ядом мира», и брат с сестрой защищают ее от армий всего континента."
+            },
+            {
+                "id": 24455,
+                "ru": "Король магических стрел и Ванадис",
+                "en": "Lord Marksman and Vanadis",
+                "score": "6.70",
+                "genres": "Фэнтези, Военный",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20809-QJQM3RI8PI4a.jpg",
+                "hook": "Меткий лучник Тигр нанимается на службу к прекрасной деве войны Элеоноре."
+            },
+            {
+                "id": 20853,
+                "ru": "Чайка, принцесса с гробом",
+                "en": "Chaika -The Coffin Princess-",
+                "score": "6.90",
+                "genres": "Фэнтези, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20462-Gi2HXG6e1oYY.jpg",
+                "hook": "Серебровласая волшебница с гробом за спиной собирает останки отца-императора."
+            },
+            {
+                "id": 36144,
+                "ru": "Гаро: Линия схода",
+                "en": "GARO -VANISHING LINE-",
+                "score": "6.70",
+                "genres": "Фэнтези, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b99796-rzZSKHBRIn6E.png",
+                "hook": "Золотой Рыцарь Сворд и девочка Софи ищут ключ к таинственному слову «Эльдорадо»."
+            },
+            {
+                "id": 1681,
+                "ru": "Отважное сердце",
+                "en": "Brave Story",
+                "score": "7.00",
+                "genres": "Фэнтези, Сказка",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b1681-G12LPkws93Ub.jpg",
+                "hook": "Мальчик Ватару входит в волшебный мир Вижен, чтобы изменить судьбу своей семьи у Богини."
             }
         ]
     },
@@ -2811,6 +3731,141 @@ const THEMES_DATA = {
                 "genres": "Drama, Romance, Slice of Life",
                 "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx101573-Gql3Q3UX1jcu.jpg",
                 "hook": "Глубокая психологическая драма о поиске своего истинного чувства."
+            },
+            {
+                "id": 42938,
+                "ru": "Корзинка фруктов: Финал",
+                "en": "Fruits Basket The Final Season",
+                "score": "8.90",
+                "genres": "Драма, Романтика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx124194-TJlqMMR7BGn9.jpg",
+                "hook": "Тору Хонда разрушает древнее проклятие семьи Сома ценой искренней доброты."
+            },
+            {
+                "id": 40787,
+                "ru": "Жозе, тигр и рыба",
+                "en": "Josee, the Tiger and the Fish",
+                "score": "8.30",
+                "genres": "Романтика, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113596-LKA0bYJGjLnB.jpg",
+                "hook": "Студент-океанолог становится помощником прикованной к креслу мечтательной девушки."
+            },
+            {
+                "id": 50593,
+                "ru": "Туннель в лето, выход прощаний",
+                "en": "The Tunnel to Summer, the Exit of Goodbyes",
+                "score": "8.00",
+                "genres": "Фэнтези, Романтика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx142769-kNyyqpwC9gGV.jpg",
+                "hook": "Два школьника исследуют туннель Урасима, где время течёт иначе, в обмен на исполнение желаний."
+            },
+            {
+                "id": 16,
+                "ru": "Мёд и клевер",
+                "en": "Honey and Clover",
+                "score": "7.60",
+                "genres": "Драма, Романтика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16-S9k8qahNXoYP.jpg",
+                "hook": "Тёплая и меланхоличная сага о студентах художественного колледжа, поиске себя и любви."
+            },
+            {
+                "id": 3965,
+                "ru": "Нодамэ Кантабиле",
+                "en": "Nodame Cantabile: Nodame to Chiaki no Umi Monogatari",
+                "score": "6.90",
+                "genres": "Музыка, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/3965.jpg",
+                "hook": "Строгий будущий дирижёр и хаотичная гениальная пианистка покоряют мировую классику."
+            },
+            {
+                "id": 11887,
+                "ru": "Связь сердец",
+                "en": "Kokoro Connect",
+                "score": "7.50",
+                "genres": "Драма, Сверхъестественное",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11887-ypZTwcRqopiL.jpg",
+                "hook": "Пятеро участников школьного клуба переживают обмен телами и раскрытие самых стыдных тайн."
+            },
+            {
+                "id": 2167,
+                "ru": "Кланнад (1 сезон)",
+                "en": "Clannad",
+                "score": "7.70",
+                "genres": "Драма, Школа",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2167-pSDBcyc0vjej.jpg",
+                "hook": "Томоя помогает замкнутой Нагисе возродить школьный драмкружок и обретает семью."
+            },
+            {
+                "id": 144,
+                "ru": "Канон",
+                "en": "Kanon",
+                "score": "6.50",
+                "genres": "Драма, Романтика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx144-YdWsrDNssRIX.png",
+                "hook": "Парень возвращается в снежный город детства и восстанавливает забытые воспоминания девушек."
+            },
+            {
+                "id": 31798,
+                "ru": "Кизнайвер",
+                "en": "Kiznaiver",
+                "score": "7.20",
+                "genres": "Драма, Sci-Fi",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21421-5y8ryXsMB7aJ.jpg",
+                "hook": "Семь незнакомых подростков связаны общей физической и душевной болью ради мира."
+            },
+            {
+                "id": 35639,
+                "ru": "Просто потому что!",
+                "en": "Just Because!",
+                "score": "7.00",
+                "genres": "Романтика, Школа",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx98820-EVHeNEUOWkh3.jpg",
+                "hook": "Возвращение старого друга переворачивает размеренную жизнь выпускников школы."
+            },
+            {
+                "id": 2129,
+                "ru": "Настоящие слёзы",
+                "en": "True Tears",
+                "score": "6.80",
+                "genres": "Романтика, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2129-5TX1vWYYe2MT.png",
+                "hook": "Сложный любовный треугольник юноши-художника и девушки, разучившейся плакать."
+            },
+            {
+                "id": 2924,
+                "ru": "Эф — история воспоминаний",
+                "en": "ef ~ A Tale of Memories",
+                "score": "7.50",
+                "genres": "Драма, Романтика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2924-MXCrAa1KAdzH.jpg",
+                "hook": "Переплетение драматических любовных историй сквозь потерю памяти и расстояния."
+            },
+            {
+                "id": 40839,
+                "ru": "Девушка напрокат",
+                "en": "Rent-a-Girlfriend",
+                "score": "6.50",
+                "genres": "Романтика, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113813-SnljeXpU3Pw7.jpg",
+                "hook": "Брошенный студент берет напрокат безупречную девушку Тидзуру Итиносэ и влюбляется."
+            },
+            {
+                "id": 18897,
+                "ru": "Притворная любовь",
+                "en": "Nisekoi",
+                "score": "7.30",
+                "genres": "Романтика, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx18897-G2Fx2ZACsXBU.jpg",
+                "hook": "Сын босса якудзы и дочь главаря мафии вынуждены притворяться парой во избежание войны."
+            },
+            {
+                "id": 23289,
+                "ru": "Нодзаки-кун",
+                "en": "Monthly Girls' Nozaki-kun",
+                "score": "7.70",
+                "genres": "Романтика, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20668-6UslJY5NDYNh.png",
+                "hook": "Тиё Сакура признается в любви двухметровому мангаке и случайно становится его ассистенткой."
             }
         ]
     },
@@ -3107,6 +4162,168 @@ const THEMES_DATA = {
                 "genres": "Comedy, Slice of Life",
                 "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx6956-Nxs7H25yHLNS.jpg",
                 "hook": "Веселые будни и романтические недопонимания персонала семейного ресторана."
+            },
+            {
+                "id": 43692,
+                "ru": "Путь домохозяина",
+                "en": "The Way of the Househusband",
+                "score": "7.10",
+                "genres": "Комедия, Повседневность",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx125426-WeKnIVjCRNIC.png",
+                "hook": "Легендарный бессмертный якудза завязывает с криминалом и становится идеальным домохозяином."
+            },
+            {
+                "id": 32648,
+                "ru": "Ханда-кун",
+                "en": "Handa-kun",
+                "score": "7.00",
+                "genres": "Комедия, Школа",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21626-5jbbIK9DsmY8.jpg",
+                "hook": "Гениальный каллиграф страдает паранойей, считая всеобщую любовь заговорщической травлей."
+            },
+            {
+                "id": 43608,
+                "ru": "Госпожа Кагуя: В любви как на войне",
+                "en": "Kaguya-sama: Love is War -Ultra Romantic-",
+                "score": "8.90",
+                "genres": "Комедия, Романтика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx125367-1yuq9NFcQuLI.png",
+                "hook": "Два гения элитной академии развязывают изощрённую психологическую дуэль признаний."
+            },
+            {
+                "id": 47917,
+                "ru": "Одинокий рокер!",
+                "en": "BOCCHI THE ROCK!",
+                "score": "8.70",
+                "genres": "Комедия, Музыка",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx130003-HTDmeL4RGeJ4.png",
+                "hook": "Застенчивая Хитори Гото преодолевает социофобию с гитарой в девичьей инди-группе."
+            },
+            {
+                "id": 33731,
+                "ru": "Габриэль бросает школу",
+                "en": "Gabriel DropOut",
+                "score": "7.30",
+                "genres": "Комедия, Сверхъестественное",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21878-rfzDjP2gjxGR.jpg",
+                "hook": "Лучшая выпускница школы ангелов попадает на Землю и превращается в заядлую геймершу."
+            },
+            {
+                "id": 17549,
+                "ru": "Деревенская глубинка",
+                "en": "Non Non Biyori",
+                "score": "7.80",
+                "genres": "Комедия, Повседневность",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx17549-ROdV36u4nWkU.png",
+                "hook": "Четыре девочки наслаждаются беззаботными временами года в тихой японской деревне."
+            },
+            {
+                "id": 34798,
+                "ru": "Лагерь на свежем воздухе",
+                "en": "Laid-Back Camp",
+                "score": "8.10",
+                "genres": "Повседневность, Релакс",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx98444-Vzysp1EsrzgD.jpg",
+                "hook": "Одиночные походы с палаткой к подножию горы Фудзи и тепло костра с горячим рамэном."
+            },
+            {
+                "id": 5680,
+                "ru": "Кэйон!",
+                "en": "K-ON!",
+                "score": "7.80",
+                "genres": "Комедия, Музыка",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5680-r3AI3Cwfv0Aq.png",
+                "hook": "Четыре беззаботные школьницы спасают клуб легкой музыки чаепитиями и роком."
+            },
+            {
+                "id": 1887,
+                "ru": "Счастливая звезда",
+                "en": "Lucky☆Star",
+                "score": "7.50",
+                "genres": "Комедия, Отаку",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1887-P36Pucd4qKji.png",
+                "hook": "Коната Идзуми и её подруги ведут бесконечные забавные дискуссии о жизни и аниме."
+            },
+            {
+                "id": 66,
+                "ru": "Азуманга Дайо",
+                "en": "Azumanga Daioh",
+                "score": "7.90",
+                "genres": "Комедия, Школа",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx66-ZqYQWl6LsfeI.png",
+                "hook": "Золотая классика абсурдной школьной комедии о вундеркинде Чиё и её эксцентричных подругах."
+            },
+            {
+                "id": 22147,
+                "ru": "Великолепный парк Амаги",
+                "en": "Amagi Brilliant Park",
+                "score": "7.20",
+                "genres": "Комедия, Магия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20602-f6CfipBF44kV.png",
+                "hook": "Самовлюблённый отличник спасает волшебный парк развлечений от закрытия за 3 месяца."
+            },
+            {
+                "id": 21273,
+                "ru": "Заказывали кролика?",
+                "en": "Is the Order a Rabbit?",
+                "score": "7.30",
+                "genres": "Комедия, Милота",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20517-SNNUtav2knou.jpg",
+                "hook": "Кокоа переезжает в кафе «Дом кролика» и находит милейших подруг."
+            },
+            {
+                "id": 43969,
+                "ru": "Мои девушки",
+                "en": "Girlfriend, Girlfriend",
+                "score": "6.30",
+                "genres": "Комедия, Романтика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx126192-3fFbZJFSwrHH.jpg",
+                "hook": "Прямолинейный старшеклассник с согласия обеих девушек начинает открыто встречаться сразу с двумя."
+            },
+            {
+                "id": 12679,
+                "ru": "Дзёсираку",
+                "en": "Joshiraku",
+                "score": "7.30",
+                "genres": "Комедия, Диалоги",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx12679-b7caRVFG2qkk.png",
+                "hook": "Пять девушек-ракугок ведут остроумные разговоры обо всем на свете за кулисами традиционного театра."
+            },
+            {
+                "id": 62287,
+                "ru": "Клуб выживания!",
+                "en": "Sabage-bu!",
+                "score": "7.20",
+                "genres": "Комедия, Пародия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Школьницы играют в страйкбол, используя самое богатое и безжалостное воображение."
+            },
+            {
+                "id": 51991,
+                "ru": "Тройняшки",
+                "en": "Mitsudomoe",
+                "score": "7.40",
+                "genres": "Комедия, Школа",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Бедный учитель начальных классов сходит с ума от трех совершенно невыносимых сестер Маруи."
+            },
+            {
+                "id": 80520,
+                "ru": "Пластиковая сестрёнка",
+                "en": "Plastic Neesan",
+                "score": "7.20",
+                "genres": "Комедия, Ураган",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Короткометражные безумные приключения трех участниц клуба сборки пластиковых моделей."
+            },
+            {
+                "id": 9513,
+                "ru": "Вельзепуз",
+                "en": "Beelzebub",
+                "score": "7.50",
+                "genres": "Комедия, Драки",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx9513-is6YiSgKbyQX.jpg",
+                "hook": "Свирепый хулиган Тацуми Ога случайно становится приемным отцом для младенца-Владыки Демонов."
             }
         ]
     },
@@ -3394,87 +4611,1097 @@ const THEMES_DATA = {
                 "genres": "Action, Comedy, Fantasy",
                 "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx15315-mvKPcy8Z2QkB.jpg",
                 "hook": "Трое одаренных подростков призваны в мир «Цветущего сада» для игр богов."
+            },
+            {
+                "id": 48316,
+                "ru": "Восхождение в тени",
+                "en": "The Eminence in Shadow",
+                "score": "8.10",
+                "genres": "Исекай, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx130298-YMdcKHytpWNH.jpg",
+                "hook": "Парень играет в теневого владыку, не подозревая, что все его выдумки реальны."
+            },
+            {
+                "id": 52347,
+                "ru": "Рубеж Шангри-Ла",
+                "en": "Shangri-La Frontier",
+                "score": "8.00",
+                "genres": "Игры, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx151970-xtIx3VqEk02X.jpg",
+                "hook": "Хардкорный любитель треш-игр покоряет эталонную VR-MMORPG в птичьей маске."
+            },
+            {
+                "id": 48233,
+                "ru": "Неправильный способ использования исцеляющей магии",
+                "en": "Chiyu Mahou no Machigatta Tsukaikata",
+                "score": "7.60",
+                "genres": "Исекай, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Случайно призванный парень попадает в адскую спасательную команду Розы."
+            },
+            {
+                "id": 96649,
+                "ru": "Тусовщик Кунмин",
+                "en": "Paripi Koumei",
+                "score": "8.10",
+                "genres": "Реверс-исекай, Музыка",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Легендарный древнекитайский полководец становится продюсером начинающей певицы в Сибуе."
+            },
+            {
+                "id": 31339,
+                "ru": "Скитальцы",
+                "en": "DRIFTERS",
+                "score": "7.50",
+                "genres": "Исекай, Тёмное фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21123-bCuqm8wLDqOw.png",
+                "hook": "Великие воины разных исторических эпох сходятся в кровавой битве за фэнтези-мир."
+            },
+            {
+                "id": 15809,
+                "ru": "Сатана на подработке!",
+                "en": "The Devil is a Part-Timer!",
+                "score": "7.50",
+                "genres": "Реверс-исекай, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx15809-ECv3HyOYJKrk.jpg",
+                "hook": "Владыка тьмы теряет магию в Токио и устраивается жарить бургеры в фастфуд."
+            },
+            {
+                "id": 49438,
+                "ru": "Фармацевт из параллельного мира",
+                "en": "Parallel World Pharmacy",
+                "score": "7.20",
+                "genres": "Исекай, Фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx136707-StRFbEwZT7q5.jpg",
+                "hook": "Погибший от переработок учёный открывает современную аптеку для простолюдинов."
+            },
+            {
+                "id": 51462,
+                "ru": "Фермерская жизнь в ином мире",
+                "en": "Farming Life in Another World",
+                "score": "7.40",
+                "genres": "Исекай, Повседневность",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx146850-xfeAFIE0M9hl.jpg",
+                "hook": "Бывший клерк с божественным инструментом строит безмятежную деревню мечты."
+            },
+            {
+                "id": 40841,
+                "ru": "Власть книжного червя",
+                "en": "Ascendance of a Bookworm Side Story",
+                "score": "7.40",
+                "genres": "Исекай, Повседневность",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113811-DxnS7eOL5zfn.jpg",
+                "hook": "Погибшая библиотекарша возрождается больной девочкой Майн и создает книги с нуля."
+            },
+            {
+                "id": 44203,
+                "ru": "Хроники мифического духа",
+                "en": "Seirei Gensouki: Spirit Chronicles",
+                "score": "6.90",
+                "genres": "Исекай, Фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx126546-Jujx9OvKxLzA.jpg",
+                "hook": "Сирота Рио вспоминает прошлую жизнь японского студента и обретает силу духа."
+            },
+            {
+                "id": 36407,
+                "ru": "Внук мудреца",
+                "en": "Wise Man’s Grandchild",
+                "score": "6.40",
+                "genres": "Исекай, Магия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx100112-eExFpnYG2QAK.jpg",
+                "hook": "Перерожденного парня вырастил легендарный Мерлин, но забыл научить здравому смыслу."
+            },
+            {
+                "id": 37744,
+                "ru": "Маг-обманщик из другого мира",
+                "en": "Isekai Cheat Magician",
+                "score": "5.20",
+                "genres": "Исекай, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101547-Y0uARlMRaARP.jpg",
+                "hook": "Обычные школьники призываются в фэнтези-мир с богоподобным запасом маны."
+            },
+            {
+                "id": 38790,
+                "ru": "Не люблю боль, поэтому вкачаю всё в защиту",
+                "en": "BOFURI: I Don't Want to Get Hurt, so I'll Max Out My Defense.",
+                "score": "7.30",
+                "genres": "Игры, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx106479-JmPk1F5ubMtm.png",
+                "hook": "Девушка Мэйпл делает билд на чистую защиту и становится несокрушимым боссом игры."
+            },
+            {
+                "id": 34497,
+                "ru": "Марш смерти в параллельный мир",
+                "en": "Death March to the Parallel World Rhapsody",
+                "score": "6.10",
+                "genres": "Исекай, Фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97907-MAOO4oDANGXm.png",
+                "hook": "29-летний программист засыпает на работе и просыпается суперсильным метеоритным магом Сато."
+            },
+            {
+                "id": 35203,
+                "ru": "В другом мире со смартфоном",
+                "en": "In Another World With My Smartphone",
+                "score": "5.70",
+                "genres": "Исекай, Гарем",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx98491-5vyX89aabiHz.jpg",
+                "hook": "Бог случайно убивает парня молнией, воскрешает в магии и оставляет ему рабочий смартфон."
+            },
+            {
+                "id": 37210,
+                "ru": "Повелитель тьмы из другого мира",
+                "en": "How NOT to Summon a Demon Lord",
+                "score": "6.60",
+                "genres": "Исекай, Этти",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101004-rJLBIWGypbYK.png",
+                "hook": "Замкнутый геймер переносится в аватаре демона Диабло и подчиняет призвавших его рабынь."
+            },
+            {
+                "id": 34561,
+                "ru": "В другом мире с необходимыми навыками",
+                "en": "Isekai Shokudou 2",
+                "score": "7.40",
+                "genres": "Исекай, Кулинария",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx132806-fuOSzS2YOpIt.jpg",
+                "hook": "Дверь в западный токийский ресторан по субботам открывается для эльфов, магов и драконов."
+            },
+            {
+                "id": 47160,
+                "ru": "Фармацевт из другого мира: Неспешная жизнь",
+                "en": "Cheat Pharmacist’s Slow Life",
+                "score": "6.40",
+                "genres": "Исекай, Повседневность",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx114302-xfqGNUaK59lQ.jpg",
+                "hook": "Бывший офисный работник варит чудодейственные зелья в собственной уютной аптеке."
+            },
+            {
+                "id": 37430,
+                "ru": "Гримгал пепла и иллюзий: OVA",
+                "en": "Hai to Gensou no Grimgar: Starlight",
+                "score": "7.50",
+                "genres": "Фэнтези, Исекай",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21428-dFVIHeZ8McBe.jpg",
+                "hook": "Подростки без памяти о прошлом учатся выживать и сражаться за каждый кусок хлеба."
+            }
+        ]
+    },
+    "shonen_hype": {
+        "title": "Сёнэн, ураганный экшен и культовые битвы 🔥",
+        "desc": "Адреналиновые противостояния, несгибаемая воля и легендарные битвы:",
+        "tags": "#сёнэн #экшен #топ_битвы",
+        "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16498-buvcRTBx4NSm.jpg",
+        "items": [
+            {
+                "id": 16498,
+                "ru": "Атака титанов",
+                "en": "Attack on Titan",
+                "score": "8.50",
+                "genres": "Экшен, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16498-buvcRTBx4NSm.jpg",
+                "hook": "Человечество ведёт отчаянную войну за выживание против гигантских титанов-людоедов."
+            },
+            {
+                "id": 11061,
+                "ru": "Охотник х Охотник",
+                "en": "Hunter x Hunter (2011)",
+                "score": "8.90",
+                "genres": "Приключения, Сёнэн",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11061-y5gsT1hoHuHw.png",
+                "hook": "Юный Гон Фрикс отправляется на смертоносный экзамен, чтобы найти своего отца."
+            },
+            {
+                "id": 40748,
+                "ru": "Магическая битва",
+                "en": "JUJUTSU KAISEN",
+                "score": "8.40",
+                "genres": "Экшен, Мистика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-LHBAeoZDIsnF.jpg",
+                "hook": "Школьник поглощает палец короля проклятий Сукуны и вступает в войну магов."
+            },
+            {
+                "id": 38000,
+                "ru": "Клинок, рассекающий демонов",
+                "en": "Demon Slayer: Kimetsu no Yaiba",
+                "score": "8.30",
+                "genres": "Экшен, Исторический",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101922-WBsBl0ClmgYL.jpg",
+                "hook": "Тандзиро берёт в руки меч, чтобы отомстить демонам и вернуть человечность сестре."
+            },
+            {
+                "id": 44511,
+                "ru": "Человек-бензопила",
+                "en": "Chainsaw Man",
+                "score": "8.30",
+                "genres": "Экшен, Тёмное фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx127230-DdP4vAdssLoz.png",
+                "hook": "Дэндзи заключает контракт с демоническим псом и распиливает чудовищ бензопилами."
+            },
+            {
+                "id": 41467,
+                "ru": "Блич: Тысячелетняя кровавая война",
+                "en": "BLEACH: Thousand-Year Blood War",
+                "score": "8.80",
+                "genres": "Экшен, Сверхъестественное",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx116674-p3zK4PUX2Aag.jpg",
+                "hook": "Финальная битва синигами Общества Душ против вернувшейся армии квинси."
+            },
+            {
+                "id": 1735,
+                "ru": "Наруто: Ураганные хроники",
+                "en": "Naruto: Shippuden",
+                "score": "8.20",
+                "genres": "Экшен, Ниндзя",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1735-kGfVm0YqCPcu.png",
+                "hook": "Повзрослевший Наруто сражается с организацией Акацуки ради спасения друга Саскэ."
+            },
+            {
+                "id": 21,
+                "ru": "Ван-Пис",
+                "en": "ONE PIECE",
+                "score": "8.70",
+                "genres": "Приключения, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+                "hook": "Манки Д. Луффи с командой Соломенной Шляпы ищет величайшее сокровище мира."
+            },
+            {
+                "id": 31964,
+                "ru": "Моя геройская академия",
+                "en": "My Hero Academia",
+                "score": "7.70",
+                "genres": "Экшен, Супергерои",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21459-nYh85uj2Fuwr.jpg",
+                "hook": "Бессильный мальчик получает мощь величайшего героя Всемогущего и поступает в академию."
+            },
+            {
+                "id": 34572,
+                "ru": "Чёрный клевер",
+                "en": "Black Clover",
+                "score": "7.90",
+                "genres": "Магия, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97940-fyh8o7gNbha0.png",
+                "hook": "Парень без капли магии получает антимагический гримуар, стремясь стать Королём магов."
+            },
+            {
+                "id": 52299,
+                "ru": "Поднятие уровня в одиночку",
+                "en": "Solo Leveling",
+                "score": "8.00",
+                "genres": "Экшен, Фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx151807-it355ZgzquUd.png",
+                "hook": "Слабейший охотник Сон Джин-у пробуждает секретную систему прокачки в подземельях."
+            },
+            {
+                "id": 52588,
+                "ru": "Кайдзю номер восемь",
+                "en": "Kaiju No. 8",
+                "score": "8.10",
+                "genres": "Экшен, Sci-Fi",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx153288-25FBfFJzEQ5O.jpg",
+                "hook": "32-летний уборщик останков монстров случайно обретает силу могучего Кайдзю."
+            },
+            {
+                "id": 32182,
+                "ru": "Моб Психо 100",
+                "en": "Mob Psycho 100",
+                "score": "8.40",
+                "genres": "Экшен, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21507-6YUSbh2m0N1p.jpg",
+                "hook": "Школьник с колоссальными телекинетическими силами сдерживает эмоции ради обычной жизни."
+            },
+            {
+                "id": 5114,
+                "ru": "Стальной алхимик: Братство",
+                "en": "Fullmetal Alchemist: Brotherhood",
+                "score": "9.00",
+                "genres": "Фэнтези, Приключения",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5114-nSWCgQlmOMtj.jpg",
+                "hook": "Братья Элрики ищут философский камень, стремясь искупить запретный грех."
+            },
+            {
+                "id": 20899,
+                "ru": "ДжоДжо: Рыцари звёздной пыли",
+                "en": "JoJo's Bizarre Adventure: Stardust Crusaders",
+                "score": "7.90",
+                "genres": "Экшен, Приключения",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20474-xuqem5GBlBtb.jpg",
+                "hook": "Джотаро Куджо и команда стенд-юзеров отправляются в Египет уничтожить Дио."
+            },
+            {
+                "id": 37991,
+                "ru": "ДжоДжо: Золотой ветер",
+                "en": "JoJo's Bizarre Adventure: Golden Wind",
+                "score": "8.50",
+                "genres": "Экшен, Криминал",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx102883-S9KzdMJhDswJ.png",
+                "hook": "Джорно Джованна пробивается на вершину неаполитанской мафии ради мечты."
+            },
+            {
+                "id": 38671,
+                "ru": "Пламенная бригада пожарных",
+                "en": "Fire Force",
+                "score": "7.60",
+                "genres": "Экшен, Сверхъестественное",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx105310-2PKUvoaA6fTn.jpg",
+                "hook": "Особые пожарные с пирокинезом тушат людей, превратившихся в живое пламя."
+            },
+            {
+                "id": 42249,
+                "ru": "Токийские мстители",
+                "en": "Tokyo Revengers",
+                "score": "7.70",
+                "genres": "Экшен, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx120120-cWDmnmeEntSe.jpg",
+                "hook": "Неудачник перемещается на 12 лет назад, чтобы спасти первую любовь от гибели в банде."
+            },
+            {
+                "id": 54900,
+                "ru": "Ветролом",
+                "en": "WIND BREAKER",
+                "score": "7.70",
+                "genres": "Экшен, Школа",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx163270-wboZJp0ybwVK.jpg",
+                "hook": "Одинокий боец поступает в школу хулиганов, защищающих покой родного города."
+            },
+            {
+                "id": 52211,
+                "ru": "Магия и мускулы",
+                "en": "MASHLE: MAGIC AND MUSCLES",
+                "score": "7.60",
+                "genres": "Комедия, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx151801-XxVf22Le6C8o.png",
+                "hook": "Парень без магии качает мышцы до абсурдного уровня, круша надменных магов."
+            },
+            {
+                "id": 46569,
+                "ru": "Адский рай",
+                "en": "Hell’s Paradise",
+                "score": "8.00",
+                "genres": "Экшен, Тёмное фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx128893-Gc2t8b8M0mVu.jpg",
+                "hook": "Приговорённый к казни ниндзя Габимару ищет эликсир бессмертия на острове монстров."
+            },
+            {
+                "id": 52741,
+                "ru": "Нежить и Неудача",
+                "en": "Undead Unluck",
+                "score": "7.60",
+                "genres": "Экшен, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154116-3ydDI9hhvPgw.png",
+                "hook": "Бессмертный зомби и девушка, приносящая несчастья, бросают вызов правилам мира."
+            },
+            {
+                "id": 49596,
+                "ru": "Синяя тюрьма: Блю Лок",
+                "en": "BLUE LOCK",
+                "score": "8.00",
+                "genres": "Спорт, Триллер",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx137822-U8naszP96vzC.png",
+                "hook": "300 молодых нападающих борются в эгоистичной королевской битве за звание лучшего."
+            },
+            {
+                "id": 20583,
+                "ru": "Волейбол!!",
+                "en": "HAIKYU!!",
+                "score": "8.40",
+                "genres": "Спорт, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20464-ooZUyBe4ptp9.png",
+                "hook": "Низкорослый Сёё Хината взмывает над сеткой, ведя команду Карасуно к вершине."
+            },
+            {
+                "id": 37520,
+                "ru": "Дороро",
+                "en": "Dororo",
+                "score": "8.10",
+                "genres": "Экшен, Исторический",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101347-TGaDwEYqLfm1.jpg",
+                "hook": "Хяккимару истребляет 12 демонов, чтобы вернуть украденные при рождении органы."
+            },
+            {
+                "id": 45,
+                "ru": "Бродяга Кэнсин",
+                "en": "Rurouni Kenshin",
+                "score": "7.90",
+                "genres": "Исторический, Самураи",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx45-DEFgZRCxiGmF.png",
+                "hook": "Легендарный мечник-убийца даёт клятву никого не убивать, защищая слабых мечом с обратным лезвием."
+            },
+            {
+                "id": 3588,
+                "ru": "Пожиратель душ",
+                "en": "Soul Eater",
+                "score": "7.70",
+                "genres": "Экшен, Фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx3588-fSMggQoFSbUI.png",
+                "hook": "Студенты оружейной академии шинигами собирают души злых людей ради создания Косы Смерти."
+            },
+            {
+                "id": 39636,
+                "ru": "Бездомный бог",
+                "en": "Noragami",
+                "score": "7.95",
+                "genres": "Экшен, Мистика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Бродячий бог Ято выполняет любые поручения за 5 иен, мечтая о собственном храме."
+            },
+            {
+                "id": 18679,
+                "ru": "Убей или умри",
+                "en": "Kill la Kill",
+                "score": "7.90",
+                "genres": "Экшен, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b18679-lbkq7iYESoFW.png",
+                "hook": "Рюко Матой с гигантской половиной ножниц сражается с элитным школьным советом."
+            },
+            {
+                "id": 269,
+                "ru": "Блич",
+                "en": "Bleach",
+                "score": "7.90",
+                "genres": "Экшен, Синигами",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx269-d2GmRkJbMopq.png",
+                "hook": "Ичиго Куросаки случайно получает силы проводника душ и защищает мир живых от Пустых."
+            },
+            {
+                "id": 83499,
+                "ru": "Хвост Феи",
+                "en": "Fairy Tail",
+                "score": "7.60",
+                "genres": "Фэнтези, Магия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Нацу Драгнил и гильдия волшебников Хвост Феи сражаются за друзей в грандиозных битвах."
+            },
+            {
+                "id": 813,
+                "ru": "Драконий жемчуг Зет",
+                "en": "Dragon Ball Z",
+                "score": "8.00",
+                "genres": "Экшен, Сверхсилы",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx813-ZhnFNOeCU5dQ.png",
+                "hook": "Сон Гоку и воины Z защищают Землю от инопланетных захватчиков Саянов и тирана Фризы."
+            },
+            {
+                "id": 1482,
+                "ru": "Ди Грэй-мен",
+                "en": "D.Gray-man",
+                "score": "7.60",
+                "genres": "Экшен, Мистика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1482-6jc8ZVSmHuLo.jpg",
+                "hook": "Аллен Уолкер и экзорцисты Черного Ордена сражаются с механическими демонами Акума."
+            },
+            {
+                "id": 1604,
+                "ru": "Учитель-киллер Реборн!",
+                "en": "REBORN!",
+                "score": "7.70",
+                "genres": "Экшен, Сёнэн",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1604-W2q38L4OCGLI.png",
+                "hook": "Неуклюжий школьник Цуна становится наследником мафиозной семьи Вонгола под надзором Реборна."
+            },
+            {
+                "id": 54778,
+                "ru": "Семь смертных грехов",
+                "en": "Hawk no Onayami Soudanshitsu Special",
+                "score": "4.60",
+                "genres": "Фэнтези, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154197-yJZMgNynqQtW.jpg",
+                "hook": "Капитан Мелиодас собирает легендарных рыцарей-изгоев, чтобы спасти королевство Лионес."
+            },
+            {
+                "id": 249,
+                "ru": "Инуяся",
+                "en": "InuYasha",
+                "score": "7.70",
+                "genres": "Фэнтези, Исторический",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx249-jVBkyLnBvnRE.png",
+                "hook": "Школьница Кагомэ попадает в средневековую Японию и ищет осколки Камня Душ с полудемоном Инуясей."
+            },
+            {
+                "id": 392,
+                "ru": "Отчёт об буйстве духов",
+                "en": "Yu Yu Hakusho: Ghostfiles",
+                "score": "8.30",
+                "genres": "Экшен, Мистика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx392-z90299zIvYmx.png",
+                "hook": "Хулиган Юсукэ погибает, спасая ребёнка, и становится сыщиком мира мёртвых."
+            },
+            {
+                "id": 22199,
+                "ru": "Убийца Акаме!",
+                "en": "Akame ga Kill!",
+                "score": "7.30",
+                "genres": "Экшен, Тёмное фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20613-HXHpec4bemk5.jpg",
+                "hook": "Отряд наёмных убийц «Ночной Рейд» истребляет коррумпированную знать столицы."
+            },
+            {
+                "id": 26243,
+                "ru": "Последний Серафим",
+                "en": "Seraph of the End: Vampire Reign",
+                "score": "7.30",
+                "genres": "Экшен, Вампиры",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20829-pgsXVjrfyI5V.png",
+                "hook": "Человечество порабощено вампирами, но отряд «Лунные демоны» наносит ответный удар."
+            },
+            {
+                "id": 20787,
+                "ru": "Чёрная пуля",
+                "en": "Black Bullet",
+                "score": "6.70",
+                "genres": "Экшен, Sci-Fi",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20457-ftrNiYhZzgoY.jpg",
+                "hook": "Охотники на вирусных монстров Гастреа сражаются бок о бок с Проклятыми Детьми."
+            },
+            {
+                "id": 38656,
+                "ru": "Игра Дарвина",
+                "en": "Darwin's Game",
+                "score": "7.00",
+                "genres": "Экшен, Выживание",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx105190-lSoQNlnMF6UP.jpg",
+                "hook": "Школьник скачивает мобильную игру и втягивается в смертельные дуэли за жизнь."
+            },
+            {
+                "id": 16011,
+                "ru": "Токийские вороны",
+                "en": "Tokyo Ravens",
+                "score": "7.10",
+                "genres": "Экшен, Магия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16011-orxVpks3jG9U.jpg",
+                "hook": "Молодые оммёдзи защищают современный Токио от духовных катастроф."
+            },
+            {
+                "id": 10033,
+                "ru": "Торико",
+                "en": "Toriko",
+                "score": "6.90",
+                "genres": "Экшен, Гурман",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx10033-V7xnlgAVtaVR.jpg",
+                "hook": "Охотник за деликатесами Торико сражается с исполинскими чудовищами ради идеального меню."
+            },
+            {
+                "id": 154,
+                "ru": "Шаман Кинг",
+                "en": "Shaman King",
+                "score": "7.40",
+                "genres": "Экшен, Духи",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154-hSYv4EtcBE1p.png",
+                "hook": "Йо Асакура с духом самурая Амидамару участвует в Битве Шаманов за титул Короля."
+            },
+            {
+                "id": 11633,
+                "ru": "Кровавый парень",
+                "en": "Blood Lad",
+                "score": "6.90",
+                "genres": "Экшен, Вампиры",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11633-vIjtabJq64Xt.jpg",
+                "hook": "Вампир-отаку Стаз пытается воскресить погибшую в Аду человеческую девушку Фуюдзи."
+            },
+            {
+                "id": 41353,
+                "ru": "Царь горы",
+                "en": "The God of High School",
+                "score": "7.00",
+                "genres": "Экшен, Боевые искусства",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx116006-Wt8JSA1ZQxlM.png",
+                "hook": "Турнир сильнейших бойцов старших школ за исполнение любого желания перерастает в битву богов."
+            },
+            {
+                "id": 857,
+                "ru": "Эйр Гир",
+                "en": "Air Gear",
+                "score": "7.00",
+                "genres": "Спорт, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b857-0pbF6kMJpUeL.png",
+                "hook": "Икки покоряет улицы на роликах с мотором Air Treck, стремясь к Небесному Регалии."
+            },
+            {
+                "id": 132,
+                "ru": "Агентство по возврату долгов",
+                "en": "GetBackers",
+                "score": "7.10",
+                "genres": "Экшен, Сверхсилы",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx132-DBhi3KQASjLU.png",
+                "hook": "Мидо Бан с глазом иллюзий и Гиндзи Амано со 100 000 вольт электричества возвращают любые вещи."
+            },
+            {
+                "id": 5079,
+                "ru": "Куроками",
+                "en": "Black God",
+                "score": "6.60",
+                "genres": "Экшен, Боевые искусства",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5079-GGC5BR9xIiE0.jpg",
+                "hook": "Парень заключает контракт с хранительницей баланса Куро в битве за потоки жизненной энергии Доппель."
+            },
+            {
+                "id": 1818,
+                "ru": "Клеймор: Воительницы",
+                "en": "Claymore",
+                "score": "7.40",
+                "genres": "Экшен, Тёмное фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1818-KieLJv0qo3mO.jpg",
+                "hook": "Клэр раскрывает силу монстра Йома ради мести за наставницу Терезу."
+            }
+        ]
+    },
+    "dark_horror": {
+        "title": "Мрачный хоррор, выживание и тёмное фэнтези 🩸",
+        "desc": "Леденящие кровь триллеры, жестокая борьба за жизнь и бескомпромиссная тьма:",
+        "tags": "#хоррор #триллер #тёмное_фэнтези",
+        "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b20605-k665mVkSug8D.jpg",
+        "items": [
+            {
+                "id": 33,
+                "ru": "Берсерк",
+                "en": "Berserk",
+                "score": "8.40",
+                "genres": "Хоррор, Тёмное фэнтези",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx33-PSwfE5B0gejI.jpg",
+                "hook": "Брутальная сага о выживании мечника Гатса в безжалостном средневековом мире."
+            },
+            {
+                "id": 22319,
+                "ru": "Токийский гуль",
+                "en": "Tokyo Ghoul",
+                "score": "7.60",
+                "genres": "Хоррор, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b20605-k665mVkSug8D.jpg",
+                "hook": "Студент Канэки становится полугулем и пытается сохранить человечность в мире хищников."
+            },
+            {
+                "id": 22535,
+                "ru": "Паразит: Учение о жизни",
+                "en": "Parasyte -the maxim-",
+                "score": "8.10",
+                "genres": "Хоррор, Sci-Fi",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20623-dUARfggnNDOe.jpg",
+                "hook": "Инопланетный паразит захватывает правую руку школьника, втягивая в смертельную войну."
+            },
+            {
+                "id": 777,
+                "ru": "Хеллсинг OVA",
+                "en": "Hellsing Ultimate",
+                "score": "8.10",
+                "genres": "Хоррор, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx777-F6547pSAR2Zd.jpg",
+                "hook": "Непобедимый вампир Алукард защищает Британскую империю от орд нечисти и фашистов."
+            },
+            {
+                "id": 1818,
+                "ru": "Клеймор",
+                "en": "Claymore",
+                "score": "7.40",
+                "genres": "Тёмное фэнтези, Хоррор",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1818-KieLJv0qo3mO.jpg",
+                "hook": "Воительницы с серебряными глазами охотятся на пожирающих людей демонов Йома."
+            },
+            {
+                "id": 11111,
+                "ru": "Иная",
+                "en": "Another",
+                "score": "7.10",
+                "genres": "Хоррор, Детектив",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11111-gvvE5bBYsyFo.png",
+                "hook": "В проклятом школьном классе оживает смертоносное проклятие, уносящее жизни одну за другой."
+            },
+            {
+                "id": 226,
+                "ru": "Эльфийская песнь",
+                "en": "Elfen Lied",
+                "score": "6.80",
+                "genres": "Хоррор, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx226-MibyRKhIrnTe.png",
+                "hook": "Мутант-диклониус Люси с невидимыми смертоносными векторами сбегает из лаборатории."
+            },
+            {
+                "id": 37779,
+                "ru": "Обещанный Неверленд",
+                "en": "The Promised Neverland",
+                "score": "8.30",
+                "genres": "Триллер, Хоррор",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101759-8UR7r9MNVpz2.jpg",
+                "hook": "Сироты идеального приюта узнают, что их растят на корм чудовищам, и готовят побег."
+            },
+            {
+                "id": 7724,
+                "ru": "Усопшие",
+                "en": "Shiki",
+                "score": "7.50",
+                "genres": "Хоррор, Мистика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx7724-NwNnRsI34eDa.jpg",
+                "hook": "Затерянная в горах деревня медленно вымирает из-за нашествия восставших вампиров."
+            },
+            {
+                "id": 71724,
+                "ru": "Страна чудес смертников",
+                "en": "Deadman Wonderland",
+                "score": "7.20",
+                "genres": "Хоррор, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Ложно обвинённый подросток попадает в смертельную тюрьму-аттракцион с боями на крови."
+            },
+            {
+                "id": 79352,
+                "ru": "Ганц",
+                "en": "Gantz",
+                "score": "7.10",
+                "genres": "Хоррор, Sci-Fi",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Погибшие люди возвращаются к жизни чёрной сферой, чтобы охотиться на жестоких пришельцев."
+            },
+            {
+                "id": 934,
+                "ru": "Когда плачут цикады",
+                "en": "When They Cry",
+                "score": "7.60",
+                "genres": "Хоррор, Психология",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx934-wjMlVEl4CWwg.jpg",
+                "hook": "Праздник Ватанагаси в тихой деревне оборачивается кровавыми циклами безумия."
+            },
+            {
+                "id": 15037,
+                "ru": "Вечеринка мертвецов",
+                "en": "Corpse Party",
+                "score": "5.90",
+                "genres": "Хоррор, Кровь",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx15037-32PupkILJcuv.jpg",
+                "hook": "Школьники переносят ритуал дружбы в проклятую начальную школу, кишащую призраками."
+            },
+            {
+                "id": 31580,
+                "ru": "Получеловек",
+                "en": "AJIN: Demi-Human",
+                "score": "7.10",
+                "genres": "Хоррор, Триллер",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21341-Pyc7SkMEuGsl.jpg",
+                "hook": "Бессмертные существа Адзины становятся объектом жестокой охоты спецслужб."
+            },
+            {
+                "id": 37349,
+                "ru": "Убийца гоблинов",
+                "en": "GOBLIN SLAYER",
+                "score": "7.10",
+                "genres": "Тёмное фэнтези, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101165-v5NwPXWPFDuD.jpg",
+                "hook": "Прагматичный мечник посвятил всю жизнь безжалостному истреблению коварных гоблинов."
+            },
+            {
+                "id": 52505,
+                "ru": "Тёмное собрание",
+                "en": "Dark Gathering",
+                "score": "7.50",
+                "genres": "Хоррор, Мистика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx152802-ENRcnqD5axhQ.jpg",
+                "hook": "Девочка собирает коллекцию опаснейших духов Японии, чтобы отомстить за душу матери."
+            },
+            {
+                "id": 48483,
+                "ru": "Девочка, которая видит это",
+                "en": "Mieruko-chan",
+                "score": "7.20",
+                "genres": "Хоррор, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx131083-sKGHkpVDksaZ.png",
+                "hook": "Школьница видит жутких потусторонних монстров и изо всех сил делает вид, что не замечает их."
+            },
+            {
+                "id": 35120,
+                "ru": "Человек-дьявол: Плакса",
+                "en": "Devilman Crybaby",
+                "score": "7.60",
+                "genres": "Хоррор, Трагедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx98460-bLtH2c3jd6sV.png",
+                "hook": "Кровавая деконструкция природы человека и демонов на пороге судного дня."
+            },
+            {
+                "id": 38668,
+                "ru": "Дорохедоро",
+                "en": "Dorohedoro",
+                "score": "7.90",
+                "genres": "Тёмное фэнтези, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx105228-I4xr84QS9Pvk.jpg",
+                "hook": "Человек с головой рептилии Кайман охотится на магов в поисках своей настоящей личности."
+            },
+            {
+                "id": 46569,
+                "ru": "Адский рай",
+                "en": "Hell’s Paradise",
+                "score": "8.00",
+                "genres": "Тёмное фэнтези, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx128893-Gc2t8b8M0mVu.jpg",
+                "hook": "Приговорённые к смерти преступники и их палачи ищут бессмертие на адском острове."
+            },
+            {
+                "id": 34542,
+                "ru": "Инуясики",
+                "en": "INUYASHIKI LAST HERO",
+                "score": "7.40",
+                "genres": "Sci-Fi, Триллер",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97922-qrGn5fkQinDs.jpg",
+                "hook": "Старик и старшеклассник превращаются в боевых киборгов, выбрав противоположные пути добра и зла."
+            },
+            {
+                "id": 150,
+                "ru": "Кровь+",
+                "en": "Blood+",
+                "score": "7.30",
+                "genres": "Хоррор, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx150-YRcwKiJEXcLx.png",
+                "hook": "Сая Отонаси с помощью собственной крови уничтожает крылатых монстров-рукокрылых."
+            },
+            {
+                "id": 12445,
+                "ru": "Амнезия сумеречной девы",
+                "en": "Dusk Maiden of Amnesia",
+                "score": "7.50",
+                "genres": "Хоррор, Романтика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx12445-hKIXQW3vA4iz.jpg",
+                "hook": "Парень общается с прекрасным призраком Юко, расследуя тайну её гибели в старой школе."
+            },
+            {
+                "id": 1571,
+                "ru": "Охота на привидений",
+                "en": "Ghost Hunt",
+                "score": "7.30",
+                "genres": "Хоррор, Мистика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1571-rgWSFoPDZhzS.png",
+                "hook": "Группа экстрасенсов и ученых исследует реальные дома с привидениями и полтергейстом."
+            },
+            {
+                "id": 228,
+                "ru": "Адская девочка",
+                "en": "Hell Girl",
+                "score": "7.20",
+                "genres": "Хоррор, Мистика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx228-J2J1CI4jfyeC.jpg",
+                "hook": "Энма Ай утягивает обидчиков в ад по полуночному запросу на таинственном сайте."
+            },
+            {
+                "id": 28623,
+                "ru": "Кабанери железной крепости",
+                "en": "Kabaneri of the Iron Fortress",
+                "score": "7.00",
+                "genres": "Хоррор, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21196-2PfPfIDrxKki.jpg",
+                "hook": "Бронированный паровоз прорывается сквозь орды стальных зомби-кабанэ в паропанковой Японии."
+            },
+            {
+                "id": 22687,
+                "ru": "Терраформирование",
+                "en": "Terra Formars",
+                "score": "6.50",
+                "genres": "Sci-Fi, Хоррор",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx20629-xO8wxKYeXncc.png",
+                "hook": "Генетически модифицированные космонавты сражаются с чудовищными тараканами-мутантами на Марсе."
+            },
+            {
+                "id": 98316,
+                "ru": "Кастлвания",
+                "en": "Castlevania",
+                "score": "8.20",
+                "genres": "Тёмное фэнтези, Хоррор",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                "hook": "Тревор Бельмонт, Алукард и Сифа ведут войну против обезумевшего от горя Дракулы."
+            },
+            {
+                "id": 543,
+                "ru": "Ди: Жажда крови",
+                "en": "Vampire Hunter D: Bloodlust",
+                "score": "7.90",
+                "genres": "Хоррор, Постапокалипсис",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx543-MAeWIDl4TwuG.png",
+                "hook": "Дампир Ди охотится за вампиром Майерлингом, похитившим дочь богатого дворянина."
+            },
+            {
+                "id": 40028,
+                "ru": "Атака титанов: Финал",
+                "en": "Attack on Titan Final Season",
+                "score": "8.70",
+                "genres": "Хоррор, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx110277-sKUNXAsWMNFw.jpg",
+                "hook": "Кульминация войны за остров Парадиз и начало Гул Земли."
+            },
+            {
+                "id": 5039,
+                "ru": "Куродзука",
+                "en": "Kurozuka",
+                "score": "6.40",
+                "genres": "Хоррор, Самураи",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5039-F9HXvMsrQGP8.png",
+                "hook": "Бессмертный мечник Куро преследует свою возлюбленную-вампиршу сквозь века."
+            },
+            {
+                "id": 3342,
+                "ru": "Дочери Мнемозины",
+                "en": "RIN ~Daughters of Mnemosyne~",
+                "score": "6.70",
+                "genres": "Хоррор, Sci-Fi",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx3342-py3qPHF7NK3c.jpg",
+                "hook": "Бессмертный частный детектив Рин распутывает изощренные дела в Токио."
+            },
+            {
+                "id": 2216,
+                "ru": "Одержимые смертью",
+                "en": "Shigurui: Death Frenzy",
+                "score": "6.90",
+                "genres": "Самураи, Хоррор",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx2216-90YquKJllawX.jpg",
+                "hook": "Бескомпромиссная кровавая дуэль двух искалеченных мастеров меча перед лицом даймё."
+            },
+            {
+                "id": 3457,
+                "ru": "Рыцарь-вампир",
+                "en": "Vampire Knight",
+                "score": "6.30",
+                "genres": "Мистика, Драма",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx3457-owSEHJYvflx5.jpg",
+                "hook": "Дневной класс обычных школьников и Ночной класс аристократичных вампиров под стражей Юки."
+            },
+            {
+                "id": 36511,
+                "ru": "Токийский гуль: Перерождение",
+                "en": "Tokyo Ghoul:re",
+                "score": "6.20",
+                "genres": "Хоррор, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx100240-vJNaKd5HwPJ2.jpg",
+                "hook": "Следователь Сасаки Хайсэ возглавляет спецотряд людей с кагуне."
+            },
+            {
+                "id": 50914,
+                "ru": "Игра в прятки",
+                "en": "Hide-and-seek",
+                "score": "4.90",
+                "genres": "Хоррор, Мистика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113266-oXOhlbnWPh4n.jpg",
+                "hook": "Дети в масках играют в заброшенном городе в прятки с настоящими демонами."
+            },
+            {
+                "id": 326,
+                "ru": "Магазинчик ужасов",
+                "en": "Petshop of Horrors",
+                "score": "6.80",
+                "genres": "Хоррор, Мистика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx326-dCwCoSAE7dWZ.jpg",
+                "hook": "Граф Ди продает экзотических питомцев при строжайшем соблюдении условий контракта."
+            },
+            {
+                "id": 1281,
+                "ru": "Истории о привидениях",
+                "en": "Ghost Stories",
+                "score": "7.40",
+                "genres": "Хоррор, Комедия",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1281-1D6fuMnHwor0.png",
+                "hook": "Школьники случайно запечатывают и изгоняют городских духов из заброшенной школы."
+            },
+            {
+                "id": 586,
+                "ru": "Аякаси: Самурайские ужасы",
+                "en": "Ayakashi: Samurai Horror Tales",
+                "score": "6.90",
+                "genres": "Хоррор, Фольклор",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx586-alDXEdRVYNU1.png",
+                "hook": "Три классические японские страшные легенды о духах и возмездии."
+            },
+            {
+                "id": 10490,
+                "ru": "Кровь-C",
+                "en": "Blood-C",
+                "score": "6.20",
+                "genres": "Хоррор, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10490-Rqx4jlTOMFWx.jpg",
+                "hook": "Милая жрица Сая защищает город от древних тварей, пока не узнаёт ужасающую правду."
+            },
+            {
+                "id": 8074,
+                "ru": "Школа мертвецов",
+                "en": "High School of the Dead",
+                "score": "6.70",
+                "genres": "Хоррор, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx8074-YB63Ik96fjPj.png",
+                "hook": "Группа выживших школьников пробивается сквозь толпы зомби в охваченном пандемией городе."
+            },
+            {
+                "id": 2775,
+                "ru": "Генокибер",
+                "en": "Genocyber",
+                "score": "5.30",
+                "genres": "Хоррор, Киберпанк",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/2775-GrmImvJgETGn.png",
+                "hook": "Ужасающий кибернетический монстр Генокибер стирает в пыль целые города и армии."
+            },
+            {
+                "id": 1107,
+                "ru": "Город чудищ",
+                "en": "Wicked City",
+                "score": "6.10",
+                "genres": "Хоррор, Мистика",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx1107-YRi1VB2Y80g3.png",
+                "hook": "Тайная полиция людей и Черного Мира охраняет мирный договор между расами от радикальных демонов."
+            },
+            {
+                "id": 32071,
+                "ru": "Ганц: О",
+                "en": "GANTZ:O",
+                "score": "7.10",
+                "genres": "Хоррор, CGI-экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx21496-b6R9F3FtIgWJ.jpg",
+                "hook": "Команда Ганца отправляется в ночную Осаку для истребления сотни смертоносных мифологических монстров Нурарихёна."
+            },
+            {
+                "id": 270,
+                "ru": "Хеллсинг (2001)",
+                "en": "Hellsing",
+                "score": "7.20",
+                "genres": "Хоррор, Вампиры",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b270-S2ProngvO6BU.jpg",
+                "hook": "Алукард и Серас Виктория истребляют вампиров-фриков под джазовый саундтрек."
+            },
+            {
+                "id": 9544,
+                "ru": "Обитель зла: Проклятие",
+                "en": "Resident Evil: Damnation",
+                "score": "6.70",
+                "genres": "Хоррор, Боевик",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx9544-rD8dGcCuSW2s.jpg",
+                "hook": "Леон Кеннеди проникает в Восточную Славянскую Республику, где повстанцы используют Лизунов."
+            },
+            {
+                "id": 33253,
+                "ru": "Получеловек (2 сезон)",
+                "en": "AJIN: Demi-Human 2",
+                "score": "7.30",
+                "genres": "Хоррор, Триллер",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21799-0WB0vWJJ7mFX.jpg",
+                "hook": "Кэи Нагаи и министерство объединяются против безжалостного террориста-адзина Сато."
+            },
+            {
+                "id": 1454,
+                "ru": "Когти зверя",
+                "en": "Kemonozume",
+                "score": "7.10",
+                "genres": "Хоррор, Экшен",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1454-fyg2zIQz5Qsj.png",
+                "hook": "Кровавая драма о древнем клане пожирателей плоти Сёкудзинки и охотниках Кимонофу."
+            },
+            {
+                "id": 19315,
+                "ru": "Куколка",
+                "en": "Pupa",
+                "score": "2.70",
+                "genres": "Хоррор, Мутации",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx19315-dWHH0pRxVCjq.jpg",
+                "hook": "Брат скармливает свою регенерирующую плоть заразившейся вирусом Пупа сестре-монстру."
+            },
+            {
+                "id": 33421,
+                "ru": "Остров гигантских насекомых",
+                "en": "The Island of Giant Insects",
+                "score": "5.70",
+                "genres": "Хоррор, Выживание",
+                "poster": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx106750-R3njaL8buS1F.jpg",
+                "hook": "Выжившие в авиакатастрофе школьницы сталкиваются с кровожадными гигантскими насекомыми на острове."
             }
         ]
     }
 };
-
-function showToast(message, type = 'info', duration = 3500) {
-      const c = document.getElementById('toastContainer');
-      const t = document.createElement('div');
-      t.className = `toast ${type}`;
-      const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
-      t.innerHTML = `<span>${icon} ${message}</span><button style="background:transparent; border:none; color:#94a3b8; cursor:pointer; font-size:1rem;" onclick="this.parentElement.remove()">&times;</button>`;
-      c.appendChild(t);
-      setTimeout(() => {
-        t.style.opacity = '0';
-        t.style.transform = 'translateY(10px)';
-        t.style.transition = 'all 0.2s';
-        setTimeout(() => t.remove(), 200);
-      }, duration);
-    }
-
-    function switchTab(tabId, el) {
-      document.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      const target = document.getElementById(tabId);
-      if (target) target.classList.add('active');
-      if (el) el.classList.add('active');
-    }
-
-    function togglePasswordVisibility(id, btn) {
-      const input = document.getElementById(id);
-      if (input.type === 'password') {
-        input.type = 'text';
-        btn.innerText = '🙈';
-      } else {
-        input.type = 'password';
-        btn.innerText = '👁️';
-      }
-    }
-
-    function updateLivePreview() {
-      const text = document.getElementById('customMsgText').value;
-      const photo = document.getElementById('customPhotoUrl').value.trim();
-      const btnText = document.getElementById('customBtnText').value.trim();
-      const btnUrl = document.getElementById('customBtnUrl').value.trim();
-
-      const pText = document.getElementById('livePreviewText');
-      const pImg = document.getElementById('livePreviewImg');
-      const pImgWrap = document.getElementById('livePreviewImgWrap');
-      const pBtn = document.getElementById('livePreviewBtn');
-      const pBtnWrap = document.getElementById('livePreviewBtnWrap');
-      const pTime = document.getElementById('previewPostTime');
-
-      if (pTime) {
-        const now = new Date();
-        pTime.innerText = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-      }
-
-      pText.innerHTML = text ? text.replace(/\n/g, '<br>') : 'Текст вашего сообщения появится здесь...';
-
-      if (photo && photo.startsWith('http')) {
-        pImg.src = photo;
-        if (pImgWrap) pImgWrap.style.display = 'block';
-        pImg.style.display = 'block';
-      } else {
-        if (pImgWrap) pImgWrap.style.display = 'none';
-        pImg.style.display = 'none';
-      }
-
-      if (btnText) {
-        pBtn.innerText = btnText;
-        pBtn.href = btnUrl || '#';
-        if (pBtnWrap) pBtnWrap.style.display = 'block';
-        pBtn.style.display = 'block';
-      } else {
-        if (pBtnWrap) pBtnWrap.style.display = 'none';
-        pBtn.style.display = 'none';
-      }
-    }
-
-    const emojisNum = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
-    let currentShuffledItems = {};
     let currentCollageBlob = null;
     let collageGenerationId = 0;
 
@@ -3516,6 +5743,18 @@ function showToast(message, type = 'info', duration = 3500) {
       lines.push(`#подборка #топ_аниме ${t.tags} #чтопосмотреть #${appName.toLowerCase()}`);
 
       let caption = lines.join('\n');
+      if (caption.length > 1020 && n <= 5) {
+        const shortLines = [`🌟 <b>ТОП-${n}: ${cleanTitle}</b>\n`];
+        items.forEach((it, idx) => {
+          const em = emojisNum[idx] || `${idx + 1}.`;
+          let h = it.hook || "";
+          if (h.length > 75) h = h.substring(0, 73).trim() + '..';
+          shortLines.push(`${em} <b>«${it.ru}»</b> / <i>${it.en}</i>\n⭐️ <b>${it.score}</b> | 🎭 ${it.genres}\n📝 ${h}\n`);
+        });
+        shortLines.push(`✨ <i>Смотрите эти тайтлы в приложении ${appName}!</i>`);
+        shortLines.push(`#подборка #топ_аниме ${t.tags} #чтопосмотреть #${appName.toLowerCase()}`);
+        caption = shortLines.join('\n');
+      }
       return caption;
     }
 
