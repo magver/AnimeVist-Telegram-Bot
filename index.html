@@ -552,7 +552,7 @@
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
               <span style="color:var(--text-secondary);">Формат подборок:</span>
-              <span style="font-family:var(--font-mono); color:var(--accent-cyan);">HD-коллаж (до 10 аниме / сетка 5×2)</span>
+              <span style="font-family:var(--font-mono); color:var(--accent-cyan);">HD-коллаж (3–5 аниме / панорама)</span>
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
               <span style="color:var(--text-secondary);">База данных Supabase:</span>
@@ -670,7 +670,7 @@
 
         <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-sm); padding:10px 12px; margin:12px 0 16px 0; font-size:0.8rem; color:#67e8f9; display:flex; align-items:center; gap:8px;">
           <span>🖼</span>
-          <span>Обложки объединяются в <b>единый HD-коллаж</b> (1-рядный для 3-5, сетка 5×2 для 10) с номерами и шапкой!</span>
+          <span>Обложки объединяются в <b>единый HD-коллаж</b> (панорамный ряд 3–5 постеров) с номерами и шапкой!</span>
         </div>
 
         <div class="form-group">
@@ -699,8 +699,6 @@
             <option value="3">3 аниме (крупный постер)</option>
             <option value="4" selected>4 аниме (рекомендуется)</option>
             <option value="5">5 аниме (панорамный коллаж)</option>
-            <option value="7">7 аниме (сетка 4+3)</option>
-            <option value="10">10 аниме (ТОП-10 сетка 5×2)</option>
           </select>
           <button type="button" class="btn btn-secondary" onclick="rerollWebCompilation()" style="margin-top:8px; width:100%; display:flex; align-items:center; justify-content:center; gap:6px;">
             <span>🎲</span> <span>Подобрать другие аниме (Случайная ротация)</span>
@@ -6278,7 +6276,8 @@ const THEMES_DATA = {
       const t = THEMES_DATA[themeKey] || THEMES_DATA['must_watch'] || THEMES_DATA['cyberpunk_scifi'];
       const appName = (currentConfig && currentConfig.app && currentConfig.app.name) || 'AnimeVist';
       const countEl = document.getElementById('webCompilationCountSelect');
-      const count = countEl ? parseInt(countEl.value) || 4 : 4;
+      const rawCount = countEl ? parseInt(countEl.value) || 4 : 4;
+      const count = Math.max(3, Math.min(5, rawCount));
 
       const displayItems = getNextDiverseAnimeBatch(themeKey, count, refresh);
 
@@ -6307,7 +6306,8 @@ const THEMES_DATA = {
       const t = THEMES_DATA[key] || THEMES_DATA['must_watch'];
       const appName = (currentConfig && currentConfig.app && currentConfig.app.name) || 'AnimeVist';
       const countEl = document.getElementById('webCompilationCountSelect');
-      const count = countEl ? parseInt(countEl.value) || 4 : 4;
+      const rawCount = countEl ? parseInt(countEl.value) || 4 : 4;
+      const count = Math.max(3, Math.min(5, rawCount));
 
       const displayItems = lastSelectedDisplayItems[key] || getNextDiverseAnimeBatch(key, count);
 
