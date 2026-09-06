@@ -992,27 +992,27 @@ def create_compilation_collage(poster_urls, title_text, output_filename="compila
 
     # Layout configuration based on count
     if n <= 5:
-        # 1-Row panoramic banner
-        poster_h = 440 if n <= 4 else 390
-        poster_w = int(poster_h * 0.70)
-        card_gap = 16
-        pad_x = 24
-        pad_top = 92
-        pad_bottom = 24
+        # Massive 1-Row panoramic banner
+        poster_h = 560 if n <= 4 else 500
+        poster_w = int(poster_h * 0.69)  # ~386px
+        card_gap = 26
+        pad_x = 36
+        pad_top = 110
+        pad_bottom = 36
         total_w = pad_x * 2 + (poster_w * n) + (card_gap * (n - 1))
         total_h = pad_top + poster_h + pad_bottom
         is_grid = False
         cols = n
     else:
-        # 2-Row adaptive grid (5x2 for 10, 4x2 for 7-8, 3x2 for 6)
+        # Grand 2-Row adaptive grid (5x2 for 10, 4x2 for 7-8, 3x2 for 6)
         cols = (n + 1) // 2
-        poster_h = 320
-        poster_w = int(poster_h * 0.70)  # ~224px
-        card_gap = 14
-        row_gap = 16
-        pad_x = 24
-        pad_top = 92
-        pad_bottom = 24
+        poster_h = 440
+        poster_w = int(poster_h * 0.69)  # ~304px
+        card_gap = 22
+        row_gap = 24
+        pad_x = 36
+        pad_top = 110
+        pad_bottom = 36
         total_w = pad_x * 2 + (poster_w * cols) + (card_gap * (cols - 1))
         total_h = pad_top + (poster_h * 2) + row_gap + pad_bottom
         is_grid = True
@@ -1023,7 +1023,7 @@ def create_compilation_collage(poster_urls, title_text, output_filename="compila
 
     # Header fonts
     font_pill = _get_font(12, bold=True)
-    font_title = _get_font(21, bold=True)
+    font_title = _get_font(26, bold=True)
     font_badge = _get_font(18 if is_grid else 19, bold=True)
 
     # Clean title from emojis and duplicated prefixes
@@ -1032,7 +1032,7 @@ def create_compilation_collage(poster_urls, title_text, output_filename="compila
     header_display = f"ТОП-{n}: {clean_title}" if clean_title else f"ТОП-{n} Шедевров"
 
     # Header glass card container
-    header_box = (pad_x, 12, total_w - pad_x, 80)
+    header_box = (pad_x, 14, total_w - pad_x, 92)
     draw.rounded_rectangle(header_box, radius=12, fill=(15, 23, 42, 220), outline=(255, 255, 255, 25), width=1)
 
     # Header Pill badge inside container
@@ -1043,10 +1043,10 @@ def create_compilation_collage(poster_urls, title_text, output_filename="compila
     draw.text((pad_x + 24, 21), pill_text, fill=(129, 140, 248), font=font_pill)
 
     # Header main title
-    draw.text((pad_x + 16, 47), header_display, fill=(248, 250, 252), font=font_title)
+    draw.text((pad_x + 18, 54), header_display, fill=(248, 250, 252), font=font_title)
 
     # Glowing subtle accent dot in right corner
-    draw.ellipse((total_w - pad_x - 30, 38, total_w - pad_x - 18, 50), fill=(99, 102, 241, 220), outline=(236, 72, 153, 200), width=1)
+    draw.ellipse((total_w - pad_x - 36, 44, total_w - pad_x - 20, 60), fill=(99, 102, 241, 220), outline=(236, 72, 153, 200), width=1)
 
     # Rounded corner mask template for posters
     scale = 2
@@ -1093,9 +1093,9 @@ def create_compilation_collage(poster_urls, title_text, output_filename="compila
 
         # 2. Resize and apply vignette
         resized = raw.resize((poster_w, poster_h), Image.Resampling.LANCZOS).convert("RGBA")
-        resized = resized.filter(ImageFilter.UnsharpMask(radius=1.0, percent=115, threshold=3))
-        resized = resized.filter(ImageFilter.UnsharpMask(radius=1.0, percent=115, threshold=3))
-        resized = resized.filter(ImageFilter.UnsharpMask(radius=1.0, percent=115, threshold=3))
+        resized = resized.filter(ImageFilter.UnsharpMask(radius=1.2, percent=120, threshold=2))
+        resized = resized.filter(ImageFilter.UnsharpMask(radius=1.2, percent=120, threshold=2))
+        resized = resized.filter(ImageFilter.UnsharpMask(radius=1.2, percent=120, threshold=2))
         vignette = Image.new("RGBA", (poster_w, poster_h), (0, 0, 0, 0))
         v_draw = ImageDraw.Draw(vignette)
         for y in range(int(poster_h * 0.62), poster_h):
@@ -1116,9 +1116,9 @@ def create_compilation_collage(poster_urls, title_text, output_filename="compila
 
         # 5. Position Badge (modern glassmorphic rank tag: [ • 01 ])
         num_str = f"{idx:02d}"
-        badge_h = 24 if is_grid else 28
-        badge_w = 46 if is_grid else 52
-        b_r = 7 if is_grid else 8
+        badge_h = 28 if is_grid else 32
+        badge_w = 54 if is_grid else 60
+        b_r = 8 if is_grid else 9
         badge = Image.new("RGBA", (badge_w, badge_h), (0, 0, 0, 0))
         b_draw = ImageDraw.Draw(badge)
 
@@ -1150,7 +1150,7 @@ def create_compilation_collage(poster_urls, title_text, output_filename="compila
         b_draw.ellipse((dot_cx - dot_r, dot_cy - dot_r, dot_cx + dot_r, dot_cy + dot_r), fill=dot_color)
 
         # Rank number
-        f_size = 11 if is_grid else 13
+        f_size = 13 if is_grid else 15
         font_badge = _get_font(f_size, bold=True)
         t_bbox = b_draw.textbbox((0, 0), num_str, font=font_badge)
         t_w = t_bbox[2] - t_bbox[0]
@@ -1168,7 +1168,7 @@ def create_compilation_collage(poster_urls, title_text, output_filename="compila
         canvas.paste(badge, (pos_x + 9, pos_y + 9), badge)
 
     final_rgb = canvas.convert("RGB")
-    final_rgb.save(out_path, "JPEG", quality=95)
+    final_rgb.save(out_path, "JPEG", quality=98, subsampling=0)
     print(f"[Compilations] Высококачественный HD-коллаж успешно сгенерирован ({n} постеров): {out_path}")
     return out_path
 
