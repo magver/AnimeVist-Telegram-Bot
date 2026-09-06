@@ -4401,18 +4401,18 @@ def draw_vector_star(draw, cx, cy, r_outer=7.2, r_inner=3.4, color=(251, 191, 36
 
 def create_light_colorful_background(width, height):
     """
-    Creates a beautiful, radiant, stylish multi-stop gradient background:
-    Royal violet -> electric purple -> vibrant magenta -> sunset amber -> cyan
-    with soft luminous aurora orbs.
+    Creates a beautiful, soft, light pastel gradient background:
+    Soft periwinkle lilac -> soft wisteria -> delicate blush pink -> warm soft peach -> airy sky cyan
+    with gentle luminous ambient orbs.
     """
     base = Image.new("RGBA", (width, height))
     draw = ImageDraw.Draw(base)
     stops = [
-        (49, 27, 98),    # Deep royal violet
-        (109, 40, 217),  # Vibrant purple
-        (219, 39, 119),  # Vibrant fuchsia rose
-        (249, 115, 22),  # Warm amber orange
-        (14, 165, 233)   # Electric sky cyan
+        (199, 210, 254),  # #c7d2fe (soft celestial periwinkle)
+        (221, 214, 254),  # #ddd6fe (soft wisteria lilac)
+        (251, 207, 232),  # #fbcfe8 (delicate blush pink)
+        (254, 215, 170),  # #fed7aa (warm soft peach)
+        (186, 230, 253)   # #bae6fd (airy sky cyan)
     ]
     for y in range(height):
         for x in range(0, width, 4):
@@ -4427,12 +4427,12 @@ def create_light_colorful_background(width, height):
             b = int(cA[2] + (cB[2] - cA[2]) * f)
             draw.rectangle([x, y, x + 3, y], fill=(r, g, b, 255))
 
-    # Soft glowing ambient orbs
+    # Gentle luminous ambient orbs
     orbs = Image.new("RGBA", (width, height), (0, 0, 0, 0))
     draw_o = ImageDraw.Draw(orbs)
-    draw_o.ellipse((width - 320, -60, width + 120, 380), fill=(56, 189, 248, 140))
-    draw_o.ellipse((-80, height - 380, 380, height + 80), fill=(236, 72, 153, 140))
-    draw_o.ellipse((width // 2 - 180, height // 2 - 180, width // 2 + 180, height // 2 + 180), fill=(251, 191, 36, 90))
+    draw_o.ellipse((width - 320, -60, width + 120, 380), fill=(186, 230, 253, 110))
+    draw_o.ellipse((-80, height - 380, 380, height + 80), fill=(251, 207, 232, 100))
+    draw_o.ellipse((width // 2 - 180, height // 2 - 180, width // 2 + 180, height // 2 + 180), fill=(254, 240, 138, 70))
     orbs = orbs.filter(ImageFilter.GaussianBlur(65))
     base = Image.alpha_composite(base, orbs)
 
