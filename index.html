@@ -1956,6 +1956,8 @@ function showToast(message, type = 'info', duration = 3500) {
     function getProxiedImageUrl(url) {
       if (!url) return '';
       if (url.startsWith('data:')) return url;
+      // AniList CDN supports native CORS directly; wsrv.nl blocks s4.anilist.co
+      if (url.includes('anilist.co')) return url;
       return `https://wsrv.nl/?url=${encodeURIComponent(url)}&w=600&output=jpg&q=95`;
     }
 
@@ -2085,7 +2087,7 @@ function showToast(message, type = 'info', duration = 3500) {
         context.closePath();
       }
 
-      // Preload images with proxy fallback
+      // Preload images with resilient fallback
       const imgPromises = items.map((it, idx) => {
         return new Promise((resolve) => {
           const posterUrl = it.poster || '';
@@ -2100,7 +2102,15 @@ function showToast(message, type = 'info', duration = 3500) {
           img.onerror = () => {
             if (!triedFallback) {
               triedFallback = true;
-              img.src = `https://images.weserv.nl/?url=${encodeURIComponent(posterUrl)}&w=600&output=jpg&q=95`;
+              if (posterUrl.includes('anilist.co')) {
+                // If CORS anonymous failed, attempt direct load
+                const imgDirect = new Image();
+                imgDirect.onload = () => resolve({ img: imgDirect, item: it, idx });
+                imgDirect.onerror = () => resolve({ img: null, item: it, idx });
+                imgDirect.src = posterUrl;
+              } else {
+                img.src = `https://images.weserv.nl/?url=${encodeURIComponent(posterUrl)}&w=600&output=jpg&q=95`;
+              }
             } else {
               resolve({ img: null, item: it, idx });
             }
@@ -2261,15 +2271,24 @@ function showToast(message, type = 'info', duration = 3500) {
         ctx.restore();
       });
 
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
-      if (imgEl) {
-        imgEl.src = dataUrl;
-        imgEl.style.opacity = '1';
+      try {
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+        if (imgEl) {
+          imgEl.src = dataUrl;
+          imgEl.style.opacity = '1';
+        }
+      } catch (e) {
+        console.warn('[Collage] canvas.toDataURL error:', e);
+        if (imgEl) imgEl.style.opacity = '1';
       }
 
-      canvas.toBlob((blob) => {
-        currentCollageBlob = blob;
-      }, 'image/jpeg', 0.92);
+      try {
+        canvas.toBlob((blob) => {
+          currentCollageBlob = blob;
+        }, 'image/jpeg', 0.92);
+      } catch (e) {
+        console.warn('[Collage] canvas.toBlob error:', e);
+      }
     }
 
     function previewSelectedTheme(themeKey, refresh = false) {
