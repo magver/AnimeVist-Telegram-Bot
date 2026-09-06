@@ -295,13 +295,18 @@ def fetch_config_from_supabase(conf=None):
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
-def load_seen_from_supabase(category='episode'):
+def load_seen_from_supabase(category='episode', days=None):
     conf = load_config()
     url = conf.get('cloud_storage', {}).get('supabase_url')
     key = conf.get('cloud_storage', {}).get('supabase_key')
     if not url or not key:
         return set()
-    endpoint = f"{url.rstrip('/')}/rest/v1/bot_seen_items?category=eq.{category}&select=item_id&limit=1000"
+    endpoint = f"{url.rstrip('/')}/rest/v1/bot_seen_items?category=eq.{category}&select=item_id,created_at&limit=1000"
+    if days:
+        import datetime
+        import urllib.parse
+        cutoff = (datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=days)).isoformat()
+        endpoint += f"&created_at=gte.{urllib.parse.quote(cutoff)}"
     req = urllib.request.Request(
         endpoint,
         headers={"apikey": key, "Authorization": f"Bearer {key}", "User-Agent": "AnimeVistBot/1.0"}
@@ -309,7 +314,7 @@ def load_seen_from_supabase(category='episode'):
     try:
         with urllib.request.urlopen(req, timeout=8) as resp:
             data = json.loads(resp.read().decode('utf-8'))
-            return set(row['item_id'] for row in data if 'item_id' in row)
+            return set(str(row['item_id']) for row in data if 'item_id' in row)
     except Exception:
         return set()
 
@@ -319,7 +324,9 @@ def save_seen_to_supabase(item_ids, category='episode'):
     key = conf.get('cloud_storage', {}).get('supabase_key')
     if not url or not key or not item_ids:
         return False
-    rows = [{"item_id": str(i), "category": category} for i in list(item_ids)[-200:]]
+    import datetime
+    now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    rows = [{"item_id": str(i), "category": category, "created_at": now_iso} for i in list(item_ids)[-200:]]
     endpoint = f"{url.rstrip('/')}/rest/v1/bot_seen_items"
     req = urllib.request.Request(
         endpoint,
