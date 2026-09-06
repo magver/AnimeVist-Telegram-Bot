@@ -13,7 +13,7 @@ import time
 import threading
 import urllib.request
 import urllib.parse
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
@@ -45,6 +45,10 @@ daemon_paused = False
 last_check_time = None
 last_compilation_time = 0
 server_start_time = time.time()
+cached_bot_info = None
+cached_chat_info = None
+cached_member_count = None
+last_bot_fetch_time = 0
 
 def log_event(message, level="info"):
     timestamp = time.strftime('%H:%M:%S')
@@ -627,10 +631,10 @@ HTML_PAGE = """<!DOCTYPE html>
       border: 1px solid rgba(255, 255, 255, 0.04);
     }
     .tg-post-img-wrap {
-      width: 100%; border-radius: 10px; overflow: hidden; margin-bottom: 10px; background: #0d1620;
+      width: 100%; border-radius: 10px; overflow: hidden; margin-bottom: 10px; background: #080c14;
     }
     .tg-post-img {
-      width: 100%; max-height: 280px; object-fit: cover; display: block;
+      width: 100%; height: auto; max-height: 520px; object-fit: contain; display: block;
       transition: transform 0.3s ease;
     }
     .tg-post-img:hover { transform: scale(1.02); }
@@ -824,7 +828,7 @@ HTML_PAGE = """<!DOCTYPE html>
                   <div class="tile-tag">#подборка</div>
                 </div>
               </div>
-              <div class="tile-desc">Топ 3-5 аниме: Киберпанк, Фэнтези, Триллеры, Романтика.</div>
+              <div class="tile-desc">Топ 3-10 аниме: Киберпанк, Фэнтези, Триллеры, Романтика.</div>
               <div class="tile-footer"><span>Выбрать тему</span><span class="btn btn-outline btn-sm">Открыть ➔</span></div>
             </div>
 
@@ -855,7 +859,7 @@ HTML_PAGE = """<!DOCTYPE html>
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
               <span style="color:var(--text-secondary);">Формат подборок:</span>
-              <span style="font-family:var(--font-mono); color:var(--accent-cyan);">Единый HD-коллаж (3-5 шт)</span>
+              <span style="font-family:var(--font-mono); color:var(--accent-cyan);">HD-коллаж (до 10 аниме / сетка 5×2)</span>
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
               <span style="color:var(--text-secondary);">База данных Supabase:</span>
@@ -889,6 +893,11 @@ HTML_PAGE = """<!DOCTYPE html>
           <div class="card-title">🌟 Публикация Топ-Подборки Аниме (#подборка)</div>
           <div class="card-subtitle">Формирует единый постер-коллаж и подробное описание без повторов:</div>
 
+          <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-sm); padding:10px 12px; margin:12px 0 16px 0; font-size:0.8rem; color:#67e8f9; display:flex; align-items:center; gap:8px;">
+            <span>🖼</span>
+            <span>Обложки объединяются в <b>единый HD-коллаж</b> (1-рядный для 3-5, сетка 5×2 для 10) с номерами и шапкой!</span>
+          </div>
+
           <div class="form-group">
             <label class="form-label">Тема подборки:</label>
             <select id="compilationGenreSelect" onchange="previewSelectedCompTheme(this.value)">
@@ -910,12 +919,12 @@ HTML_PAGE = """<!DOCTYPE html>
               <option value="3">3 аниме (крупный постер)</option>
               <option value="4" selected>4 аниме (рекомендуется)</option>
               <option value="5">5 аниме (панорамный коллаж)</option>
+              <option value="7">7 аниме (сетка 4+3)</option>
+              <option value="10">10 аниме (ТОП-10 сетка 5×2)</option>
             </select>
-          </div>
-
-          <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:14px; font-size:0.8rem; color:#67e8f9; display:flex; align-items:center; gap:8px;">
-            <span>🖼</span>
-            <span>Все обложки склеиваются в <b>единый горизонтальный HD-коллаж</b> с номерами 1..N и шапкой AnimeVist!</span>
+            <button type="button" class="btn btn-secondary" onclick="rerollCompilationPreview()" style="margin-top:8px; width:100%; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <span>🎲</span> <span>Подобрать другие аниме (Случайная ротация)</span>
+            </button>
           </div>
 
           <div class="form-label" style="margin-top:12px; font-weight:600; color:var(--text-primary);">
@@ -1345,7 +1354,13 @@ HTML_PAGE = """<!DOCTYPE html>
           renderLogs();
         }
       } catch (e) {
+        console.error("loadData error:", e);
+        const statusEl = document.getElementById('headerStatusText');
+        const dotEl = document.getElementById('headerDot');
+        if (statusEl) statusEl.innerText = 'Сервер временно недоступен (повтор...)';
+        if (dotEl) dotEl.className = 'status-dot error';
         showToast("Ошибка связи с сервером дашборда", "error");
+        setTimeout(loadData, 3000);
       }
     }
 
@@ -1528,52 +1543,138 @@ HTML_PAGE = """<!DOCTYPE html>
 
     const SAMPLE_THEMES = {
       must_watch: {
-        title: "Золотая Классика и Шедевры Аниме (8.5+)",
-        banner: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80",
+        title: "Золотая Классика и Шедевры (8.5+)",
+        banner: "https://shikimori.one/system/animes/original/52991.jpg",
         items: [
-          "1. 🏆 <b>«Стальной алхимик: Братство»</b> (Fullmetal Alchemist: Brotherhood)\\n⭐️ Рейтинг: <b>9.1</b> • Студия: Bones • 🎭 Сёнэн, Приключения",
-          "2. 🏆 <b>«Врата Штейна»</b> (Steins;Gate)\\n⭐️ Рейтинг: <b>9.0</b> • Студия: White Fox • 🎭 Фантастика, Триллер",
-          "3. 🏆 <b>«Атака титанов»</b> (Shingeki no Kyojin)\\n⭐️ Рейтинг: <b>8.9</b> • Студия: Wit Studio • 🎭 Экшен, Драма",
-          "4. 🏆 <b>«Охотник х Охотник»</b> (Hunter x Hunter)\\n⭐️ Рейтинг: <b>9.0</b> • Студия: Madhouse • 🎭 Приключения"
+          "1. 🏆 <b>«Провожающая в последний путь Фрирен»</b> (Sousou no Frieren)<br>⭐️ Рейтинг: <b>9.25</b> • 🎭 Фэнтези, Драма",
+          "2. 🏆 <b>«Стальной алхимик: Братство»</b> (Fullmetal Alchemist)<br>⭐️ Рейтинг: <b>9.11</b> • 🎭 Сёнэн, Фэнтези",
+          "3. 🏆 <b>«Врата Штейна»</b> (Steins;Gate)<br>⭐️ Рейтинг: <b>9.07</b> • 🎭 Фантастика, Триллер",
+          "4. 🏆 <b>«Охотник х Охотник»</b> (Hunter x Hunter)<br>⭐️ Рейтинг: <b>9.04</b> • 🎭 Приключения",
+          "5. 🏆 <b>«Монстр»</b> (Monster)<br>⭐️ Рейтинг: <b>8.87</b> • 🎭 Драма, Триллер",
+          "6. 🏆 <b>«Ковбой Бибоп»</b> (Cowboy Bebop)<br>⭐️ Рейтинг: <b>8.75</b> • 🎭 Космос, Джаз",
+          "7. 🏆 <b>«Гуррен-Лаганн»</b> (Tengen Toppa Gurren Lagann)<br>⭐️ Рейтинг: <b>8.63</b> • 🎭 Меха, Экшен",
+          "8. 🏆 <b>«Код Гиас: Восставший Лелуш»</b> (Code Geass)<br>⭐️ Рейтинг: <b>8.70</b> • 🎭 Меха, Детектив",
+          "9. 🏆 <b>«Тетрадь смерти»</b> (Death Note)<br>⭐️ Рейтинг: <b>8.62</b> • 🎭 Мистика, Триллер",
+          "10. 🏆 <b>«Крутой учитель Онидзука»</b> (GTO)<br>⭐️ Рейтинг: <b>8.69</b> • 🎭 Комедия, Школа"
         ]
       },
       hidden_gems: {
         title: "Недооценённые Алмазы и Скрытые Жемчужины",
-        banner: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&q=80",
+        banner: "https://shikimori.one/system/animes/original/13125.jpg",
         items: [
-          "1. 💎 <b>«Виви: Песнь флюоритового глаза»</b> (Vivy: Fluorite Eye's Song)\\n⭐️ Рейтинг: <b>8.4</b> • Студия: Wit Studio • 🎭 Киберпанк, Музыка",
-          "2. 💎 <b>«Парад смерти»</b> (Death Parade)\\n⭐️ Рейтинг: <b>8.2</b> • Студия: Madhouse • 🎭 Психология, Мистика",
-          "3. 💎 <b>«Пинг-понг»</b> (Ping Pong the Animation)\\n⭐️ Рейтинг: <b>8.6</b> • Студия: Tatsunoko • 🎭 Спорт, Драма",
-          "4. 💎 <b>«Дороро»</b> (Dororo)\\n⭐️ Рейтинг: <b>8.2</b> • Студия: MAPPA • 🎭 Экшен, Сверхъестественное"
+          "1. 💎 <b>«Из нового света»</b> (Shinsekai yori)<br>⭐️ Рейтинг: <b>8.27</b> • 🎭 Драма, Фантастика",
+          "2. 💎 <b>«Пинг-понг»</b> (Ping Pong the Animation)<br>⭐️ Рейтинг: <b>8.60</b> • 🎭 Спорт, Драма",
+          "3. 💎 <b>«Эрго Прокси»</b> (Ergo Proxy)<br>⭐️ Рейтинг: <b>7.91</b> • 🎭 Киберпанк, Детектив",
+          "4. 💎 <b>«Путешествие Кино»</b> (Kino no Tabi)<br>⭐️ Рейтинг: <b>8.38</b> • 🎭 Философия, Приключения",
+          "5. 💎 <b>«Баккано!»</b> (Baccano!)<br>⭐️ Рейтинг: <b>8.38</b> • 🎭 Экшен, Комедия",
+          "6. 💎 <b>«Мононокэ»</b> (Mononoke)<br>⭐️ Рейтинг: <b>8.42</b> • 🎭 Мистика, Детектив",
+          "7. 💎 <b>«Альянс Серокрылых»</b> (Haibane Renmei)<br>⭐️ Рейтинг: <b>7.99</b> • 🎭 Драма, Мистика",
+          "8. 💎 <b>«Радуга: Семеро из шестой камеры»</b> (Rainbow)<br>⭐️ Рейтинг: <b>8.46</b> • 🎭 Драма, Триллер",
+          "9. 💎 <b>«Клеймор»</b> (Claymore)<br>⭐️ Рейтинг: <b>7.80</b> • 🎭 Тёмное фэнтези, Экшен",
+          "10. 💎 <b>«Дороро»</b> (Dororo)<br>⭐️ Рейтинг: <b>8.24</b> • 🎭 Исторический, Экшен"
         ]
       },
       mindfuck: {
         title: "Игры Разума, Психологические Триллеры и Детективы",
-        banner: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80",
+        banner: "https://shikimori.one/system/animes/original/1535.jpg",
         items: [
-          "1. 🧠 <b>«Монстр»</b> (Monster)\\n⭐️ Рейтинг: <b>8.9</b> • Студия: Madhouse • 🎭 Детектив, Триллер",
-          "2. 🧠 <b>«Идеальная грусть»</b> (Perfect Blue)\\n⭐️ Рейтинг: <b>8.5</b> • Студия: Madhouse • 🎭 Психология",
-          "3. 🧠 <b>«Психопаспорт»</b> (Psycho-Pass)\\n⭐️ Рейтинг: <b>8.3</b> • Студия: Production I.G • 🎭 Киберпанк",
-          "4. 🧠 <b>«Тетрадь смерти»</b> (Death Note)\\n⭐️ Рейтинг: <b>8.6</b> • Студия: Madhouse • 🎭 Мистика, Триллер"
+          "1. 🧠 <b>«Монстр»</b> (Monster)<br>⭐️ Рейтинг: <b>8.87</b> • 🎭 Детектив, Триллер",
+          "2. 🧠 <b>«Тетрадь смерти»</b> (Death Note)<br>⭐️ Рейтинг: <b>8.62</b> • 🎭 Мистика, Детектив",
+          "3. 🧠 <b>«Психопаспорт»</b> (Psycho-Pass)<br>⭐️ Рейтинг: <b>8.34</b> • 🎭 Киберпанк, Триллер",
+          "4. 🧠 <b>«Паразит: Учение о жизни»</b> (Kiseijuu)<br>⭐️ Рейтинг: <b>8.34</b> • 🎭 Экшен, Ужасы",
+          "5. 🧠 <b>«Идеальная грусть»</b> (Perfect Blue)<br>⭐️ Рейтинг: <b>8.53</b> • 🎭 Психология, Триллер",
+          "6. 🧠 <b>«Обещанный Неверленд»</b> (Neverland)<br>⭐️ Рейтинг: <b>8.51</b> • 🎭 Мистика, Триллер",
+          "7. 🧠 <b>«Токийский гуль»</b> (Tokyo Ghoul)<br>⭐️ Рейтинг: <b>7.79</b> • 🎭 Драма, Ужасы",
+          "8. 🧠 <b>«Иная»</b> (Another)<br>⭐️ Рейтинг: <b>7.46</b> • 🎭 Мистика, Ужасы",
+          "9. 🧠 <b>«Игра друзей»</b> (Tomodachi Game)<br>⭐️ Рейтинг: <b>7.69</b> • 🎭 Психология, Игры",
+          "10. 🧠 <b>«Шарлотта»</b> (Charlotte)<br>⭐️ Рейтинг: <b>7.74</b> • 🎭 Драма, Сверхъестественное"
         ]
       },
       cyberpunk_scifi: {
         title: "Киберпанк, Космос и Научная Фантастика",
-        banner: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800&q=80",
+        banner: "https://shikimori.one/system/animes/original/42310.jpg",
         items: [
-          "1. 🌆 <b>«Киберпанк: Бегущие по краю»</b> (Edgerunners)\\n⭐️ Рейтинг: <b>8.6</b> • Студия: Trigger • 🎭 Киберпанк",
-          "2. 🌆 <b>«Ковбой Бибоп»</b> (Cowboy Bebop)\\n⭐️ Рейтинг: <b>8.8</b> • Студия: Sunrise • 🎭 Космос, Джаз",
-          "3. 🌆 <b>«Призрак в доспехах: Синдром одиночки»</b>\\n⭐️ Рейтинг: <b>8.4</b> • Студия: Production I.G • 🎭 Sci-Fi",
-          "4. 🌆 <b>«Эрго Прокси»</b> (Ergo Proxy)\\n⭐️ Рейтинг: <b>7.9</b> • Студия: Manglobe • 🎭 Постапокалипсис"
+          "1. 🌆 <b>«Киберпанк: Бегущие по краю»</b> (Edgerunners)<br>⭐️ Рейтинг: <b>8.62</b> • 🎭 Киберпанк, Экшен",
+          "2. 🌆 <b>«Ковбой Бибоп»</b> (Cowboy Bebop)<br>⭐️ Рейтинг: <b>8.75</b> • 🎭 Космос, Джаз",
+          "3. 🌆 <b>«Призрак в доспехах»</b> (Ghost in the Shell)<br>⭐️ Рейтинг: <b>8.28</b> • 🎭 Меха, Sci-Fi",
+          "4. 🌆 <b>«Виви: Песнь флюоритового глаза»</b> (Vivy)<br>⭐️ Рейтинг: <b>8.40</b> • 🎭 Музыка, Sci-Fi",
+          "5. 🌆 <b>«Акира»</b> (Akira)<br>⭐️ Рейтинг: <b>8.15</b> • 🎭 Фантастика, Экшен",
+          "6. 🌆 <b>«Легенда о героях Галактики»</b> (LOGH)<br>⭐️ Рейтинг: <b>9.02</b> • 🎭 Космос, Военное",
+          "7. 🌆 <b>«Триган»</b> (Trigun)<br>⭐️ Рейтинг: <b>8.21</b> • 🎭 Sci-Fi, Экшен",
+          "8. 🌆 <b>«Изгнанник»</b> (Last Exile)<br>⭐️ Рейтинг: <b>7.82</b> • 🎭 Стимпанк, Приключения",
+          "9. 🌆 <b>«Время Евы»</b> (Eve no Jikan)<br>⭐️ Рейтинг: <b>7.98</b> • 🎭 Sci-Fi, Повседневность",
+          "10. 🌆 <b>«Акудама Драйв»</b> (Akudama Drive)<br>⭐️ Рейтинг: <b>7.58</b> • 🎭 Экшен, Киберпанк"
+        ]
+      },
+      epic_fantasy: {
+        title: "Эпическое Фэнтези и Магические Приключения",
+        banner: "https://shikimori.one/system/animes/original/37521.jpg",
+        items: [
+          "1. ⚔️ <b>«Сага о Винланде»</b> (Vinland Saga)<br>⭐️ Рейтинг: <b>8.75</b> • 🎭 Экшен, Приключения",
+          "2. ⚔️ <b>«Берсерк (1997)»</b> (Berserk)<br>⭐️ Рейтинг: <b>8.57</b> • 🎭 Тёмное фэнтези, Драма",
+          "3. ⚔️ <b>«Созданный в Бездне»</b> (Made in Abyss)<br>⭐️ Рейтинг: <b>8.66</b> • 🎭 Приключения, Драма",
+          "4. ⚔️ <b>«Клинок, рассекающий демонов»</b> (Kimetsu no Yaiba)<br>⭐️ Рейтинг: <b>8.47</b> • 🎭 Сверхъестественное, Экшен",
+          "5. ⚔️ <b>«Бездомный бог»</b> (Noragami)<br>⭐️ Рейтинг: <b>7.96</b> • 🎭 Мистика, Комедия",
+          "6. ⚔️ <b>«Убей или умри»</b> (Kill la Kill)<br>⭐️ Рейтинг: <b>8.04</b> • 🎭 Экшен, Комедия",
+          "7. ⚔️ <b>«ДжоДжо: Невероятные приключения»</b> (JoJo)<br>⭐️ Рейтинг: <b>8.11</b> • 🎭 Приключения, Экшен",
+          "8. ⚔️ <b>«Подземелье вкусностей»</b> (Dungeon Meshi)<br>⭐️ Рейтинг: <b>8.58</b> • 🎭 Фэнтези, Комедия",
+          "9. ⚔️ <b>«Охотник х Охотник»</b> (Hunter x Hunter)<br>⭐️ Рейтинг: <b>9.04</b> • 🎭 Экшен, Приключения",
+          "10. ⚔️ <b>«Клеймор»</b> (Claymore)<br>⭐️ Рейтинг: <b>7.80</b> • 🎭 Тёмное фэнтези, Экшен"
+        ]
+      },
+      soul_romance: {
+        title: "Трогательная Романтика и Драма для Души",
+        banner: "https://shikimori.one/system/animes/original/37999.jpg",
+        items: [
+          "1. 💖 <b>«Госпожа Кагуя: В любви как на войне»</b> (Kaguya-sama)<br>⭐️ Рейтинг: <b>8.89</b> • 🎭 Комедия, Романтика",
+          "2. 💖 <b>«Хоримия»</b> (Horimiya)<br>⭐️ Рейтинг: <b>8.19</b> • 🎭 Школа, Романтика",
+          "3. 💖 <b>«Кланнад: Продолжение истории»</b> (Clannad)<br>⭐️ Рейтинг: <b>8.93</b> • 🎭 Драма, Романтика",
+          "4. 💖 <b>«Форма голоса»</b> (Koe no Katachi)<br>⭐️ Рейтинг: <b>8.93</b> • 🎭 Драма, Школа",
+          "5. 💖 <b>«Твоя апрельская ложь»</b> (Shigatsu)<br>⭐️ Рейтинг: <b>8.64</b> • 🎭 Музыка, Драма",
+          "6. 💖 <b>«Торадора!»</b> (Toradora!)<br>⭐️ Рейтинг: <b>8.08</b> • 🎭 Комедия, Романтика",
+          "7. 💖 <b>«Этот глупый свин не понимает мечту девочки-зайки»</b><br>⭐️ Рейтинг: <b>8.24</b> • 🎭 Мистика, Романтика",
+          "8. 💖 <b>«Дотянуться до тебя»</b> (Kimi ni Todoke)<br>⭐️ Рейтинг: <b>7.99</b> • 🎭 Школа, Романтика",
+          "9. 💖 <b>«Опасность в моем сердце»</b> (Bokuyaba)<br>⭐️ Рейтинг: <b>8.78</b> • 🎭 Комедия, Романтика",
+          "10. 💖 <b>«Пять невест»</b> (Gotoubun)<br>⭐️ Рейтинг: <b>7.64</b> • 🎭 Гарем, Романтика"
+        ]
+      },
+      pure_comedy: {
+        title: "Отборные Комедии и Море Позитива",
+        banner: "https://shikimori.one/system/animes/original/918.jpg",
+        items: [
+          "1. 😂 <b>«Гинтама»</b> (Gintama)<br>⭐️ Рейтинг: <b>8.93</b> • 🎭 Пародия, Экшен",
+          "2. 😂 <b>«Необъятный океан»</b> (Grand Blue)<br>⭐️ Рейтинг: <b>8.44</b> • 🎭 Комедия, Студенты",
+          "3. 😂 <b>«Несладкая жизнь псионика Сайки К.»</b><br>⭐️ Рейтинг: <b>8.41</b> • 🎭 Комедия, Мистика",
+          "4. 😂 <b>«Этот замечательный мир! (KonoSuba)»</b><br>⭐️ Рейтинг: <b>8.10</b> • 🎭 Комедия, Пародия",
+          "5. 😂 <b>«Моб Психо 100»</b> (Mob Psycho 100)<br>⭐️ Рейтинг: <b>8.48</b> • 🎭 Экшен, Комедия",
+          "6. 😂 <b>«Крутой учитель Онидзука»</b> (GTO)<br>⭐️ Рейтинг: <b>8.69</b> • 🎭 Комедия, Школа",
+          "7. 😂 <b>«Повседневная жизнь старшеклассников»</b><br>⭐️ Рейтинг: <b>8.23</b> • 🎭 Комедия, Повседневность",
+          "8. 😂 <b>«Сатана на подработке!»</b> (Hataraku Maou)<br>⭐️ Рейтинг: <b>7.74</b> • 🎭 Комедия, Фэнтези",
+          "9. 😂 <b>«Восхождение в тени!»</b> (Kage no Jitsuryokusha)<br>⭐️ Рейтинг: <b>8.24</b> • 🎭 Экшен, Пародия",
+          "10. 😂 <b>«Семья шпиона»</b> (Spy x Family)<br>⭐️ Рейтинг: <b>8.48</b> • 🎭 Комедия, Экшен"
+        ]
+      },
+      isekai_special: {
+        title: "Захватывающие Исекаи и Попаданцы",
+        banner: "https://shikimori.one/system/animes/original/39535.jpg",
+        items: [
+          "1. 🌀 <b>«Реинкарнация безработного»</b> (Mushoku Tensei)<br>⭐️ Рейтинг: <b>8.65</b> • 🎭 Магия, Приключения",
+          "2. 🌀 <b>«Re:Zero — жизнь с нуля в другом мире»</b><br>⭐️ Рейтинг: <b>8.23</b> • 🎭 Триллер, Драма",
+          "3. 🌀 <b>«О моём перерождении в слизь»</b> (Tensei Slime)<br>⭐️ Рейтинг: <b>8.12</b> • 🎭 Фэнтези, Сёнэн",
+          "4. 🌀 <b>«Повелитель»</b> (Overlord)<br>⭐️ Рейтинг: <b>7.92</b> • 🎭 Фэнтези, Экшен",
+          "5. 🌀 <b>«Восхождение героя щита»</b> (Tate no Yuusha)<br>⭐️ Рейтинг: <b>7.94</b> • 🎭 Драма, Фэнтези",
+          "6. 🌀 <b>«Военная хроника маленькой девочки»</b> (Youjo Senki)<br>⭐️ Рейтинг: <b>7.96</b> • 🎭 Магия, Военное",
+          "7. 🌀 <b>«Нет игры — нет жизни»</b> (No Game No Life)<br>⭐️ Рейтинг: <b>8.08</b> • 🎭 Игры, Комедия",
+          "8. 🌀 <b>«Да, я паук, и что же?»</b> (Kumo desu ga)<br>⭐️ Рейтинг: <b>7.39</b> • 🎭 Экшен, Фэнтези",
+          "9. 🌀 <b>«Непризнанный школой владыка демонов»</b><br>⭐️ Рейтинг: <b>7.35</b> • 🎭 Магия, Фэнтези",
+          "10. 🌀 <b>«Этот герой неуязвим, но очень осторожен»</b><br>⭐️ Рейтинг: <b>7.45</b> • 🎭 Комедия, Фэнтези"
         ]
       }
     };
 
-    function previewSelectedCompTheme(themeKey) {
+    async function previewSelectedCompTheme(themeKey, refresh = false) {
       if (!themeKey || themeKey === 'auto') themeKey = 'must_watch';
-      const theme = SAMPLE_THEMES[themeKey] || SAMPLE_THEMES.must_watch;
       const count = parseInt(document.getElementById('compilationCountSelect')?.value || 4);
-      const items = theme.items.slice(0, count);
 
       const pText = document.getElementById('compPreviewText');
       const pImg = document.getElementById('compPreviewImg');
@@ -1583,6 +1684,30 @@ HTML_PAGE = """<!DOCTYPE html>
         const now = new Date();
         pTime.textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
       }
+
+      // 1. Try fetching live preview from backend engine
+      try {
+        const url = `/api/compilation-preview?genre=${encodeURIComponent(themeKey)}&count=${count}&refresh=${refresh ? 1 : 0}`;
+        const res = await fetch(url);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.ok && data.caption_html) {
+            if (pText) pText.innerHTML = data.caption_html;
+            if (pImg && data.poster) pImg.src = data.poster;
+            return;
+          }
+        }
+      } catch (e) {
+        // Fallback to local sample presets
+      }
+
+      // 2. Fallback with randomized rotation
+      const theme = SAMPLE_THEMES[themeKey] || SAMPLE_THEMES.must_watch;
+      let pool = [...theme.items];
+      if (refresh) {
+        pool.sort(() => Math.random() - 0.5);
+      }
+      const items = pool.slice(0, count);
 
       if (pImg) pImg.src = theme.banner;
       if (pText) {
@@ -1595,6 +1720,12 @@ HTML_PAGE = """<!DOCTYPE html>
         html += `#подборка #топаниме #animevist`;
         pText.innerHTML = html;
       }
+    }
+
+    function rerollCompilationPreview() {
+      const g = document.getElementById('compilationGenreSelect').value;
+      showToast("🎲 Подбираем новую выборку аниме...", "info", 1500);
+      previewSelectedCompTheme(g, true);
     }
 
     function updateCustomPreview() {
@@ -1857,10 +1988,24 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(HTML_PAGE.encode("utf-8"))
         elif path == "/api/status":
-            sender = TelegramSender()
-            me = sender.get_me()
-            chat_info = sender.get_chat()
-            member_count_res = sender.get_chat_member_count()
+            global cached_bot_info, cached_chat_info, cached_member_count, last_bot_fetch_time
+            now = time.time()
+            if (now - last_bot_fetch_time > 45) or (cached_bot_info is None):
+                try:
+                    sender = TelegramSender()
+                    me = sender.get_me()
+                    if me.get('ok'):
+                        cached_bot_info = me.get('result')
+                        chat_info = sender.get_chat()
+                        cached_chat_info = chat_info.get('result') if chat_info.get('ok') else None
+                        member_count_res = sender.get_chat_member_count()
+                        cached_member_count = member_count_res.get('result') if member_count_res.get('ok') else None
+                        last_bot_fetch_time = now
+                    else:
+                        cached_bot_info = None
+                except Exception as e:
+                    print(f"[Status] Error fetching Telegram info: {e}")
+
             config = load_config()
             uptime_min = int((time.time() - server_start_time) / 60)
 
@@ -1882,9 +2027,9 @@ class DashboardHandler(BaseHTTPRequestHandler):
             next_comp_sec = max(0, int((last_comp + comp_hours * 3600) - time.time())) if last_comp > 0 else 0
 
             resp = {
-                "bot": me.get('result') if me.get('ok') else None,
-                "chat": chat_info.get('result') if chat_info.get('ok') else None,
-                "member_count": member_count_res.get('result') if member_count_res.get('ok') else None,
+                "bot": cached_bot_info,
+                "chat": cached_chat_info,
+                "member_count": cached_member_count,
                 "stats": {
                     "episodes": episodes_count,
                     "news": news_count,
@@ -1903,6 +2048,14 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self._send_json(activity_logs)
         elif path == "/api/compilations-themes":
             self._send_json(list_available_themes())
+        elif path == "/api/compilation-preview":
+            query_components = urllib.parse.parse_qs(parsed.query)
+            genre_arg = query_components.get('genre', ['must_watch'])[0]
+            count_arg = int(query_components.get('count', [4])[0])
+            refresh_arg = query_components.get('refresh', ['1'])[0] in ['1', 'true', 'yes']
+            from compilations_announcer import get_compilation_preview
+            prev = get_compilation_preview(genre_arg, count=count_arg, refresh=refresh_arg)
+            self._send_json(prev)
         else:
             self.send_response(404)
             self.end_headers()
@@ -2112,14 +2265,16 @@ def start_server(port=None):
     actual_port = None
     for p in ports_to_try:
         try:
-            server = HTTPServer(("0.0.0.0", p), DashboardHandler)
+            server = ThreadingHTTPServer(("0.0.0.0", p), DashboardHandler)
+            server.daemon_threads = True
             actual_port = p
             break
         except OSError:
             continue
 
     if server is None:
-        server = HTTPServer(("0.0.0.0", 0), DashboardHandler)
+        server = ThreadingHTTPServer(("0.0.0.0", 0), DashboardHandler)
+        server.daemon_threads = True
         actual_port = server.server_port
 
     print(f"\n================================================================")
