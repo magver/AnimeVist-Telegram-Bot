@@ -1544,7 +1544,7 @@ HTML_PAGE = """<!DOCTYPE html>
     const SAMPLE_THEMES = {
       must_watch: {
         title: "Золотая Классика и Шедевры (8.5+)",
-        banner: "https://shikimori.one/system/animes/original/52991.jpg",
+        banner: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
         items: [
           "1. 🏆 <b>«Провожающая в последний путь Фрирен»</b> (Sousou no Frieren)<br>⭐️ Рейтинг: <b>9.25</b> • 🎭 Фэнтези, Драма",
           "2. 🏆 <b>«Стальной алхимик: Братство»</b> (Fullmetal Alchemist)<br>⭐️ Рейтинг: <b>9.11</b> • 🎭 Сёнэн, Фэнтези",
@@ -1560,7 +1560,7 @@ HTML_PAGE = """<!DOCTYPE html>
       },
       hidden_gems: {
         title: "Недооценённые Алмазы и Скрытые Жемчужины",
-        banner: "https://shikimori.one/system/animes/original/13125.jpg",
+        banner: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx13125-2EDZb8ahshQc.png",
         items: [
           "1. 💎 <b>«Из нового света»</b> (Shinsekai yori)<br>⭐️ Рейтинг: <b>8.27</b> • 🎭 Драма, Фантастика",
           "2. 💎 <b>«Пинг-понг»</b> (Ping Pong the Animation)<br>⭐️ Рейтинг: <b>8.60</b> • 🎭 Спорт, Драма",
@@ -1576,7 +1576,7 @@ HTML_PAGE = """<!DOCTYPE html>
       },
       mindfuck: {
         title: "Игры Разума, Психологические Триллеры и Детективы",
-        banner: "https://shikimori.one/system/animes/original/1535.jpg",
+        banner: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1535-kUgkcrfOrkUM.jpg",
         items: [
           "1. 🧠 <b>«Монстр»</b> (Monster)<br>⭐️ Рейтинг: <b>8.87</b> • 🎭 Детектив, Триллер",
           "2. 🧠 <b>«Тетрадь смерти»</b> (Death Note)<br>⭐️ Рейтинг: <b>8.62</b> • 🎭 Мистика, Детектив",
@@ -1592,7 +1592,7 @@ HTML_PAGE = """<!DOCTYPE html>
       },
       cyberpunk_scifi: {
         title: "Киберпанк, Космос и Научная Фантастика",
-        banner: "https://shikimori.one/system/animes/original/42310.jpg",
+        banner: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx120377-ayZPoxiWt4Li.jpg",
         items: [
           "1. 🌆 <b>«Киберпанк: Бегущие по краю»</b> (Edgerunners)<br>⭐️ Рейтинг: <b>8.62</b> • 🎭 Киберпанк, Экшен",
           "2. 🌆 <b>«Ковбой Бибоп»</b> (Cowboy Bebop)<br>⭐️ Рейтинг: <b>8.75</b> • 🎭 Космос, Джаз",
@@ -1608,7 +1608,7 @@ HTML_PAGE = """<!DOCTYPE html>
       },
       epic_fantasy: {
         title: "Эпическое Фэнтези и Магические Приключения",
-        banner: "https://shikimori.one/system/animes/original/37521.jpg",
+        banner: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101348-2fhDFPCuMNiz.jpg",
         items: [
           "1. ⚔️ <b>«Сага о Винланде»</b> (Vinland Saga)<br>⭐️ Рейтинг: <b>8.75</b> • 🎭 Экшен, Приключения",
           "2. ⚔️ <b>«Берсерк (1997)»</b> (Berserk)<br>⭐️ Рейтинг: <b>8.57</b> • 🎭 Тёмное фэнтези, Драма",
@@ -1624,7 +1624,7 @@ HTML_PAGE = """<!DOCTYPE html>
       },
       soul_romance: {
         title: "Трогательная Романтика и Драма для Души",
-        banner: "https://shikimori.one/system/animes/original/37999.jpg",
+        banner: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101921-ufrjLzhSz7L1.jpg",
         items: [
           "1. 💖 <b>«Госпожа Кагуя: В любви как на войне»</b> (Kaguya-sama)<br>⭐️ Рейтинг: <b>8.89</b> • 🎭 Комедия, Романтика",
           "2. 💖 <b>«Хоримия»</b> (Horimiya)<br>⭐️ Рейтинг: <b>8.19</b> • 🎭 Школа, Романтика",
@@ -1640,7 +1640,7 @@ HTML_PAGE = """<!DOCTYPE html>
       },
       pure_comedy: {
         title: "Отборные Комедии и Море Позитива",
-        banner: "https://shikimori.one/system/animes/original/918.jpg",
+        banner: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx918-iOaeBVUn4uK7.jpg",
         items: [
           "1. 😂 <b>«Гинтама»</b> (Gintama)<br>⭐️ Рейтинг: <b>8.93</b> • 🎭 Пародия, Экшен",
           "2. 😂 <b>«Необъятный океан»</b> (Grand Blue)<br>⭐️ Рейтинг: <b>8.44</b> • 🎭 Комедия, Студенты",
@@ -1656,7 +1656,7 @@ HTML_PAGE = """<!DOCTYPE html>
       },
       isekai_special: {
         title: "Захватывающие Исекаи и Попаданцы",
-        banner: "https://shikimori.one/system/animes/original/39535.jpg",
+        banner: "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx108465-1ANspF1EWyFx.jpg",
         items: [
           "1. 🌀 <b>«Реинкарнация безработного»</b> (Mushoku Tensei)<br>⭐️ Рейтинг: <b>8.65</b> • 🎭 Магия, Приключения",
           "2. 🌀 <b>«Re:Zero — жизнь с нуля в другом мире»</b><br>⭐️ Рейтинг: <b>8.23</b> • 🎭 Триллер, Драма",
