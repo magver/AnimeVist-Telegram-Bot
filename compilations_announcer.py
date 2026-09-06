@@ -4390,7 +4390,7 @@ def _get_font(size, bold=True):
                 pass
     return ImageFont.load_default()
 
-def draw_vector_star(draw, cx, cy, r_outer=5.5, r_inner=2.6, color=(251, 191, 36, 255)):
+def draw_vector_star(draw, cx, cy, r_outer=7.2, r_inner=3.4, color=(251, 191, 36, 255)):
     """Draws a crisp anti-aliased 5-point star polygon."""
     points = []
     for i in range(10):
@@ -4399,11 +4399,54 @@ def draw_vector_star(draw, cx, cy, r_outer=5.5, r_inner=2.6, color=(251, 191, 36
         points.append((cx + r * math.cos(angle), cy + r * math.sin(angle)))
     draw.polygon(points, fill=color)
 
+def create_light_colorful_background(width, height):
+    """
+    Creates a beautiful, radiant, light, colorful pastel aurora gradient background:
+    Soft lavender, delicate rose/peach, sky azure, and pearl cream.
+    """
+    base = Image.new("RGBA", (width, height), (248, 250, 252, 255))
+    
+    grad = Image.new("RGBA", (width, height))
+    draw_g = ImageDraw.Draw(grad)
+    for y in range(height):
+        factor = y / height
+        if factor < 0.5:
+            sub_f = factor / 0.5
+            r = int(224 + (252 - 224) * sub_f)
+            g = int(231 + (231 - 231) * sub_f)
+            b = int(255 + (243 - 255) * sub_f)
+        else:
+            sub_f = (factor - 0.5) / 0.5
+            r = int(252 + (224 - 252) * sub_f)
+            g = int(231 + (242 - 231) * sub_f)
+            b = int(243 + (254 - 243) * sub_f)
+        draw_g.line([(0, y), (width, y)], fill=(r, g, b, 255))
+    
+    base = Image.alpha_composite(base, grad)
+
+    # Glowing colorful aurora orbs
+    orbs = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    draw_o = ImageDraw.Draw(orbs)
+    
+    orb_r1 = int(min(width, height) * 0.45)
+    draw_o.ellipse((-50, -50, orb_r1 * 2 - 50, orb_r1 * 2 - 50), fill=(186, 230, 253, 140))
+    
+    orb_r2 = int(min(width, height) * 0.45)
+    draw_o.ellipse((width - orb_r2 * 2 + 50, height - orb_r2 * 2 + 50, width + 50, height + 50), fill=(233, 213, 255, 140))
+    
+    draw_o.ellipse((width - 250, -40, width + 150, 360), fill=(254, 215, 170, 120))
+    draw_o.ellipse((-40, height - 350, 350, height + 40), fill=(165, 243, 252, 110))
+
+    orbs = orbs.filter(ImageFilter.GaussianBlur(55))
+    base = Image.alpha_composite(base, orbs)
+
+    return base
+
 def create_compilation_collage(items_or_urls, title_text, output_filename="compilation_collage.jpg"):
     """
     Downloads poster images and composites them into a single high-resolution,
     aesthetically polished collage banner in 2+1, 2+2, or 3+2 grid layouts
-    with rank badges and top-right title/score cards.
+    on a luminous light colorful aurora background without header bar.
     """
     os.makedirs(COLLAGE_DIR, exist_ok=True)
     out_path = os.path.join(COLLAGE_DIR, output_filename)
@@ -4464,50 +4507,25 @@ def create_compilation_collage(items_or_urls, title_text, output_filename="compi
         card_h = 535
         gap = 22
 
-    pad_x = 36
-    pad_y = 26
-    header_h = 88
+    # Clean even outer padding (no header plate)
+    pad_x = 28
+    pad_y = 28
 
     row1_w = row1_count * card_w + (row1_count - 1) * gap
     total_w = pad_x * 2 + row1_w
-    total_h = header_h + pad_y * 2 + card_h * 2 + gap
+    total_h = pad_y * 2 + card_h * 2 + gap
 
     # Coordinates
     cards_coords = []
     for i in range(row1_count):
-        cards_coords.append((pad_x + i * (card_w + gap), header_h + pad_y))
+        cards_coords.append((pad_x + i * (card_w + gap), pad_y))
     row2_w = row2_count * card_w + (row2_count - 1) * gap
     row2_start_x = pad_x + (row1_w - row2_w) // 2
     for i in range(row2_count):
-        cards_coords.append((row2_start_x + i * (card_w + gap), header_h + pad_y + card_h + gap))
+        cards_coords.append((row2_start_x + i * (card_w + gap), pad_y + card_h + gap))
 
-    # Canvas with dark luxury background (#080C16)
-    canvas = Image.new("RGBA", (total_w, total_h), (8, 12, 22, 255))
-    draw = ImageDraw.Draw(canvas)
-
-    # Header fonts
-    font_pill = _get_font(12, bold=True)
-    font_title = _get_font(24 if cols == 2 else 26, bold=True)
-
-    # Clean title
-    clean_title = re.sub(r'[\U00010000-\U0010ffff]', '', title_text).strip()
-    clean_title = re.sub(r'^(ТОП[\s\-\d:]*)+', '', clean_title, flags=re.IGNORECASE).strip()
-    header_display = f"ТОП-{n}: {clean_title}" if clean_title else f"ТОП-{n} Шедевров"
-
-    # Header glass card container
-    header_box = (pad_x, 14, total_w - pad_x, 82)
-    draw.rounded_rectangle(header_box, radius=12, fill=(15, 23, 42, 220), outline=(255, 255, 255, 25), width=1)
-
-    # Header Pill badge
-    pill_text = "ANIME VIST  •  CURATED SELECTION"
-    draw.rounded_rectangle((pad_x + 14, 18, pad_x + 14 + 260, 18 + 22), radius=10, fill=(30, 41, 59, 230), outline=(99, 102, 241, 140), width=1)
-    draw.text((pad_x + 24, 21), pill_text, fill=(129, 140, 248), font=font_pill)
-
-    # Header main title
-    draw.text((pad_x + 18, 48), header_display, fill=(248, 250, 252), font=font_title)
-
-    # Glowing subtle accent dot in right corner
-    draw.ellipse((total_w - pad_x - 36, 40, total_w - pad_x - 20, 56), fill=(99, 102, 241, 220), outline=(236, 72, 153, 200), width=1)
+    # Beautiful light colorful background
+    canvas = create_light_colorful_background(total_w, total_h)
 
     # Rounded corner mask template for posters
     scale = 2
@@ -4523,21 +4541,21 @@ def create_compilation_collage(items_or_urls, title_text, output_filename="compi
             break
         pos_x, pos_y = cards_coords[idx - 1]
 
-        # 1. Drop shadow behind card
-        shadow = Image.new("RGBA", (card_w + 16, card_h + 16), (0, 0, 0, 0))
+        # 1. Soft realistic layered drop shadow on light background
+        shadow = Image.new("RGBA", (card_w + 24, card_h + 24), (0, 0, 0, 0))
         s_draw = ImageDraw.Draw(shadow)
-        s_draw.rounded_rectangle((8, 8, card_w + 8, card_h + 8), radius=r + 2, fill=(0, 0, 0, 150))
-        shadow = shadow.filter(ImageFilter.GaussianBlur(8))
-        canvas.paste(shadow, (pos_x - 8, pos_y - 4), shadow)
+        s_draw.rounded_rectangle((12, 12, card_w + 12, card_h + 12), radius=r + 2, fill=(15, 23, 42, 45))
+        shadow = shadow.filter(ImageFilter.GaussianBlur(12))
+        canvas.paste(shadow, (pos_x - 12, pos_y - 8), shadow)
 
         # 2. Resize and sharpen poster
         resized = raw_img.resize((card_w, card_h), Image.Resampling.LANCZOS).convert("RGBA")
         resized = resized.filter(ImageFilter.UnsharpMask(radius=1.2, percent=120, threshold=2))
 
-        # 3. 1px card border
+        # 3. Picture-frame border
         border = Image.new("RGBA", (card_w, card_h), (0, 0, 0, 0))
         b_draw = ImageDraw.Draw(border)
-        b_draw.rounded_rectangle((0, 0, card_w - 1, card_h - 1), radius=r, outline=(255, 255, 255, 45), width=1)
+        b_draw.rounded_rectangle((0, 0, card_w - 1, card_h - 1), radius=r, outline=(255, 255, 255, 180), width=2)
         card_with_border = Image.alpha_composite(resized, border)
 
         # 4. Paste card with anti-aliased mask
@@ -4545,39 +4563,41 @@ def create_compilation_collage(items_or_urls, title_text, output_filename="compi
         card_masked.paste(card_with_border, (0, 0), mask)
         canvas.paste(card_masked, (pos_x, pos_y), card_masked)
 
-        # Rank badge colors
+        # Rank tier colors
         if idx == 1:
             dot_color = (250, 204, 21, 255)      # Gold
-            border_color = (250, 204, 21, 180)
+            border_color = (250, 204, 21, 220)
             text_color = (254, 240, 138, 255)
         elif idx == 2:
             dot_color = (56, 189, 248, 255)     # Cyan
-            border_color = (56, 189, 248, 180)
+            border_color = (56, 189, 248, 220)
             text_color = (224, 242, 254, 255)
         elif idx == 3:
             dot_color = (244, 114, 182, 255)    # Rose
-            border_color = (244, 114, 182, 180)
+            border_color = (244, 114, 182, 220)
             text_color = (252, 231, 243, 255)
         else:
             dot_color = (129, 140, 248, 255)    # Indigo
-            border_color = (129, 140, 248, 140)
+            border_color = (129, 140, 248, 180)
             text_color = (241, 245, 249, 255)
 
-        # 5. Top-Left Rank Badge [ • 01 ]
+        # 5. Top-Left Rank Badge [ • 01 ] with font size matching title (17px / 16px)
+        font_size_title = 17 if card_w >= 400 else 16
+        font_badge = _get_font(font_size_title, bold=True)
         num_str = f"{idx:02d}"
-        badge_h = 30
-        badge_w = 58
-        b_r = 8
+
+        badge_h = 36
+        badge_w = 66
+        b_r = 9
         badge = Image.new("RGBA", (badge_w, badge_h), (0, 0, 0, 0))
         bd_draw = ImageDraw.Draw(badge)
-        bd_draw.rounded_rectangle((0, 0, badge_w - 1, badge_h - 1), radius=b_r, fill=(11, 15, 28, 225), outline=border_color, width=1)
+        bd_draw.rounded_rectangle((0, 0, badge_w - 1, badge_h - 1), radius=b_r, fill=(11, 15, 28, 235), outline=border_color, width=1)
 
-        dot_r = 3.5
-        dot_cx = 13
+        dot_r = 4.0
+        dot_cx = 14
         dot_cy = badge_h / 2
         bd_draw.ellipse((dot_cx - dot_r, dot_cy - dot_r, dot_cx + dot_r, dot_cy + dot_r), fill=dot_color)
 
-        font_badge = _get_font(14, bold=True)
         t_bbox = bd_draw.textbbox((0, 0), num_str, font=font_badge)
         t_w = t_bbox[2] - t_bbox[0]
         t_h = t_bbox[3] - t_bbox[1]
@@ -4592,16 +4612,15 @@ def create_compilation_collage(items_or_urls, title_text, output_filename="compi
         canvas.paste(b_shadow, (pos_x + 9, pos_y + 9), b_shadow)
         canvas.paste(badge, (pos_x + 12, pos_y + 12), badge)
 
-        # 6. Top-Right Title & Rating Badge (in top right corner of the poster, +30% size)
+        # 6. Top-Right Title & Rating Badge
         raw_ru = it.get('ru', '') or it.get('en', '')
         score_val = str(it.get('score', ''))
         if raw_ru or score_val:
-            max_chars = 22 if card_w >= 400 else 18
+            max_chars = 20 if card_w >= 400 else 17
             display_title = (raw_ru[:max_chars-2] + '..') if len(raw_ru) > max_chars else raw_ru
             score_text = score_val if score_val else '—'
 
-            # +30% fonts: 13->17, 12->16, 11->15
-            font_tr_title = _get_font(17 if card_w >= 400 else 16, bold=True)
+            font_tr_title = _get_font(font_size_title, bold=True)
             font_tr_score = _get_font(16 if card_w >= 400 else 15, bold=True)
 
             dummy_draw = ImageDraw.Draw(canvas)
@@ -4609,8 +4628,8 @@ def create_compilation_collage(items_or_urls, title_text, output_filename="compi
             title_w = t_bbox[2] - t_bbox[0]
             s_bbox = dummy_draw.textbbox((0, 0), score_text, font=font_tr_score)
             score_num_w = s_bbox[2] - s_bbox[0]
-            star_r_out = 7.2  # 5.5 * 1.3
-            star_r_in = 3.4   # 2.6 * 1.3
+            star_r_out = 7.2
+            star_r_in = 3.4
             star_space = 22
             score_w = score_num_w + star_space
 
@@ -4626,7 +4645,7 @@ def create_compilation_collage(items_or_urls, title_text, output_filename="compi
 
             tr_badge = Image.new("RGBA", (tr_w, tr_h), (0, 0, 0, 0))
             tr_draw = ImageDraw.Draw(tr_badge)
-            tr_draw.rounded_rectangle((0, 0, tr_w - 1, tr_h - 1), radius=tr_r, fill=(11, 15, 28, 230), outline=border_color, width=1)
+            tr_draw.rounded_rectangle((0, 0, tr_w - 1, tr_h - 1), radius=tr_r, fill=(11, 15, 28, 235), outline=border_color, width=1)
 
             # Title (right-aligned in badge)
             tr_draw.text((tr_w - pad_tr_x - title_w, pad_tr_y), display_title, fill=(255, 255, 255, 255), font=font_tr_title)
