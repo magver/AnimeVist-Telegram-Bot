@@ -2008,30 +2008,30 @@ function showToast(message, type = 'info', duration = 3500) {
       if (n <= 5) {
         cols = n;
         rows = 1;
-        cardW = 190;
-        cardH = 280;
-        gap = 14;
-        padX = 18;
-        padY = 18;
-        headerH = 50;
+        cardW = 380;
+        cardH = 550;
+        gap = 24;
+        padX = 36;
+        padY = 28;
+        headerH = 88;
       } else if (n <= 7) {
         cols = 4;
         rows = 2;
-        cardW = 180;
-        cardH = 260;
-        gap = 14;
-        padX = 18;
-        padY = 18;
-        headerH = 50;
+        cardW = 320;
+        cardH = 460;
+        gap = 20;
+        padX = 36;
+        padY = 28;
+        headerH = 88;
       } else {
         cols = 5;
         rows = 2;
-        cardW = 180;
-        cardH = 260;
-        gap = 14;
-        padX = 18;
-        padY = 18;
-        headerH = 50;
+        cardW = 320;
+        cardH = 460;
+        gap = 20;
+        padX = 36;
+        padY = 28;
+        headerH = 88;
       }
 
       const totalW = padX * 2 + cols * cardW + (cols - 1) * gap;
@@ -2039,6 +2039,8 @@ function showToast(message, type = 'info', duration = 3500) {
 
       canvas.width = totalW;
       canvas.height = totalH;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
 
       // Draw background
       const bgGrad = ctx.createLinearGradient(0, 0, totalW, totalH);
@@ -2057,20 +2059,20 @@ function showToast(message, type = 'info', duration = 3500) {
 
       // Header title
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 22px "Inter", -apple-system, sans-serif';
+      ctx.font = 'bold 28px "Inter", -apple-system, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(`🌟 AnimeVist  •  ТОП-${n}: ${titleText}`, totalW / 2, 34);
+      ctx.fillText(`🌟 AnimeVist  •  ТОП-${n}: ${titleText}`, totalW / 2, 48);
 
       // Separator line
-      const lineGrad = ctx.createLinearGradient(padX, 48, totalW - padX, 48);
+      const lineGrad = ctx.createLinearGradient(padX, 74, totalW - padX, 74);
       lineGrad.addColorStop(0, 'rgba(99, 102, 241, 0)');
       lineGrad.addColorStop(0.5, 'rgba(236, 72, 153, 0.85)');
       lineGrad.addColorStop(1, 'rgba(6, 182, 212, 0)');
       ctx.strokeStyle = lineGrad;
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(padX, 48);
-      ctx.lineTo(totalW - padX, 48);
+      ctx.moveTo(padX, 74);
+      ctx.lineTo(totalW - padX, 74);
       ctx.stroke();
 
       function roundRect(context, x, y, width, height, radius) {
@@ -2145,17 +2147,17 @@ function showToast(message, type = 'info', duration = 3500) {
 
         // Shadow
         ctx.save();
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.65)';
-        ctx.shadowBlur = 12;
-        ctx.shadowOffsetY = 6;
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.75)';
+        ctx.shadowBlur = 18;
+        ctx.shadowOffsetY = 8;
         ctx.fillStyle = '#111827';
-        roundRect(ctx, posX, posY, cardW, cardH, 10);
+        roundRect(ctx, posX, posY, cardW, cardH, 14);
         ctx.fill();
         ctx.restore();
 
         // Image clip
         ctx.save();
-        roundRect(ctx, posX, posY, cardW, cardH, 10);
+        roundRect(ctx, posX, posY, cardW, cardH, 14);
         ctx.clip();
 
         if (img && img.naturalWidth > 0) {
@@ -2188,35 +2190,35 @@ function showToast(message, type = 'info', duration = 3500) {
         }
 
         // Vignette
-        const vigGrad = ctx.createLinearGradient(posX, posY + cardH - 65, posX, posY + cardH);
+        const vigGrad = ctx.createLinearGradient(posX, posY + cardH - 110, posX, posY + cardH);
         vigGrad.addColorStop(0, 'rgba(0,0,0,0)');
-        vigGrad.addColorStop(0.6, 'rgba(0,0,0,0.8)');
+        vigGrad.addColorStop(0.6, 'rgba(0,0,0,0.85)');
         vigGrad.addColorStop(1, 'rgba(0,0,0,0.98)');
         ctx.fillStyle = vigGrad;
-        ctx.fillRect(posX, posY + cardH - 65, cardW, 65);
+        ctx.fillRect(posX, posY + cardH - 110, cardW, 110);
 
         // Title and score on card bottom
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 12px "Inter", sans-serif';
+        ctx.font = 'bold 16px "Inter", sans-serif';
         ctx.textAlign = 'left';
         let shortTitle = item.ru;
-        if (shortTitle.length > 18) shortTitle = shortTitle.substring(0, 16) + '..';
-        ctx.fillText(shortTitle, posX + 8, posY + cardH - 24);
+        if (shortTitle.length > 24) shortTitle = shortTitle.substring(0, 22) + '..';
+        ctx.fillText(shortTitle, posX + 14, posY + cardH - 36);
 
         ctx.fillStyle = '#f59e0b';
-        ctx.font = 'bold 11px "Inter", sans-serif';
-        ctx.fillText(`⭐️ ${item.score}`, posX + 8, posY + cardH - 8);
+        ctx.font = 'bold 14px "Inter", sans-serif';
+        ctx.fillText(`⭐️ ${item.score}`, posX + 14, posY + cardH - 14);
 
         ctx.restore();
 
         // Modern Glassmorphic Rank Badge (Pill with accent dot: [ • 01 ])
         ctx.save();
         const numStr = (idx + 1) < 10 ? `0${idx + 1}` : `${idx + 1}`;
-        const bW = 44;
-        const bH = 22;
-        const bX = posX + 8;
-        const bY = posY + 8;
-        const bR = 6;
+        const bW = 56;
+        const bH = 28;
+        const bX = posX + 12;
+        const bY = posY + 12;
+        const bR = 8;
 
         // Luxury metallic color themes per rank
         let dotColor = '#818cf8';
@@ -2256,23 +2258,23 @@ function showToast(message, type = 'info', duration = 3500) {
         // Glowing accent dot
         ctx.fillStyle = dotColor;
         ctx.shadowColor = dotColor;
-        ctx.shadowBlur = 4;
+        ctx.shadowBlur = 5;
         ctx.beginPath();
-        ctx.arc(bX + 11, bY + bH / 2, 3, 0, Math.PI * 2);
+        ctx.arc(bX + 14, bY + bH / 2, 3.5, 0, Math.PI * 2);
         ctx.fill();
 
         // Rank number
         ctx.shadowBlur = 0;
         ctx.fillStyle = textColor;
-        ctx.font = 'bold 11px "Inter", -apple-system, sans-serif';
+        ctx.font = 'bold 13px "Inter", -apple-system, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(numStr, bX + 27, bY + bH / 2 + 0.5);
+        ctx.fillText(numStr, bX + 34, bY + bH / 2 + 0.5);
         ctx.restore();
       });
 
       try {
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.98);
         if (imgEl) {
           imgEl.src = dataUrl;
           imgEl.style.opacity = '1';
@@ -2285,7 +2287,7 @@ function showToast(message, type = 'info', duration = 3500) {
       try {
         canvas.toBlob((blob) => {
           currentCollageBlob = blob;
-        }, 'image/jpeg', 0.92);
+        }, 'image/jpeg', 0.98);
       } catch (e) {
         console.warn('[Collage] canvas.toBlob error:', e);
       }
