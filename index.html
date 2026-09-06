@@ -685,6 +685,10 @@
             <option value="pure_comedy">😂 Отборные комедии и позитив</option>
             <option value="isekai_special">🌀 Захватывающие исекаи и попаданцы</option>
           </select>
+          <div id="cooldownBadge" style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:var(--radius-sm); padding:6px 10px; margin-top:6px; font-size:0.75rem; color:#6ee7b7; display:flex; align-items:center; gap:6px;">
+            <span>🛡️</span>
+            <span id="cooldownBadgeText">Умный фильтр: аниме за последние 7 дней исключаются</span>
+          </div>
         </div>
 
         <div class="form-group">
@@ -3814,6 +3818,93 @@ function showToast(message, type = 'info', duration = 3500) {
       }
     }
 
+    /* --- 7-Day Anti-Repeat Cooldown Manager --- */
+    const COMPILATION_HISTORY_KEY = 'animevist_compilations_seen_history';
+    const COOLDOWN_DAYS = 7;
+    const COOLDOWN_MS = COOLDOWN_DAYS * 24 * 60 * 60 * 1000;
+
+    function getLocalCompilationHistory() {
+      try {
+        const raw = localStorage.getItem(COMPILATION_HISTORY_KEY);
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        if (typeof parsed !== 'object' || parsed === null) return {};
+        return parsed;
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveLocalCompilationHistory(history) {
+      try {
+        const cutoff30d = Date.now() - (30 * 24 * 60 * 60 * 1000);
+        const cleaned = {};
+        for (const [id, ts] of Object.entries(history)) {
+          if (typeof ts === 'number' && ts >= cutoff30d) {
+            cleaned[id] = ts;
+          }
+        }
+        localStorage.setItem(COMPILATION_HISTORY_KEY, JSON.stringify(cleaned));
+      } catch (e) {}
+    }
+
+    function isAnimeInCooldown(animeId, history) {
+      const ts = history[String(animeId)];
+      if (!ts || typeof ts !== 'number') return false;
+      return (Date.now() - ts) < COOLDOWN_MS;
+    }
+
+    async function syncCompilationCooldownWithSupabase() {
+      const history = getLocalCompilationHistory();
+      try {
+        const cutoff7d = new Date(Date.now() - COOLDOWN_MS).toISOString();
+        const endpoint = `${SUPABASE_URL}/rest/v1/bot_seen_items?category=eq.compilation_anime&created_at=gte.${encodeURIComponent(cutoff7d)}&select=item_id,created_at&limit=1000`;
+        const res = await fetch(endpoint, {
+          headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+        });
+        if (res.ok) {
+          const rows = await res.json();
+          if (Array.isArray(rows)) {
+            for (const r of rows) {
+              const ts = r.created_at ? Date.parse(r.created_at) : Date.now();
+              const cur = history[String(r.item_id)];
+              if (!cur || ts > cur) {
+                history[String(r.item_id)] = ts;
+              }
+            }
+            saveLocalCompilationHistory(history);
+          }
+        }
+      } catch (e) {
+        console.warn('[Cooldown] Supabase sync error:', e);
+      }
+      updateCooldownBadge();
+      return history;
+    }
+
+    function updateCooldownBadge() {
+      const selectEl = document.getElementById('webCompilationThemeSelect');
+      const badgeTextEl = document.getElementById('cooldownBadgeText');
+      if (!selectEl || !badgeTextEl) return;
+      const key = selectEl.value;
+      const t = THEMES_DATA[key] || THEMES_DATA['must_watch'];
+      if (!t || !t.items) return;
+
+      const history = getLocalCompilationHistory();
+      let cooldownCount = 0;
+      for (const it of t.items) {
+        if (isAnimeInCooldown(it.id, history)) {
+          cooldownCount++;
+        }
+      }
+      const availableCount = t.items.length - cooldownCount;
+      if (cooldownCount > 0) {
+        badgeTextEl.innerHTML = `🛡️ <b>Умный фильтр:</b> ${availableCount} доступно (${cooldownCount} на 7-дневном кулдауне)`;
+      } else {
+        badgeTextEl.innerHTML = `🛡️ <b>Умный фильтр:</b> все ${availableCount} аниме доступны (без повторов за 7 дней)`;
+      }
+    }
+
     let themeUnseenDecks = {};
     let lastShownItemIds = {};
     let lastSelectedDisplayItems = {};
@@ -3822,20 +3913,35 @@ function showToast(message, type = 'info', duration = 3500) {
       const t = THEMES_DATA[themeKey] || THEMES_DATA['must_watch'] || THEMES_DATA['cyberpunk_scifi'];
       if (!t || !t.items || t.items.length === 0) return [];
 
+      const history = getLocalCompilationHistory();
+
+      // Filter: strictly exclude any anime published in the last 7 days
+      const eligiblePool = t.items.filter(it => !isAnimeInCooldown(it.id, history));
+      const inCooldownPool = t.items.filter(it => isAnimeInCooldown(it.id, history));
+
       if (!themeUnseenDecks[themeKey] || forceRefill || themeUnseenDecks[themeKey].length < count) {
-        // True non-repeating deck shuffle
-        const lastIds = lastShownItemIds[themeKey] || new Set();
-        const candidatePool = [...t.items];
+        let source = [...eligiblePool];
+
+        // If eligible pool has fewer than count items, fall back to recycling oldest published
+        if (source.length < count) {
+          const sortedCooling = [...inCooldownPool].sort((a, b) => {
+            const tsA = history[String(a.id)] || 0;
+            const tsB = history[String(b.id)] || 0;
+            return tsA - tsB; // oldest first
+          });
+          source = [...source, ...sortedCooling];
+        }
 
         // Fisher-Yates thorough shuffle
-        for (let i = candidatePool.length - 1; i > 0; i--) {
+        for (let i = source.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
-          [candidatePool[i], candidatePool[j]] = [candidatePool[j], candidatePool[i]];
+          [source[i], source[j]] = [source[j], source[i]];
         }
 
         // Put items NOT shown in previous batch at the front
-        const fresh = candidatePool.filter(it => !lastIds.has(it.id));
-        const tail = candidatePool.filter(it => lastIds.has(it.id));
+        const lastIds = lastShownItemIds[themeKey] || new Set();
+        const fresh = source.filter(it => !lastIds.has(it.id));
+        const tail = source.filter(it => lastIds.has(it.id));
         themeUnseenDecks[themeKey] = [...fresh, ...tail];
       }
 
@@ -3843,6 +3949,8 @@ function showToast(message, type = 'info', duration = 3500) {
       const picked = themeUnseenDecks[themeKey].splice(0, count);
       lastShownItemIds[themeKey] = new Set(picked.map(it => it.id));
       lastSelectedDisplayItems[themeKey] = picked;
+
+      updateCooldownBadge();
       return picked;
     }
 
@@ -3913,6 +4021,39 @@ function showToast(message, type = 'info', duration = 3500) {
         const data = await res.json();
         if (data.ok) {
           showToast("✅ Топ-подборка с HD-коллажем успешно опубликована в канале!", "success");
+
+          // Enforce 7-day cooldown: mark published anime with timestamp
+          const now = Date.now();
+          const history = getLocalCompilationHistory();
+          for (const it of displayItems) {
+            history[String(it.id)] = now;
+          }
+          saveLocalCompilationHistory(history);
+
+          // Invalidate deck for this theme so next roll immediately excludes these published items
+          delete themeUnseenDecks[key];
+
+          // Sync published items to Supabase cloud
+          try {
+            const isoNow = new Date(now).toISOString();
+            const rows = displayItems.map(it => ({
+              item_id: String(it.id),
+              category: 'compilation_anime',
+              created_at: isoNow
+            }));
+            fetch(`${SUPABASE_URL}/rest/v1/bot_seen_items`, {
+              method: 'POST',
+              headers: {
+                "apikey": SUPABASE_KEY,
+                "Authorization": `Bearer ${SUPABASE_KEY}`,
+                "Content-Type": "application/json",
+                "Prefer": "resolution=merge-duplicates"
+              },
+              body: JSON.stringify(rows)
+            }).catch(e => console.warn('Supabase seen sync err:', e));
+          } catch (e) {}
+
+          updateCooldownBadge();
         } else {
           showToast(`Ошибка: ${data.description}`, "error", 5000);
         }
@@ -4015,6 +4156,7 @@ function showToast(message, type = 'info', duration = 3500) {
             checkTelegramBotAndChannel(tg.bot_token, tg.channel_id);
           }
           fetchSupabaseContentStats();
+          await syncCompilationCooldownWithSupabase();
           previewSelectedTheme(document.getElementById('webCompilationThemeSelect').value);
         } else {
           document.getElementById('headerStatusText').innerText = 'База пуста';
