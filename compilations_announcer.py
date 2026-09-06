@@ -2243,29 +2243,69 @@ THEMES = {   'must_watch': {   'key': 'must_watch',
                                                 'hook': 'Трое одаренных подростков призваны в мир «Цветущего сада» для '
                                                         'игр богов.'}]}}
 
-def load_seen_compilation_animes():
-    seen = set()
+def load_seen_compilation_animes(cooldown_days=7):
+    """
+    Loads anime IDs that were published within the cooldown period (default: 7 days).
+    Anime published more than 7 days ago will naturally exit the set and become available again.
+    """
+    now = time.time()
+    cutoff_ts = now - (cooldown_days * 86400)
+    seen_ids = set()
+
+    # 1. Local storage with timestamps
     if os.path.exists(SEEN_ANIMES_FILE):
         try:
             with open(SEEN_ANIMES_FILE, 'r', encoding='utf-8') as f:
-                seen.update(json.load(f))
+                data = json.load(f)
+                if isinstance(data, dict):
+                    for anime_id, ts in data.items():
+                        if isinstance(ts, (int, float)) and ts >= cutoff_ts:
+                            seen_ids.add(str(anime_id))
+                elif isinstance(data, list):
+                    seen_ids.update(str(x) for x in data)
+        except Exception as e:
+            print(f"[Compilations] Ошибка чтения {SEEN_ANIMES_FILE}: {e}")
+
+    # 2. Supabase Cloud Sync (items published in last 7 days)
+    try:
+        remote_seen = load_seen_from_supabase(category='compilation_anime', days=cooldown_days)
+        seen_ids.update(str(s) for s in remote_seen)
+    except Exception:
+        pass
+
+    return seen_ids
+
+def save_seen_compilation_animes(new_anime_ids):
+    """
+    Saves published anime IDs with the current timestamp into both local JSON
+    and Supabase cloud table with category='compilation_anime'.
+    """
+    now = time.time()
+    cutoff_30d = now - (30 * 86400)
+    data = {}
+
+    if os.path.exists(SEEN_ANIMES_FILE):
+        try:
+            with open(SEEN_ANIMES_FILE, 'r', encoding='utf-8') as f:
+                loaded = json.load(f)
+                if isinstance(loaded, dict):
+                    data = {k: v for k, v in loaded.items() if isinstance(v, (int, float)) and v >= cutoff_30d}
+                elif isinstance(loaded, list):
+                    data = {str(k): now for k in loaded}
         except Exception:
             pass
-    try:
-        remote_seen = load_seen_from_supabase(category='compilation_anime')
-        seen.update(str(s) for s in remote_seen)
-    except Exception:
-        pass
-    return seen
 
-def save_seen_compilation_animes(seen_set):
+    for aid in new_anime_ids:
+        data[str(aid)] = now
+
     try:
         with open(SEEN_ANIMES_FILE, 'w', encoding='utf-8') as f:
-            json.dump(list(seen_set)[-1000:], f, ensure_ascii=False, indent=2)
-    except Exception:
-        pass
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"[Compilations] Ошибка сохранения {SEEN_ANIMES_FILE}: {e}")
+
     try:
-        save_seen_to_supabase(seen_set, category='compilation_anime')
+        save_seen_to_supabase(list(new_anime_ids), category='compilation_anime')
     except Exception:
         pass
 
@@ -2554,37 +2594,29 @@ def fetch_shikimori_candidates(genre_id=None, order="ranked", limit=20):
         print(f"[Compilations] Shikimori query error: {e}")
         return []
 
-def select_unseen_anime(theme_key, count=4, refresh=False):
+def select_unseen_anime(theme_key, count=4, refresh=False, cooldown_days=7):
     """
-    Selects N unseen anime for the compilation to ensure it is NEVER the same.
-    Dynamically rotates, shuffles, and handles pools up to 10 anime without duplicate titles.
+    Selects N unseen anime for the compilation, strictly skipping any anime
+    published within the last 7 days (cooldown_days=7).
     """
     theme = THEMES.get(theme_key, THEMES['must_watch'])
-    seen = load_seen_compilation_animes()
+    recently_published = load_seen_compilation_animes(cooldown_days=cooldown_days)
 
     pool = list(theme.get('candidates', []))
 
-    # If dynamic search supported, query Shikimori
-    if theme.get('shiki_genre') or theme.get('shiki_order'):
-        dyn = fetch_shikimori_candidates(theme.get('shiki_genre'), theme.get('shiki_order'), limit=20)
-        existing_ids = set(c['id'] for c in pool)
-        for d in dyn:
-            if d['id'] not in existing_ids:
-                pool.append(d)
+    # Filter out any anime published within the last 7 days
+    available = [c for c in pool if str(c['id']) not in recently_published]
+    random.shuffle(available)
 
-    # Filter by seen
-    unseen = [c for c in pool if str(c['id']) not in seen]
-    random.shuffle(unseen)
-
-    # If pool is exhausted or less than requested count, recycle seen with shuffling
-    if len(unseen) < count:
-        print(f"[Compilations] В пуле {len(unseen)} новых тайтлов (запрошено {count}), подключаем ротацию.")
-        already_ids = set(c['id'] for c in unseen)
+    # If pool is exhausted due to high frequency, fall back to recycling oldest
+    if len(available) < count:
+        print(f"[Compilations] Доступно {len(available)} тайтлов вне 7-дневного кулдауна (запрошено {count}), подключаем ротацию.")
+        already_ids = set(c['id'] for c in available)
         remainder_pool = [c for c in pool if c['id'] not in already_ids]
         random.shuffle(remainder_pool)
-        unseen.extend(remainder_pool)
+        available.extend(remainder_pool)
 
-    selected = unseen[:count]
+    selected = available[:count]
     return selected
 
 def build_compilation_content(theme_key, count=4, refresh=False):
@@ -2704,11 +2736,8 @@ def run_compilation_post(genre_key=None, count=4, dry_run=False):
     res = sender.send_photo(poster_to_send, caption=caption, reply_markup=reply_markup)
     if res.get('ok'):
         print(f"[Compilations] ✅ Успешно опубликована подборка: {theme['name']} ({len(chosen_items)} аниме)")
-        # Save seen anime IDs to prevent repetition
-        seen = load_seen_compilation_animes()
-        for it in chosen_items:
-            seen.add(str(it['id']))
-        save_seen_compilation_animes(seen)
+        # Save newly published anime IDs with current timestamp to enforce 7-day cooldown
+        save_seen_compilation_animes([str(it['id']) for it in chosen_items])
         save_last_compilation_time()
         return {"ok": True, "theme": genre_key, "count": len(chosen_items), "message": f"Опубликовано: {theme['name']}"}
     else:
