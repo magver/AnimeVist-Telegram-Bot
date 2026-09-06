@@ -6105,21 +6105,22 @@ const THEMES_DATA = {
         const displayTitle = rawRu.length > maxChars ? (rawRu.substring(0, maxChars - 2) + '..') : rawRu;
         const scoreVal = String(item.score || '—');
 
-        const fontTitleSize = cardW >= 400 ? 13 : 12;
-        const fontScoreSize = cardW >= 400 ? 12 : 11;
+        // +30% font sizes: 13 -> 17, 12 -> 16, 11 -> 15
+        const fontTitleSize = cardW >= 400 ? 17 : 16;
+        const fontScoreSize = cardW >= 400 ? 16 : 15;
         ctx.font = `bold ${fontTitleSize}px "Inter", -apple-system, sans-serif`;
         const titleW = ctx.measureText(displayTitle).width;
 
         ctx.font = `bold ${fontScoreSize}px "Inter", -apple-system, sans-serif`;
         const scoreNumW = ctx.measureText(scoreVal).width;
-        const scoreW = scoreNumW + 16; // 16px for star icon + gap
+        const scoreW = scoreNumW + 22; // 22px for +30% larger star icon + gap
 
-        const padTrX = 11;
-        const padTrY = 6;
+        const padTrX = 13;
+        const padTrY = 8;
         const contentW = Math.max(titleW, scoreW);
         const trW = contentW + padTrX * 2;
-        const trH = 48;
-        const trR = 8;
+        const trH = 58;
+        const trR = 9;
 
         const trX = posX + cardW - 12 - trW;
         const trY = posY + 12;
@@ -6145,16 +6146,16 @@ const THEMES_DATA = {
         ctx.textBaseline = 'top';
         ctx.fillText(displayTitle, trX + trW - padTrX, trY + padTrY);
 
-        // Vector Star + Rating (right-aligned in badge)
+        // Vector Star + Rating (right-aligned in badge, +30% size)
         const scoreNumX = trX + trW - padTrX;
-        const starCenterX = scoreNumX - scoreNumW - 9;
-        const starCenterY = trY + padTrY + 25;
+        const starCenterX = scoreNumX - scoreNumW - 12;
+        const starCenterY = trY + padTrY + 32;
 
         ctx.fillStyle = '#fbbf24';
         ctx.beginPath();
         for (let s = 0; s < 10; s++) {
           const angle = -Math.PI / 2 + s * Math.PI / 5;
-          const r = s % 2 === 0 ? 5.5 : 2.6;
+          const r = s % 2 === 0 ? 7.2 : 3.4;
           const sx = starCenterX + r * Math.cos(angle);
           const sy = starCenterY + r * Math.sin(angle);
           if (s === 0) ctx.moveTo(sx, sy);
@@ -6165,7 +6166,7 @@ const THEMES_DATA = {
 
         ctx.fillStyle = '#fbbf24';
         ctx.font = `bold ${fontScoreSize}px "Inter", -apple-system, sans-serif`;
-        ctx.fillText(scoreVal, scoreNumX, trY + padTrY + 19);
+        ctx.fillText(scoreVal, scoreNumX, trY + padTrY + 24);
         ctx.restore();
       });
 
