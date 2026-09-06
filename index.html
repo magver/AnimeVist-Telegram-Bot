@@ -341,10 +341,10 @@
       border: 1px solid rgba(255, 255, 255, 0.04);
     }
     .tg-post-img-wrap {
-      width: 100%; border-radius: 10px; overflow: hidden; margin-bottom: 10px; background: #0d1620;
+      width: 100%; border-radius: 10px; overflow: hidden; margin-bottom: 10px; background: #080c14;
     }
     .tg-post-img {
-      width: 100%; max-height: 280px; object-fit: cover; display: block;
+      width: 100%; height: auto; max-height: 520px; object-fit: contain; display: block;
       transition: transform 0.3s ease;
     }
     .tg-post-img:hover { transform: scale(1.02); }
@@ -552,7 +552,7 @@
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
               <span style="color:var(--text-secondary);">Формат подборок:</span>
-              <span style="font-family:var(--font-mono); color:var(--accent-cyan);">Единый HD-коллаж (3-5 шт)</span>
+              <span style="font-family:var(--font-mono); color:var(--accent-cyan);">HD-коллаж (до 10 аниме / сетка 5×2)</span>
             </div>
             <div style="display:flex; justify-content:space-between; padding-bottom:8px; border-bottom:1px solid var(--border-subtle);">
               <span style="color:var(--text-secondary);">База данных Supabase:</span>
@@ -668,6 +668,11 @@
         <div class="card-title">🌟 Публикатор Топ-Подборок Аниме (#подборка)</div>
         <div class="card-subtitle">Формирует единый постер-коллаж и подробное описание без повторов:</div>
 
+        <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-sm); padding:10px 12px; margin:12px 0 16px 0; font-size:0.8rem; color:#67e8f9; display:flex; align-items:center; gap:8px;">
+          <span>🖼</span>
+          <span>Обложки объединяются в <b>единый HD-коллаж</b> (1-рядный для 3-5, сетка 5×2 для 10) с номерами и шапкой!</span>
+        </div>
+
         <div class="form-group">
           <label class="form-label">Жанр / Тема подборки:</label>
           <select id="webCompilationThemeSelect" onchange="previewSelectedTheme(this.value)">
@@ -688,12 +693,12 @@
             <option value="3">3 аниме (крупный постер)</option>
             <option value="4" selected>4 аниме (рекомендуется)</option>
             <option value="5">5 аниме (панорамный коллаж)</option>
+            <option value="7">7 аниме (сетка 4+3)</option>
+            <option value="10">10 аниме (ТОП-10 сетка 5×2)</option>
           </select>
-        </div>
-
-        <div style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:16px; font-size:0.8rem; color:#67e8f9; display:flex; align-items:center; gap:8px;">
-          <span>🖼</span>
-          <span>Все обложки склеиваются в <b>единый горизонтальный HD-коллаж</b> с номерами 1..N и шапкой AnimeVist!</span>
+          <button type="button" class="btn btn-secondary" onclick="rerollWebCompilation()" style="margin-top:8px; width:100%; display:flex; align-items:center; justify-content:center; gap:6px;">
+            <span>🎲</span> <span>Подобрать другие аниме (Случайная ротация)</span>
+          </button>
         </div>
 
         <div class="form-label" style="margin-top:16px; font-weight:600; color:var(--text-primary);">
@@ -902,109 +907,169 @@
 
     let currentConfig = null;
 
-    const THEMES_DATA = {
+const THEMES_DATA = {
       must_watch: {
-        title: "ТОП-4: Золотая Классика и Шедевры 🏆",
+        title: "Золотая Классика и Шедевры 🏆",
         desc: "Легендарные тайтлы с оценкой 8.5+, которые обязан посмотреть каждый:",
         tags: "#классика #шедевр #топ_аниме",
         poster: "https://shikimori.one/system/animes/original/52991.jpg",
         items: [
-          "1️⃣ <b>«Провожающая в последний путь Фрирен»</b> / <i>Sousou no Frieren</i>\n⭐️ <b>9.25</b> | 🎭 Фэнтези, Приключения\n📝 Бессмертная эльфийка отправляется в путь, чтобы понять мимолетность человеческой жизни.",
-          "2️⃣ <b>«Стальной алхимик: Братство»</b> / <i>Fullmetal Alchemist</i>\n⭐️ <b>9.11</b> | 🎭 Сёнэн, Фэнтези\n📝 Братья Элрики ищут философский камень, чтобы вернуть утраченные тела.",
-          "3️⃣ <b>«Врата Штейна»</b> / <i>Steins;Gate</i>\n⭐️ <b>9.07</b> | 🎭 Фантастика, Триллер\n📝 Случайное изобретение машины времени втягивает друзей в опаснейший заговор.",
-          "4️⃣ <b>«Охотник х Охотник (2011)»</b> / <i>Hunter x Hunter</i>\n⭐️ <b>9.04</b> | 🎭 Экшен, Приключения\n📝 Гон отправляется на смертельно опасный экзамен ради поисков отца.",
-          "5️⃣ <b>«Ковбой Бибоп»</b> / <i>Cowboy Bebop</i>\n⭐️ <b>8.75</b> | 🎭 Фантастика, Детектив\n📝 Охотники за головами бороздят просторы Солнечной системы под звуки джаза."
+          {"id": 52991, "ru": "Провожающая в последний путь Фрирен", "en": "Sousou no Frieren", "score": "9.25", "genres": "Фэнтези, Драма", "poster": "https://shikimori.one/system/animes/original/52991.jpg", "hook": "Бессмертная эльфийка отправляется в путь, чтобы постичь ценность человеческой жизни."},
+          {"id": 5114, "ru": "Стальной алхимик: Братство", "en": "Fullmetal Alchemist: Brotherhood", "score": "9.11", "genres": "Сёнэн, Фэнтези", "poster": "https://shikimori.one/system/animes/original/5114.jpg", "hook": "Братья Элрики ищут философский камень, чтобы вернуть утраченные тела."},
+          {"id": 9253, "ru": "Врата Штейна", "en": "Steins;Gate", "score": "9.07", "genres": "Фантастика, Триллер", "poster": "https://shikimori.one/system/animes/original/9253.jpg", "hook": "Случайное создание машины времени втягивает друзей в опаснейший заговор."},
+          {"id": 11061, "ru": "Охотник х Охотник (2011)", "en": "Hunter x Hunter", "score": "9.04", "genres": "Экшен, Приключения", "poster": "https://shikimori.one/system/animes/original/11061.jpg", "hook": "Гон отправляется на смертельный экзамен Охотников ради поисков отца."},
+          {"id": 19, "ru": "Монстр", "en": "Monster", "score": "8.87", "genres": "Драма, Триллер", "poster": "https://shikimori.one/system/animes/original/19.jpg", "hook": "Гениальный хирург спасает жизнь мальчику, не зная, что взрастил зло."},
+          {"id": 1, "ru": "Ковбой Бибоп", "en": "Cowboy Bebop", "score": "8.75", "genres": "Фантастика, Экшен", "poster": "https://shikimori.one/system/animes/original/1.jpg", "hook": "Охотники за головами бороздят Солнечную систему под звуки джаза."},
+          {"id": 2001, "ru": "Гуррен-Лаганн", "en": "Tengen Toppa Gurren Lagann", "score": "8.63", "genres": "Экшен, Меха", "poster": "https://shikimori.one/system/animes/original/2001.jpg", "hook": "Симон и Камина бурят путь наверх сквозь пространство, бросая вызов Вселенной."},
+          {"id": 1575, "ru": "Код Гиас: Восставший Лелуш", "en": "Code Geass", "score": "8.70", "genres": "Экшен, Меха", "poster": "https://shikimori.one/system/animes/original/1575.jpg", "hook": "Отвергнутый принц получает силу абсолютного подчинения и начинает восстание."},
+          {"id": 1535, "ru": "Тетрадь смерти", "en": "Death Note", "score": "8.62", "genres": "Мистика, Детектив", "poster": "https://shikimori.one/system/animes/original/1535.jpg", "hook": "Интеллектуальная дуэль школьника с тетрадью бога смерти и гениального сыщика L."},
+          {"id": 245, "ru": "Крутой учитель Онидзука", "en": "Great Teacher Onizuka", "score": "8.69", "genres": "Комедия, Школа", "poster": "https://shikimori.one/system/animes/original/245.jpg", "hook": "Бывший байкер берется перевоспитывать самый проблемный класс школы."},
+          {"id": 164, "ru": "Самурай Чамплу", "en": "Samurai Champloo", "score": "8.51", "genres": "Экшен, Приключения", "poster": "https://shikimori.one/system/animes/original/164.jpg", "hook": "Два непревзойденных мечника сопровождают девушку в поисках самурая."},
+          {"id": 30, "ru": "Евангелион", "en": "Neon Genesis Evangelion", "score": "8.35", "genres": "Меха, Психология", "poster": "https://shikimori.one/system/animes/original/30.jpg", "hook": "Подростки пилотируют биороботов, защищая мир от таинственных Ангелов."},
+          {"id": 199, "ru": "Унесённые призраками", "en": "Sen to Chihiro", "score": "8.78", "genres": "Сказка, Мистика", "poster": "https://shikimori.one/system/animes/original/199.jpg", "hook": "Десятилетняя Тихиро попадает в таинственный мир духов и ведьмы Юбабы."},
+          {"id": 16498, "ru": "Атака титанов", "en": "Shingeki no Kyojin", "score": "8.54", "genres": "Экшен, Драма", "poster": "https://shikimori.one/system/animes/original/16498.jpg", "hook": "Остатки человечества сражаются за выживание с гигантами-людоедами."}
         ]
       },
       hidden_gems: {
-        title: "ТОП-4: Недооценённые Алмазы и Скрытые Шедевры 💎",
+        title: "Недооценённые Алмазы и Скрытые Шедевры 💎",
         desc: "Великолепные тайтлы, которые незаслуженно обделили массовым вниманием:",
         tags: "#скрытыйшедевр #недооцененное #топ",
-        poster: "https://shikimori.one/system/animes/original/32281.jpg",
+        poster: "https://shikimori.one/system/animes/original/13125.jpg",
         items: [
-          "1️⃣ <b>«Пинг-понг»</b> / <i>Ping Pong the Animation</i>\n⭐️ <b>8.60</b> | 🎭 Спорт, Драма\n📝 Шедевр Масааки Юасы о дружбе, призвании и взрослении через настольный теннис.",
-          "2️⃣ <b>«Город, в котором меня нет»</b> / <i>Boku dake ga Inai Machi</i>\n⭐️ <b>8.31</b> | 🎭 Детектив, Триллер\n📝 Мангака возвращается в тело 10-летнего себя, чтобы предотвратить трагедию.",
-          "3️⃣ <b>«Дороро»</b> / <i>Dororo</i>\n⭐️ <b>8.24</b> | 🎭 Исторический, Экшен\n📝 Юноша с протезами вместо тела возвращает свои органы, истребляя демонов.",
-          "4️⃣ <b>«Связь сердец»</b> / <i>Kokoro Connect</i>\n⭐️ <b>7.85</b> | 🎭 Мистика, Психология\n📝 Пятеро друзей внезапно начинают непроизвольно меняться телами.",
-          "5️⃣ <b>«Парад смерти»</b> / <i>Death Parade</i>\n⭐️ <b>8.18</b> | 🎭 Психология, Драма\n📝 Бар Quindecim, где души умерших играют на жизнь и раскрывают свою истинную суть."
+          {"id": 13125, "ru": "Из нового света", "en": "Shinsekai yori", "score": "8.27", "genres": "Драма, Фантастика", "poster": "https://shikimori.one/system/animes/original/13125.jpg", "hook": "Утопическое общество телекинетиков скрывает леденящую кровь тайну."},
+          {"id": 22135, "ru": "Пинг-понг", "en": "Ping Pong the Animation", "score": "8.60", "genres": "Спорт, Драма", "poster": "https://shikimori.one/system/animes/original/22135.jpg", "hook": "Шедевр Масааки Юасы о дружбе, призвании и взрослении через спорт."},
+          {"id": 1279, "ru": "Эрго Прокси", "en": "Ergo Proxy", "score": "7.91", "genres": "Детектив, Психология", "poster": "https://shikimori.one/system/animes/original/1279.jpg", "hook": "Загадки города-купола Ромдо, где андроиды внезапно обретают душу."},
+          {"id": 486, "ru": "Путешествие Кино", "en": "Kino no Tabi", "score": "8.38", "genres": "Приключения, Философия", "poster": "https://shikimori.one/system/animes/original/486.jpg", "hook": "Путешественница Кино и говорящий мотоцикл исследуют обычаи стран мира."},
+          {"id": 2251, "ru": "Баккано!", "en": "Baccano!", "score": "8.38", "genres": "Экшен, Комедия", "poster": "https://shikimori.one/system/animes/original/2251.jpg", "hook": "Вихрь мафиози, алхимиков и бессмертных на трансконтинентальном поезде."},
+          {"id": 45, "ru": "Мононокэ", "en": "Mononoke", "score": "8.42", "genres": "Мистика, Детектив", "poster": "https://shikimori.one/system/animes/original/45.jpg", "hook": "Безымянный Аптекарь изгоняет духов, раскрывая их Форму, Суть и Первопричину."},
+          {"id": 387, "ru": "Альянс Серокрылых", "en": "Haibane Renmei", "score": "7.99", "genres": "Драма, Мистика", "poster": "https://shikimori.one/system/animes/original/387.jpg", "hook": "Девушка с пепельными крыльями ищет свое предназначение в городе за Стеной."},
+          {"id": 6594, "ru": "Радуга: Семеро из шестой камеры", "en": "Rainbow", "score": "8.46", "genres": "Драма, Триллер", "poster": "https://shikimori.one/system/animes/original/6594.jpg", "hook": "Семеро юношей в колонии строгого режима находят братство посреди жестокости."},
+          {"id": 457, "ru": "Клеймор", "en": "Claymore", "score": "7.80", "genres": "Тёмное фэнтези, Экшен", "poster": "https://shikimori.one/system/animes/original/457.jpg", "hook": "Воительницы с серебряными глазами очищают континент от чудовищ-йома."},
+          {"id": 26, "ru": "Технолайз", "en": "Texhnolyze", "score": "7.76", "genres": "Киберпанк, Драма", "poster": "https://shikimori.one/system/animes/original/26.jpg", "hook": "Бескомпромиссная антиутопия подземного города Люкс на грани угасания."},
+          {"id": 37520, "ru": "Дороро", "en": "Dororo", "score": "8.24", "genres": "Исторический, Экшен", "poster": "https://shikimori.one/system/animes/original/37520.jpg", "hook": "Хяккимару возвращает украденные демонами органы, истребляя нечисть."},
+          {"id": 22043, "ru": "Парад смерти", "en": "Death Parade", "score": "8.16", "genres": "Психология, Драма", "poster": "https://shikimori.one/system/animes/original/22043.jpg", "hook": "Таинственный бар, где души умерших обнажают истинную натуру в играх."},
+          {"id": 31043, "ru": "Город, в котором меня нет", "en": "Boku dake ga Inai Machi", "score": "8.31", "genres": "Детектив, Триллер", "poster": "https://shikimori.one/system/animes/original/31043.jpg", "hook": "Мангака возвращается в детство, чтобы предотвратить гибель девочки."},
+          {"id": 10620, "ru": "Рассвет Йоны", "en": "Akatsuki no Yona", "score": "8.02", "genres": "Приключения, Фэнтези", "poster": "https://shikimori.one/system/animes/original/10620.jpg", "hook": "Изгнанная принцесса собирает легендарных воинов-драконов ради царства."}
         ]
       },
       mindfuck: {
-        title: "ТОП-4: Игры Разума и Психологические Триллеры 🧠",
+        title: "Игры Разума и Психологические Триллеры 🧠",
         desc: "Напряженные сюжеты, заговоры и неожиданные сюжетные твисты:",
         tags: "#триллер #психология #игрыразума",
         poster: "https://shikimori.one/system/animes/original/1535.jpg",
         items: [
-          "1️⃣ <b>«Тетрадь смерти»</b> / <i>Death Note</i>\n⭐️ <b>8.62</b> | 🎭 Мистика, Детектив\n📝 Интеллектуальная дуэль школьника с тетрадью бога смерти и гениального сыщика L.",
-          "2️⃣ <b>«Монстр»</b> / <i>Monster</i>\n⭐️ <b>8.87</b> | 🎭 Драма, Триллер\n📝 Хирург спасает жизнь мальчику, не подозревая, что взрастил монстра.",
-          "3️⃣ <b>«Идеальная грусть»</b> / <i>Perfect Blue</i>\n⭐️ <b>8.53</b> | 🎭 Психология, Триллер\n📝 Бывшая поп-идол теряет грань между реальностью и психозом из-за преследователя.",
-          "4️⃣ <b>«Эрго Прокси»</b> / <i>Ergo Proxy</i>\n⭐️ <b>7.91</b> | 🎭 Детектив, Киберпанк\n📝 Загадки города-купола Ромдо, где андроиды внезапно обретают душу.",
-          "5️⃣ <b>«Из нового света»</b> / <i>Shinsekai yori</i>\n⭐️ <b>8.27</b> | 🎭 Драма, Фантастика\n📝 Утопическое общество телекинетиков скрывает леденящую тайну."
+          {"id": 1535, "ru": "Тетрадь смерти", "en": "Death Note", "score": "8.62", "genres": "Мистика, Детектив", "poster": "https://shikimori.one/system/animes/original/1535.jpg", "hook": "Интеллектуальная дуэль школьника с тетрадью смерти и гениального сыщика L."},
+          {"id": 19, "ru": "Монстр", "en": "Monster", "score": "8.87", "genres": "Драма, Триллер", "poster": "https://shikimori.one/system/animes/original/19.jpg", "hook": "Хирург спасает жизнь мальчику, не подозревая, что взрастил абсолютное зло."},
+          {"id": 13601, "ru": "Психопаспорт", "en": "Psycho-Pass", "score": "8.34", "genres": "Детектив, Триллер", "poster": "https://shikimori.one/system/animes/original/13601.jpg", "hook": "Система «Сивилла» вычисляет вероятность преступления еще до его совершения."},
+          {"id": 22535, "ru": "Паразит: Учение о жизни", "en": "Kiseijuu", "score": "8.34", "genres": "Экшен, Ужасы", "poster": "https://shikimori.one/system/animes/original/22535.jpg", "hook": "Инопланетный паразит в руке школьника втягивает его в войну за выживание."},
+          {"id": 37, "ru": "Идеальная грусть", "en": "Perfect Blue", "score": "8.53", "genres": "Психология, Триллер", "poster": "https://shikimori.one/system/animes/original/37.jpg", "hook": "Бывшая поп-идол теряет грань между реальностью и безумием из-за сталкера."},
+          {"id": 35849, "ru": "Обещанный Неверленд", "en": "Yakusoku no Neverland", "score": "8.51", "genres": "Мистика, Триллер", "poster": "https://shikimori.one/system/animes/original/35849.jpg", "hook": "Дети в идиллическом приюте узнают, что их растят на убой для монстров."},
+          {"id": 20707, "ru": "Токийский гуль", "en": "Tokyo Ghoul", "score": "7.79", "genres": "Ужасы, Драма", "poster": "https://shikimori.one/system/animes/original/20707.jpg", "hook": "Студент становится полугулем и балансирует между миром людей и чудовищ."},
+          {"id": 11111, "ru": "Иная", "en": "Another", "score": "7.46", "genres": "Мистика, Ужасы", "poster": "https://shikimori.one/system/animes/original/11111.jpg", "hook": "В классе 3-3 оживает проклятие, и ученики начинают погибать один за другим."},
+          {"id": 40052, "ru": "Игра друзей", "en": "Tomodachi Game", "score": "7.69", "genres": "Психология, Игры", "poster": "https://shikimori.one/system/animes/original/40052.jpg", "hook": "Пятеро друзей попадают в жестокую психологическую игру ради выплаты долга."},
+          {"id": 24405, "ru": "Шарлотта", "en": "Charlotte", "score": "7.74", "genres": "Драма, Сверхъестественное", "poster": "https://shikimori.one/system/animes/original/24405.jpg", "hook": "Подростки со скрытыми способностями сталкиваются с суровой ценой своих сил."},
+          {"id": 14813, "ru": "Как и ожидалось, моя школьная жизнь не задалась", "en": "Oregairu", "score": "8.24", "genres": "Драма, Психология", "poster": "https://shikimori.one/system/animes/original/14813.jpg", "hook": "Циничный школьник Хатиман препарирует социальные маски сверстников."},
+          {"id": 28223, "ru": "Рыцари Сидонии", "en": "Knights of Sidonia", "score": "7.65", "genres": "Фантастика, Меха", "poster": "https://shikimori.one/system/animes/original/28223.jpg", "hook": "Остатки человечества в космосе ведут отчаянную борьбу против пришельцев-гауна."}
         ]
       },
       cyberpunk_scifi: {
-        title: "ТОП-4: Культовый Киберпанк и Фантастика 🌆",
+        title: "Культовый Киберпанк и Фантастика 🌆",
         desc: "Мрачное будущее, высокие технологии и неоновые мегаполисы:",
         tags: "#киберпанк #фантастика #меха",
         poster: "https://shikimori.one/system/animes/original/42310.jpg",
         items: [
-          "1️⃣ <b>«Киберпанк: Бегущие по краю»</b> / <i>Cyberpunk: Edgerunners</i>\n⭐️ <b>8.62</b> | 🎭 Экшен, Фантастика\n📝 Парень из трущоб становится наемником в безжалостном Найт-Сити.",
-          "2️⃣ <b>«Психопаспорт»</b> / <i>Psycho-Pass</i>\n⭐️ <b>8.34</b> | 🎭 Детектив, Триллер\n📝 Система «Сивилла» вычисляет преступный коэффициент еще до совершения преступления.",
-          "3️⃣ <b>«Призрак в доспехах»</b> / <i>Ghost in the Shell</i>\n⭐️ <b>8.28</b> | 🎭 Экшен, Меха\n📝 Майор Мотоко Кусанаги расследует киберпреступления на грани человечности.",
-          "4️⃣ <b>«Акира»</b> / <i>Akira</i>\n⭐️ <b>8.15</b> | 🎭 Фантастика, Экшен\n📝 Байкер в Нео-Токио пробуждает колоссальную разрушительную силу.",
-          "5️⃣ <b>«Виви: Песнь флюоритового глаза»</b> / <i>Vivy: Fluorite Eye's Song</i>\n⭐️ <b>8.40</b> | 🎭 Музыка, Фантастика\n📝 Андроид-певица должна предотвратить войну человечества против искусственного интеллекта."
+          {"id": 42310, "ru": "Киберпанк: Бегущие по краю", "en": "Cyberpunk: Edgerunners", "score": "8.62", "genres": "Экшен, Фантастика", "poster": "https://shikimori.one/system/animes/original/42310.jpg", "hook": "Парень из трущоб становится наемником-соло в безжалостном Найт-Сити."},
+          {"id": 43, "ru": "Призрак в доспехах", "en": "Ghost in the Shell", "score": "8.28", "genres": "Экшен, Меха", "poster": "https://shikimori.one/system/animes/original/43.jpg", "hook": "Майор Мотоко Кусанаги расследует киберпреступления на грани человечности."},
+          {"id": 47, "ru": "Акира", "en": "Akira", "score": "8.15", "genres": "Фантастика, Экшен", "poster": "https://shikimori.one/system/animes/original/47.jpg", "hook": "Байкер в разрушенном Нео-Токио пробуждает колоссальную разрушительную мощь."},
+          {"id": 40571, "ru": "Виви: Песнь флюоритового глаза", "en": "Vivy", "score": "8.40", "genres": "Музыка, Фантастика", "poster": "https://shikimori.one/system/animes/original/40571.jpg", "hook": "Андроид-певица должна предотвратить восстание машин длиною в 100 лет."},
+          {"id": 2005, "ru": "Триган", "en": "Trigun", "score": "8.21", "genres": "Экшен, Sci-Fi", "poster": "https://shikimori.one/system/animes/original/2005.jpg", "hook": "Пацифист Вэш Ураган скитается по пустынной планете, спасая людей."},
+          {"id": 820, "ru": "Легенда о героях Галактики", "en": "Ginga Eiyuu Densetsu", "score": "9.02", "genres": "Космос, Военное", "poster": "https://shikimori.one/system/animes/original/820.jpg", "hook": "Грандиозное противостояние двух гениальных стратегов в масштабах космоса."},
+          {"id": 513, "ru": "Изгнанник", "en": "Last Exile", "score": "7.82", "genres": "Стимпанк, Приключения", "poster": "https://shikimori.one/system/animes/original/513.jpg", "hook": "Юные пилоты ваншипа оказываются втянуты в воздушную войну двух империй."},
+          {"id": 3167, "ru": "Время Евы", "en": "Eve no Jikan", "score": "7.98", "genres": "Повседневность, Sci-Fi", "poster": "https://shikimori.one/system/animes/original/3167.jpg", "hook": "В уютном кафе стирается социальная грань между людьми и андроидами."},
+          {"id": 40748, "ru": "Акудама Драйв", "en": "Akudama Drive", "score": "7.58", "genres": "Экшен, Киберпанк", "poster": "https://shikimori.one/system/animes/original/40748.jpg", "hook": "Отряд отпетых преступников Кансая берется за самоубийственное ограбление."},
+          {"id": 31964, "ru": "Измерение W", "en": "Dimension W", "score": "7.14", "genres": "Экшен, Sci-Fi", "poster": "https://shikimori.one/system/animes/original/31964.jpg", "hook": "Коллекционер нелегальных катушек исследует тайны четвертого измерения."},
+          {"id": 2001, "ru": "Гуррен-Лаганн", "en": "Tengen Toppa Gurren Lagann", "score": "8.63", "genres": "Экшен, Меха", "poster": "https://shikimori.one/system/animes/original/2001.jpg", "hook": "Симон и Камина бурят путь наверх сквозь пространство, бросая вызов Вселенной."},
+          {"id": 1, "ru": "Ковбой Бибоп", "en": "Cowboy Bebop", "score": "8.75", "genres": "Фантастика, Экшен", "poster": "https://shikimori.one/system/animes/original/1.jpg", "hook": "Охотники за головами бороздят Солнечную систему под звуки бессмертного джаза."}
         ]
       },
       epic_fantasy: {
-        title: "ТОП-4: Эпическое Фэнтези и Магические Приключения ⚔️",
+        title: "Эпическое Фэнтези и Магические Приключения ⚔️",
         desc: "Грандиозные сражения, масштабные миры и судьбы королевств:",
         tags: "#фэнтези #приключения #эпик",
         poster: "https://shikimori.one/system/animes/original/37521.jpg",
         items: [
-          "1️⃣ <b>«Сага о Винланде»</b> / <i>Vinland Saga</i>\n⭐️ <b>8.75</b> | 🎭 Экшен, Приключения\n📝 Юный Торфинн жаждет мести за отца в кровавую эпоху викингов.",
-          "2️⃣ <b>«Берсерк (1997)»</b> / <i>Berserk</i>\n⭐️ <b>8.57</b> | 🎭 Тёмное фэнтези, Драма\n📝 Одинокий наемник Гатс встречает Гриффита и вступает в Отряд Сокола.",
-          "3️⃣ <b>«Атака титанов»</b> / <i>Attack on Titan</i>\n⭐️ <b>8.55</b> | 🎭 Экшен, Детектив\n📝 Остатки человечества ведут войну на выживание с гигантскими людоедами.",
-          "4️⃣ <b>«Клеймор»</b> / <i>Claymore</i>\n⭐️ <b>7.80</b> | 🎭 Тёмное фэнтези, Экшен\n📝 Воительницы-полудемоны с серебряными глазами очищают континент от чудовищ.",
-          "5️⃣ <b>«Магическая битва»</b> / <i>Jujutsu Kaisen</i>\n⭐️ <b>8.59</b> | 🎭 Экшен, Сверхъестественное\n📝 Юдзи поглощает палец древнего демона ради спасения друзей."
+          {"id": 37521, "ru": "Сага о Винланде", "en": "Vinland Saga", "score": "8.75", "genres": "Экшен, Приключения", "poster": "https://shikimori.one/system/animes/original/37521.jpg", "hook": "Юный Торфинн жаждет мести за отца посреди завоевательных походов викингов."},
+          {"id": 33, "ru": "Берсерк (1997)", "en": "Berserk", "score": "8.57", "genres": "Тёмное фэнтези, Военное", "poster": "https://shikimori.one/system/animes/original/33.jpg", "hook": "Одинокий мечник Гатс встречает Гриффита и вступает в Отряд Сокола."},
+          {"id": 34599, "ru": "Созданный в Бездне", "en": "Made in Abyss", "score": "8.66", "genres": "Приключения, Драма", "poster": "https://shikimori.one/system/animes/original/34599.jpg", "hook": "Девочка Рико и робот Рэг спускаются в смертоносные глубины великой Бездны."},
+          {"id": 38000, "ru": "Клинок, рассекающий демонов", "en": "Kimetsu no Yaiba", "score": "8.47", "genres": "Экшен, Сверхъестественное", "poster": "https://shikimori.one/system/animes/original/38000.jpg", "hook": "Тандзиро становится истребителем демонов, чтобы исцелить обращенную сестру."},
+          {"id": 20507, "ru": "Бездомный бог", "en": "Noragami", "score": "7.96", "genres": "Мистика, Комедия", "poster": "https://shikimori.one/system/animes/original/20507.jpg", "hook": "Бродячий бог Ято выполняет любые просьбы за монетку в 5 иен ради своего храма."},
+          {"id": 18679, "ru": "Убей или умри", "en": "Kill la Kill", "score": "8.04", "genres": "Экшен, Комедия", "poster": "https://shikimori.one/system/animes/original/18679.jpg", "hook": "Рюко Матой с половиной ножниц ищет убийцу отца в элитной академии."},
+          {"id": 14719, "ru": "Невероятные приключения ДжоДжо", "en": "JoJo no Kimyou na Bouken", "score": "8.11", "genres": "Экшен, Приключения", "poster": "https://shikimori.one/system/animes/original/14719.jpg", "hook": "Эпическая сага поколений семьи Джостаров в схватке с древним злом."},
+          {"id": 52701, "ru": "Подземелье вкусностей", "en": "Dungeon Meshi", "score": "8.58", "genres": "Фэнтези, Гурман", "poster": "https://shikimori.one/system/animes/original/52701.jpg", "hook": "Отряд авантюристов спасает соратницу из брюха дракона, готовя монстров на обед."},
+          {"id": 22319, "ru": "Токийский гуль: Перерождение", "en": "Tokyo Ghoul:re", "score": "7.63", "genres": "Экшен, Детектив", "poster": "https://shikimori.one/system/animes/original/22319.jpg", "hook": "Следователь Сасаки Хайсэ ведет отряд куинксов, пытаясь вспомнить свое прошлое."},
+          {"id": 11061, "ru": "Охотник х Охотник", "en": "Hunter x Hunter", "score": "9.04", "genres": "Экшен, Приключения", "poster": "https://shikimori.one/system/animes/original/11061.jpg", "hook": "Гон и друзья преодолевают смертельные испытания невероятного мира Охотников."},
+          {"id": 52991, "ru": "Провожающая в последний путь Фрирен", "en": "Sousou no Frieren", "score": "9.25", "genres": "Фэнтези, Драма", "poster": "https://shikimori.one/system/animes/original/52991.jpg", "hook": "Эльфийская волшебница познает тепло человеческих уз после победы над Владыкой."},
+          {"id": 457, "ru": "Клеймор", "en": "Claymore", "score": "7.80", "genres": "Тёмное фэнтези, Экшен", "poster": "https://shikimori.one/system/animes/original/457.jpg", "hook": "Воительницы с серебряными глазами очищают континент от чудовищ-йома."}
         ]
       },
       soul_romance: {
-        title: "ТОП-4: Трогательная Романтика и Драма 💖",
+        title: "Трогательная Романтика и Драма 💖",
         desc: "Искренние чувства, неловкие признания и сильные эмоции:",
         tags: "#романтика #драма #чувства",
         poster: "https://shikimori.one/system/animes/original/37999.jpg",
         items: [
-          "1️⃣ <b>«Госпожа Кагуя: В любви как на войне»</b> / <i>Kaguya-sama</i>\n⭐️ <b>8.89</b> | 🎭 Комедия, Романтика\n📝 Два гения студсовета ведут войну умов за первое признание в чувствах.",
-          "2️⃣ <b>«Твоё имя»</b> / <i>Kimi no Na wa</i>\n⭐️ <b>8.84</b> | 🎭 Драма, Романтика\n📝 Парень из Токио и девушка из деревни начинают меняться телами во сне.",
-          "3️⃣ <b>«Хоримия»</b> / <i>Horimiya</i>\n⭐️ <b>8.19</b> | 🎭 Школа, Романтика\n📝 Два разных старшеклассника открывают друг другу свои тайные стороны.",
-          "4️⃣ <b>«Форма голоса»</b> / <i>Koe no Katachi</i>\n⭐️ <b>8.93</b> | 🎭 Драма, Школа\n📝 Бывший задира ищет искупления перед глухой девушкой.",
-          "5️⃣ <b>«Кланнад: Продолжение истории»</b> / <i>Clannad: After Story</i>\n⭐️ <b>8.93</b> | 🎭 Драма, Романтика\n📝 Трогательная до слез история взросления, семьи и настоящей любви."
+          {"id": 37999, "ru": "Госпожа Кагуя: В любви как на войне", "en": "Kaguya-sama", "score": "8.89", "genres": "Комедия, Романтика", "poster": "https://shikimori.one/system/animes/original/37999.jpg", "hook": "Президенты элитного студсовета ведут войну умов за первое признание в чувствах."},
+          {"id": 42897, "ru": "Хоримия", "en": "Horimiya", "score": "8.19", "genres": "Школа, Романтика", "poster": "https://shikimori.one/system/animes/original/42897.jpg", "hook": "Два разных старшеклассника открывают друг другу свои настоящие тайные стороны."},
+          {"id": 4181, "ru": "Кланнад: Продолжение истории", "en": "Clannad: After Story", "score": "8.93", "genres": "Драма, Романтика", "poster": "https://shikimori.one/system/animes/original/4181.jpg", "hook": "Трогательная история взросления, семейных ценностей и настоящей вечной любви."},
+          {"id": 28851, "ru": "Форма голоса", "en": "Koe no Katachi", "score": "8.93", "genres": "Драма, Школа", "poster": "https://shikimori.one/system/animes/original/28851.jpg", "hook": "Бывший задира ищет искупления перед глухой одноклассницей."},
+          {"id": 30015, "ru": "Твоя апрельская ложь", "en": "Shigatsu wa Kimi no Uso", "score": "8.64", "genres": "Музыка, Драма", "poster": "https://shikimori.one/system/animes/original/30015.jpg", "hook": "Скрипачка-бунтарка возвращает юному пианисту страсть к музыке и жизни."},
+          {"id": 4224, "ru": "Торадора!", "en": "Toradora!", "score": "8.08", "genres": "Комедия, Романтика", "poster": "https://shikimori.one/system/animes/original/4224.jpg", "hook": "Грозный с виду парень и миниатюрная Тигрица помогают друг другу в делах любви."},
+          {"id": 30276, "ru": "Этот глупый свин не понимает мечту девочки-зайки", "en": "Seishun Buta Yarou", "score": "8.24", "genres": "Мистика, Романтика", "poster": "https://shikimori.one/system/animes/original/30276.jpg", "hook": "Сакута помогает актрисе в костюме зайки, которую перестают замечать окружающие."},
+          {"id": 5081, "ru": "Дотянуться до тебя", "en": "Kimi ni Todoke", "score": "7.99", "genres": "Школа, Романтика", "poster": "https://shikimori.one/system/animes/original/5081.jpg", "hook": "Скромная девушка Савако учится общаться с миром благодаря доброму однокласснику."},
+          {"id": 52588, "ru": "Опасность в моем сердце", "en": "Boku no Kokoro no Yabai Yatsu", "score": "8.78", "genres": "Комедия, Романтика", "poster": "https://shikimori.one/system/animes/original/52588.jpg", "hook": "Мрачный интроверт постепенно сближается с жизнерадостной школьной красавицей."},
+          {"id": 37450, "ru": "Пять невест", "en": "Gotoubun no Hanayome", "score": "7.64", "genres": "Гарем, Романтика", "poster": "https://shikimori.one/system/animes/original/37450.jpg", "hook": "Бедный отличник нанимается репетитором к пяти непокорным сестрам-близняшкам."},
+          {"id": 13759, "ru": "Кошечка из Сакурасо", "en": "Sakurasou no Pet na Kanojo", "score": "8.11", "genres": "Комедия, Драма", "poster": "https://shikimori.one/system/animes/original/13759.jpg", "hook": "Жизнь в общежитии одаренных чудаков учит мечтать и не сдаваться перед трудностями."},
+          {"id": 14813, "ru": "Как и ожидалось, моя школьная жизнь не задалась", "en": "Oregairu", "score": "8.24", "genres": "Драма, Романтика", "poster": "https://shikimori.one/system/animes/original/14813.jpg", "hook": "Клуб служения помогает старшеклассникам разрешать их эмоциональные кризисы."}
         ]
       },
       pure_comedy: {
-        title: "ТОП-4: Отборные Комедии и Позитив 😂",
+        title: "Отборные Комедии и Позитив 😂",
         desc: "Море юмора, безумных ситуаций и гарантированный заряд смеха:",
         tags: "#комедия #позитив #пародия",
         poster: "https://shikimori.one/system/animes/original/918.jpg",
         items: [
-          "1️⃣ <b>«Гинтама»</b> / <i>Gintama</i>\n⭐️ <b>8.93</b> | 🎭 Пародия, Экшен\n📝 Самураи, инопланетяне и мастер абсурдного юмора Гинтоки Саката.",
-          "2️⃣ <b>«Необъятный океан»</b> / <i>Grand Blue</i>\n⭐️ <b>8.44</b> | 🎭 Комедия, Студенты\n📝 Студенческая жизнь дайвинг-клуба, полная вечеринок и крепкой дружбы.",
-          "3️⃣ <b>«Несладкая жизнь псионика Сайки К.»</b> / <i>Saiki Kusuo</i>\n⭐️ <b>8.41</b> | 🎭 Комедия, Сверхъестественное\n📝 Могущественный экстрасенс мечтает о тихой жизни среди чудаков.",
-          "4️⃣ <b>«Этот замечательный мир! (KonoSuba)»</b> / <i>KonoSuba</i>\n⭐️ <b>8.10</b> | 🎭 Комедия, Исекай\n📝 Казума берет с собой бесполезную богиню Акву и чудаковатую команду.",
-          "5️⃣ <b>«Моб Психо 100»</b> / <i>Mob Psycho 100</i>\n⭐️ <b>8.48</b> | 🎭 Экшен, Комедия\n📝 Скромный школьник с чудовищной психической силой пытается жить обычной жизнью."
+          {"id": 918, "ru": "Гинтама", "en": "Gintama", "score": "8.93", "genres": "Пародия, Экшен", "poster": "https://shikimori.one/system/animes/original/918.jpg", "hook": "Самураи, пришельцы и мастер абсурдного юмора Гинтоки Саката в феодальной Японии."},
+          {"id": 33255, "ru": "Необъятный океан", "en": "Grand Blue", "score": "8.44", "genres": "Комедия, Студенты", "poster": "https://shikimori.one/system/animes/original/33255.jpg", "hook": "Безумная жизнь студенческого дайвинг-клуба, полная угарных вечеринок и дружбы."},
+          {"id": 32281, "ru": "Несладкая жизнь псионика Сайки К.", "en": "Saiki Kusuo", "score": "8.41", "genres": "Комедия, Сверхъестественное", "poster": "https://shikimori.one/system/animes/original/32281.jpg", "hook": "Могущественный экстрасенс хочет спокойной жизни, но чудаки вокруг не дают покоя."},
+          {"id": 30831, "ru": "Этот замечательный мир! (KonoSuba)", "en": "KonoSuba", "score": "8.10", "genres": "Комедия, Пародия", "poster": "https://shikimori.one/system/animes/original/30831.jpg", "hook": "Казума берет с собой бесполезную богиню Акву и собирает чудаковатую команду."},
+          {"id": 32182, "ru": "Моб Психо 100", "en": "Mob Psycho 100", "score": "8.48", "genres": "Экшен, Комедия", "poster": "https://shikimori.one/system/animes/original/32182.jpg", "hook": "Школьник с колоссальной телекинетической силой пытается жить обычной жизнью."},
+          {"id": 245, "ru": "Крутой учитель Онидзука", "en": "GTO", "score": "8.69", "genres": "Комедия, Школа", "poster": "https://shikimori.one/system/animes/original/245.jpg", "hook": "Бывший главарь банды байкеров учит трудных подростков настоящей жизни."},
+          {"id": 10165, "ru": "Повседневная жизнь старшеклассников", "en": "Danshi Koukousei", "score": "8.23", "genres": "Комедия, Повседневность", "poster": "https://shikimori.one/system/animes/original/10165.jpg", "hook": "Реалистичный и уморительный взгляд на будни трех школьных оболтусов."},
+          {"id": 18677, "ru": "Сатана на подработке!", "en": "Hataraku Maou-sama!", "score": "7.74", "genres": "Комедия, Фэнтези", "poster": "https://shikimori.one/system/animes/original/18677.jpg", "hook": "Владыка тьмы попадает в современный Токио и устраивается жарить бургеры."},
+          {"id": 38474, "ru": "Восхождение в тени!", "en": "Kage no Jitsuryokusha", "score": "8.24", "genres": "Экшен, Пародия", "poster": "https://shikimori.one/system/animes/original/38474.jpg", "hook": "Парень играет роль серого кардинала, не зная, что все его выдумки реальны."},
+          {"id": 50265, "ru": "Семья шпиона", "en": "Spy x Family", "score": "8.48", "genres": "Комедия, Экшен", "poster": "https://shikimori.one/system/animes/original/50265.jpg", "hook": "Шпион, наемная убийца и девочка-телепат создают фиктивную образцовую семью."},
+          {"id": 41389, "ru": "Скейт: Бесконечность", "en": "SK8 the Infinity", "score": "8.02", "genres": "Спорт, Комедия", "poster": "https://shikimori.one/system/animes/original/41389.jpg", "hook": "Драйвовые нелегальные гонки на скейтах по заброшенной шахте на Окинаве."},
+          {"id": 35843, "ru": "Дурни, тесты и призванные существа", "en": "Baka to Test", "score": "7.54", "genres": "Комедия, Романтика", "poster": "https://shikimori.one/system/animes/original/35843.jpg", "hook": "Битва школьных классов за комфорт в кабинетах с помощью призванных аватаров."}
         ]
       },
       isekai_special: {
-        title: "ТОП-4: Захватывающие Исекаи и Попаданцы 🌀",
+        title: "Захватывающие Исекаи и Попаданцы 🌀",
         desc: "Попаданцы в фантастические миры, где всё пошло не по шаблону:",
         tags: "#исекай #фэнтези #приключения",
         poster: "https://shikimori.one/system/animes/original/39535.jpg",
         items: [
-          "1️⃣ <b>«Реинкарнация безработного»</b> / <i>Mushoku Tensei</i>\n⭐️ <b>8.65</b> | 🎭 Магия, Приключения\n📝 34-летний затворник получает второй шанс прожить достойную жизнь с мечом и магией.",
-          "2️⃣ <b>«Re:Zero — жизнь с нуля в другом мире»</b> / <i>Re:Zero</i>\n⭐️ <b>8.23</b> | 🎭 Триллер, Драма\n📝 Субару возвращается во времени только после своей мучительной гибели.",
-          "3️⃣ <b>«О моём перерождении в слизь»</b> / <i>Tensei Slime</i>\n⭐️ <b>8.12</b> | 🎭 Фэнтези, Сёнэн\n📝 Офисный клерк перерождается слизью и строит процветающую федерацию монстров.",
-          "4️⃣ <b>«Повелитель»</b> / <i>Overlord</i>\n⭐️ <b>7.90</b> | 🎭 Экшен, Тёмное фэнтези\n📝 Игрок остается запертым в теле скелета-мага и начинает захват мира.",
-          "5️⃣ <b>«Восхождение героя щита»</b> / <i>Tate no Yuusha</i>\n⭐️ <b>7.94</b> | 🎭 Драма, Фэнтези\n📝 Преданный союзниками герой щита поднимается с самого дна."
+          {"id": 39535, "ru": "Реинкарнация безработного", "en": "Mushoku Tensei", "score": "8.65", "genres": "Магия, Приключения", "poster": "https://shikimori.one/system/animes/original/39535.jpg", "hook": "34-летний затворник получает второй шанс прожить достойную жизнь с мечом и магией."},
+          {"id": 31240, "ru": "Re:Zero — жизнь с нуля в другом мире", "en": "Re:Zero", "score": "8.23", "genres": "Триллер, Драма", "poster": "https://shikimori.one/system/animes/original/31240.jpg", "hook": "Субару Нацуки обретает способность возвращаться во времени только после гибели."},
+          {"id": 37430, "ru": "О моём перерождении в слизь", "en": "Tensei Slime", "score": "8.12", "genres": "Фэнтези, Сёнэн", "poster": "https://shikimori.one/system/animes/original/37430.jpg", "hook": "Офисный клерк перерождается слизью и строит процветающую федерацию монстров."},
+          {"id": 29803, "ru": "Повелитель (Overlord)", "en": "Overlord", "score": "7.92", "genres": "Фэнтези, Экшен", "poster": "https://shikimori.one/system/animes/original/29803.jpg", "hook": "Геймер остается заперт в теле могущественного скелета-мага в новом мире."},
+          {"id": 39292, "ru": "Восхождение героя щита", "en": "Tate no Yuusha", "score": "7.94", "genres": "Драма, Фэнтези", "poster": "https://shikimori.one/system/animes/original/39292.jpg", "hook": "Оболганный и преданный герой щита поднимается со дна ради справедливости."},
+          {"id": 34618, "ru": "Военная хроника маленькой девочки", "en": "Youjo Senki", "score": "7.96", "genres": "Магия, Военное", "poster": "https://shikimori.one/system/animes/original/34618.jpg", "hook": "Циничный японский менеджер перерождается одаренной девочкой-магом на войне."},
+          {"id": 19815, "ru": "Нет игры — нет жизни", "en": "No Game No Life", "score": "8.08", "genres": "Игры, Комедия", "poster": "https://shikimori.one/system/animes/original/19815.jpg", "hook": "Гениальные брат и сестра попадают в мир, где любые конфликты решаются играми."},
+          {"id": 40594, "ru": "Да, я паук, и что же?", "en": "Kumo desu ga", "score": "7.39", "genres": "Экшен, Фэнтези", "poster": "https://shikimori.one/system/animes/original/40594.jpg", "hook": "Обычная школьница перерождается слабейшим паучком в смертоносном лабиринте."},
+          {"id": 38790, "ru": "Непризнанный школой владыка демонов", "en": "Maou Gakuin", "score": "7.35", "genres": "Магия, Фэнтези", "poster": "https://shikimori.one/system/animes/original/38790.jpg", "hook": "Всемогущий владыка демонов перерождается спустя 2000 лет в мирной эпохе."},
+          {"id": 38000, "ru": "Этот герой неуязвим, но очень осторожен", "en": "Cautious Hero", "score": "7.45", "genres": "Комедия, Фэнтези", "poster": "https://shikimori.one/system/animes/original/38000.jpg", "hook": "Богиня призывает невероятно сильного героя, который перестраховывается во всем."},
+          {"id": 49891, "ru": "О моём перерождении в меч", "en": "Tensei shitara Ken", "score": "7.42", "genres": "Экшен, Фэнтези", "poster": "https://shikimori.one/system/animes/original/49891.jpg", "hook": "Разумный меч становится наставником и оружием юной кошкодевочки Фран."},
+          {"id": 40356, "ru": "Гримгал пепла и иллюзий", "en": "Grimgar", "score": "7.62", "genres": "Драма, Фэнтези", "poster": "https://shikimori.one/system/animes/original/40356.jpg", "hook": "Группа новичков без воспоминаний отчаянно учится выживать в суровом мире."}
         ]
       }
     };
@@ -1083,26 +1148,318 @@
       }
     }
 
-    function previewSelectedTheme(themeKey) {
+    const emojisNum = ['1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
+    let currentShuffledItems = {};
+    let currentCollageBlob = null;
+    let collageGenerationId = 0;
+
+    function getProxiedImageUrl(url) {
+      if (!url) return '';
+      if (url.startsWith('data:')) return url;
+      return `https://wsrv.nl/?url=${encodeURIComponent(url)}&w=300&output=jpg`;
+    }
+
+    function formatCompilationCaption(t, items, count, appName) {
+      const cleanTitle = t.title.replace(/ТОП[\s\-\d:]*/gi, '').trim();
+      const n = items.length;
+      const lines = [
+        `🌟 <b>ТОП-${n}: ${cleanTitle}</b>\n`
+      ];
+      if (n <= 5 && t.desc) {
+        lines.push(`<i>${t.desc}</i>\n`);
+      }
+
+      if (n <= 5) {
+        items.forEach((it, idx) => {
+          const em = emojisNum[idx] || `${idx + 1}.`;
+          lines.push(`${em} <b>«${it.ru}»</b> / <i>${it.en}</i>\n⭐️ <b>${it.score}</b> | 🎭 ${it.genres}\n📝 ${it.hook}\n`);
+        });
+      } else {
+        items.forEach((it, idx) => {
+          const em = emojisNum[idx] || `${idx + 1}.`;
+          let h = it.hook || "";
+          const maxLen = n >= 9 ? 24 : (n >= 7 ? 36 : 60);
+          if (h.length > maxLen) h = h.substring(0, maxLen - 2).trim() + '..';
+          lines.push(`${em} <b>«${it.ru}»</b> (⭐️ ${it.score}) — ${h}`);
+        });
+        lines.push('');
+      }
+
+      lines.push(`✨ <i>Смотрите эти тайтлы в приложении ${appName}!</i>`);
+      lines.push(`#подборка #топ_аниме ${t.tags} #чтопосмотреть #${appName.toLowerCase()}`);
+
+      let caption = lines.join('\n');
+      return caption;
+    }
+
+    async function generateCompilationCollage(items, titleText, count) {
+      const genId = ++collageGenerationId;
+      currentCollageBlob = null;
+      const imgEl = document.getElementById('compPreviewImg');
+      if (imgEl) imgEl.style.opacity = '0.5';
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const n = items.length;
+
+      let cols, rows, cardW, cardH, gap, padX, padY, headerH;
+      if (n <= 5) {
+        cols = n;
+        rows = 1;
+        cardW = 190;
+        cardH = 280;
+        gap = 14;
+        padX = 18;
+        padY = 18;
+        headerH = 50;
+      } else if (n <= 7) {
+        cols = 4;
+        rows = 2;
+        cardW = 180;
+        cardH = 260;
+        gap = 14;
+        padX = 18;
+        padY = 18;
+        headerH = 50;
+      } else {
+        cols = 5;
+        rows = 2;
+        cardW = 180;
+        cardH = 260;
+        gap = 14;
+        padX = 18;
+        padY = 18;
+        headerH = 50;
+      }
+
+      const totalW = padX * 2 + cols * cardW + (cols - 1) * gap;
+      const totalH = headerH + padY * 2 + rows * cardH + (rows - 1) * gap;
+
+      canvas.width = totalW;
+      canvas.height = totalH;
+
+      // Draw background
+      const bgGrad = ctx.createLinearGradient(0, 0, totalW, totalH);
+      bgGrad.addColorStop(0, '#0a0f1d');
+      bgGrad.addColorStop(0.5, '#0f172a');
+      bgGrad.addColorStop(1, '#080c14');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, totalW, totalH);
+
+      // Glow circle
+      const radGrad = ctx.createRadialGradient(totalW * 0.5, headerH, 10, totalW * 0.5, headerH, totalW * 0.6);
+      radGrad.addColorStop(0, 'rgba(99, 102, 241, 0.22)');
+      radGrad.addColorStop(1, 'transparent');
+      ctx.fillStyle = radGrad;
+      ctx.fillRect(0, 0, totalW, totalH);
+
+      // Header title
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 22px "Inter", -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`🌟 AnimeVist  •  ТОП-${n}: ${titleText}`, totalW / 2, 34);
+
+      // Separator line
+      const lineGrad = ctx.createLinearGradient(padX, 48, totalW - padX, 48);
+      lineGrad.addColorStop(0, 'rgba(99, 102, 241, 0)');
+      lineGrad.addColorStop(0.5, 'rgba(236, 72, 153, 0.85)');
+      lineGrad.addColorStop(1, 'rgba(6, 182, 212, 0)');
+      ctx.strokeStyle = lineGrad;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(padX, 48);
+      ctx.lineTo(totalW - padX, 48);
+      ctx.stroke();
+
+      function roundRect(context, x, y, width, height, radius) {
+        context.beginPath();
+        context.moveTo(x + radius, y);
+        context.lineTo(x + width - radius, y);
+        context.quadraticCurveTo(x + width, y, x + width, y + radius);
+        context.lineTo(x + width, y + height - radius);
+        context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        context.lineTo(x + radius, y + height);
+        context.quadraticCurveTo(x, y + height, x, y + height - radius);
+        context.lineTo(x, y + radius);
+        context.quadraticCurveTo(x, y, x + radius, y);
+        context.closePath();
+      }
+
+      // Preload images with proxy fallback
+      const imgPromises = items.map((it, idx) => {
+        return new Promise((resolve) => {
+          const posterUrl = it.poster || '';
+          if (!posterUrl) {
+            resolve({ img: null, item: it, idx });
+            return;
+          }
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          let triedFallback = false;
+          img.onload = () => resolve({ img, item: it, idx });
+          img.onerror = () => {
+            if (!triedFallback) {
+              triedFallback = true;
+              img.src = `https://images.weserv.nl/?url=${encodeURIComponent(posterUrl)}&w=300&output=jpg`;
+            } else {
+              resolve({ img: null, item: it, idx });
+            }
+          };
+          img.src = getProxiedImageUrl(posterUrl);
+        });
+      });
+
+      const loadedImages = await Promise.all(imgPromises);
+      if (genId !== collageGenerationId) return;
+
+      loadedImages.forEach(({ img, item, idx }) => {
+        let r, c;
+        if (n <= 5) {
+          r = 0;
+          c = idx;
+        } else if (n === 7) {
+          if (idx < 4) {
+            r = 0;
+            c = idx;
+          } else {
+            r = 1;
+            c = (idx - 4) + 0.5;
+          }
+        } else {
+          r = Math.floor(idx / 5);
+          c = idx % 5;
+        }
+
+        const posX = padX + c * (cardW + gap);
+        const posY = headerH + padY + r * (cardH + gap);
+
+        // Shadow
+        ctx.save();
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.65)';
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetY = 6;
+        ctx.fillStyle = '#111827';
+        roundRect(ctx, posX, posY, cardW, cardH, 10);
+        ctx.fill();
+        ctx.restore();
+
+        // Image clip
+        ctx.save();
+        roundRect(ctx, posX, posY, cardW, cardH, 10);
+        ctx.clip();
+
+        if (img && img.naturalWidth > 0) {
+          const imgRatio = img.naturalWidth / img.naturalHeight;
+          const cardRatio = cardW / cardH;
+          let sw, sh, sx, sy;
+          if (imgRatio > cardRatio) {
+            sh = img.naturalHeight;
+            sw = sh * cardRatio;
+            sx = (img.naturalWidth - sw) / 2;
+            sy = 0;
+          } else {
+            sw = img.naturalWidth;
+            sh = sw / cardRatio;
+            sx = 0;
+            sy = (img.naturalHeight - sh) / 2;
+          }
+          ctx.drawImage(img, sx, sy, sw, sh, posX, posY, cardW, cardH);
+        } else {
+          const cardGrad = ctx.createLinearGradient(posX, posY, posX + cardW, posY + cardH);
+          cardGrad.addColorStop(0, '#1e293b');
+          cardGrad.addColorStop(1, '#0f172a');
+          ctx.fillStyle = cardGrad;
+          ctx.fillRect(posX, posY, cardW, cardH);
+
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = 'bold 13px "Inter", sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(item.ru.substring(0, 18), posX + cardW / 2, posY + cardH / 2);
+        }
+
+        // Vignette
+        const vigGrad = ctx.createLinearGradient(posX, posY + cardH - 65, posX, posY + cardH);
+        vigGrad.addColorStop(0, 'rgba(0,0,0,0)');
+        vigGrad.addColorStop(0.6, 'rgba(0,0,0,0.8)');
+        vigGrad.addColorStop(1, 'rgba(0,0,0,0.98)');
+        ctx.fillStyle = vigGrad;
+        ctx.fillRect(posX, posY + cardH - 65, cardW, 65);
+
+        // Title and score on card bottom
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 12px "Inter", sans-serif';
+        ctx.textAlign = 'left';
+        let shortTitle = item.ru;
+        if (shortTitle.length > 18) shortTitle = shortTitle.substring(0, 16) + '..';
+        ctx.fillText(shortTitle, posX + 8, posY + cardH - 24);
+
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = 'bold 11px "Inter", sans-serif';
+        ctx.fillText(`⭐️ ${item.score}`, posX + 8, posY + cardH - 8);
+
+        ctx.restore();
+
+        // Glowing Badge
+        ctx.save();
+        const bSize = 30;
+        const bX = posX + 8;
+        const bY = posY + 8;
+
+        ctx.shadowColor = 'rgba(99, 102, 241, 0.7)';
+        ctx.shadowBlur = 8;
+        const badgeGrad = ctx.createLinearGradient(bX, bY, bX + bSize, bY + bSize);
+        badgeGrad.addColorStop(0, '#6366f1');
+        badgeGrad.addColorStop(1, '#ec4899');
+        ctx.fillStyle = badgeGrad;
+        ctx.beginPath();
+        ctx.arc(bX + bSize / 2, bY + bSize / 2, bSize / 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 14px "Inter", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(`${idx + 1}`, bX + bSize / 2, bY + bSize / 2 + 1);
+        ctx.restore();
+      });
+
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+      if (imgEl) {
+        imgEl.src = dataUrl;
+        imgEl.style.opacity = '1';
+      }
+
+      canvas.toBlob((blob) => {
+        currentCollageBlob = blob;
+      }, 'image/jpeg', 0.92);
+    }
+
+    function previewSelectedTheme(themeKey, refresh = false) {
       const t = THEMES_DATA[themeKey] || THEMES_DATA['must_watch'] || THEMES_DATA['cyberpunk_scifi'];
       const appName = (currentConfig && currentConfig.app && currentConfig.app.name) || 'AnimeVist';
       const countEl = document.getElementById('webCompilationCountSelect');
       const count = countEl ? parseInt(countEl.value) || 4 : 4;
-      const displayItems = t.items.slice(0, count);
 
-      const lines = [
-        `🌟 <b>${t.title.replace('ТОП-4', `ТОП-${count}`)}</b>`,
-        `<i>${t.desc}</i>`,
-        '',
-        ...displayItems,
-        '',
-        `✨ <i>Смотрите эти тайтлы в высоком качестве в приложении ${appName}!</i>`,
-        `#подборка #топ_аниме ${t.tags} #чтопосмотреть #${appName.toLowerCase()}`
-      ];
+      if (!currentShuffledItems[themeKey] || refresh || currentShuffledItems[themeKey].length < count) {
+        currentShuffledItems[themeKey] = [...t.items].sort(() => Math.random() - 0.5);
+      }
+      const displayItems = currentShuffledItems[themeKey].slice(0, count);
 
-      const fullText = lines.join('\n');
-      document.getElementById('compPreviewText').innerHTML = fullText.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
-      document.getElementById('compPreviewImg').src = t.poster;
+      const caption = formatCompilationCaption(t, displayItems, count, appName);
+      document.getElementById('compPreviewText').innerHTML = caption.replace(/\n/g, '<br>');
+
+      // Generate dynamic HD collage matching the selected anime posters
+      generateCompilationCollage(displayItems, t.title.replace(/ТОП[\s\-\d:]*/gi, '').trim(), count);
+    }
+
+    function rerollWebCompilation() {
+      const key = document.getElementById('webCompilationThemeSelect').value;
+      showToast("🎲 Подбираем новую случайную выборку аниме...", "info", 1500);
+      previewSelectedTheme(key, true);
     }
 
     async function sendCompilationDirect() {
@@ -1118,37 +1475,47 @@
       const appName = (currentConfig && currentConfig.app && currentConfig.app.name) || 'AnimeVist';
       const countEl = document.getElementById('webCompilationCountSelect');
       const count = countEl ? parseInt(countEl.value) || 4 : 4;
-      const displayItems = t.items.slice(0, count);
 
-      const lines = [
-        `🌟 <b>${t.title.replace('ТОП-4', `ТОП-${count}`)}</b>\n`,
-        `<i>${t.desc}</i>\n`,
-        ...displayItems.map(it => it.replace(/\\n/g, '\n') + '\n'),
-        `✨ <i>Смотрите эти тайтлы в высоком качестве в приложении ${appName}!</i>\n`,
-        `#подборка #топ_аниме ${t.tags} #чтопосмотреть #${appName.toLowerCase()}`
-      ];
-      const caption = lines.join('\n');
+      if (!currentShuffledItems[key] || currentShuffledItems[key].length < count) {
+        currentShuffledItems[key] = [...t.items].sort(() => Math.random() - 0.5);
+      }
+      const displayItems = currentShuffledItems[key].slice(0, count);
+
+      const caption = formatCompilationCaption(t, displayItems, count, appName);
 
       showToast(`Публикация подборки (${count} аниме) в Telegram...`, "info");
       try {
-        const res = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: channel,
-            photo: t.poster,
-            caption: caption,
-            parse_mode: "HTML"
-          })
-        });
+        let res;
+        if (currentCollageBlob) {
+          const formData = new FormData();
+          formData.append('chat_id', channel);
+          formData.append('photo', currentCollageBlob, 'animevist_compilation.jpg');
+          formData.append('caption', caption);
+          formData.append('parse_mode', 'HTML');
+          res = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+            method: 'POST',
+            body: formData
+          });
+        } else {
+          res = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: channel,
+              photo: t.poster,
+              caption: caption,
+              parse_mode: "HTML"
+            })
+          });
+        }
         const data = await res.json();
         if (data.ok) {
-          showToast("✅ Топ-подборка успешно опубликована в канале!", "success");
+          showToast("✅ Топ-подборка с HD-коллажем успешно опубликована в канале!", "success");
         } else {
           showToast(`Ошибка: ${data.description}`, "error", 5000);
         }
       } catch (e) {
-        showToast("Ошибка связи с Telegram API: " + e.message, "error");
+        showToast("Ошибка запроса к Telegram API: " + e.message, "error");
       }
     }
 
@@ -1248,9 +1615,12 @@
           fetchSupabaseContentStats();
           previewSelectedTheme(document.getElementById('webCompilationThemeSelect').value);
         } else {
+          document.getElementById('headerStatusText').innerText = 'База пуста';
           showToast("Конфиг пока не найден в базе. Нажмите 'Сохранить настройки'.", "info");
         }
       } catch (e) {
+        document.getElementById('headerStatusText').innerText = 'Ошибка связи с Supabase';
+        document.getElementById('headerDot').className = 'status-dot error';
         showToast("Ошибка загрузки из Supabase: " + e.message, "error");
       }
     }
@@ -1262,6 +1632,9 @@
         if (dataMe.ok) {
           document.getElementById('headerStatusText').innerText = `@${dataMe.result.username} Онлайн`;
           document.getElementById('headerDot').className = 'status-dot';
+        } else {
+          document.getElementById('headerStatusText').innerText = 'Неверный токен бота';
+          document.getElementById('headerDot').className = 'status-dot error';
         }
 
         if (channel) {
@@ -1285,7 +1658,10 @@
             document.getElementById('cmChannelTitle').innerText = channel;
           }
         }
-      } catch (e) {}
+      } catch (e) {
+        console.warn("Telegram check error:", e);
+        document.getElementById('headerStatusText').innerText = 'Supabase активна';
+      }
     }
 
     async function fetchSupabaseContentStats() {
