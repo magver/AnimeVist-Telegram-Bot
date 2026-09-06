@@ -5894,30 +5894,31 @@ const THEMES_DATA = {
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = 'high';
 
-      // 1. Multi-stop light pastel aurora gradient
+      // 1. Multi-stop vibrant aesthetic diagonal gradient
       const bgGrad = ctx.createLinearGradient(0, 0, totalW, totalH);
-      bgGrad.addColorStop(0, '#edf2f7');
-      bgGrad.addColorStop(0.35, '#e0e7ff');
-      bgGrad.addColorStop(0.68, '#fce7f3');
-      bgGrad.addColorStop(1, '#e0f2fe');
+      bgGrad.addColorStop(0, '#311b62');     // Royal violet
+      bgGrad.addColorStop(0.28, '#6d28d9');  // Purple
+      bgGrad.addColorStop(0.58, '#db2777');  // Fuchsia / magenta
+      bgGrad.addColorStop(0.85, '#f97316');  // Sunset amber / orange
+      bgGrad.addColorStop(1, '#0ea5e9');     // Cyan
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, totalW, totalH);
 
-      // 2. Soft colorful glowing aurora orbs
-      const g1 = ctx.createRadialGradient(0, 0, 10, 0, 0, totalW * 0.45);
-      g1.addColorStop(0, 'rgba(186, 230, 253, 0.65)');
+      // 2. Soft luminous ambient aurora orbs
+      const g1 = ctx.createRadialGradient(totalW, 0, 10, totalW, 0, totalW * 0.5);
+      g1.addColorStop(0, 'rgba(56, 189, 248, 0.45)');
       g1.addColorStop(1, 'transparent');
       ctx.fillStyle = g1;
       ctx.fillRect(0, 0, totalW, totalH);
 
-      const g2 = ctx.createRadialGradient(totalW, totalH, 10, totalW, totalH, totalW * 0.45);
-      g2.addColorStop(0, 'rgba(233, 213, 255, 0.65)');
+      const g2 = ctx.createRadialGradient(0, totalH, 10, 0, totalH, totalW * 0.5);
+      g2.addColorStop(0, 'rgba(236, 72, 153, 0.45)');
       g2.addColorStop(1, 'transparent');
       ctx.fillStyle = g2;
       ctx.fillRect(0, 0, totalW, totalH);
 
-      const g3 = ctx.createRadialGradient(totalW, 0, 10, totalW, 0, totalW * 0.4);
-      g3.addColorStop(0, 'rgba(254, 215, 170, 0.55)');
+      const g3 = ctx.createRadialGradient(totalW * 0.5, totalH * 0.5, 10, totalW * 0.5, totalH * 0.5, totalW * 0.4);
+      g3.addColorStop(0, 'rgba(251, 191, 36, 0.30)');
       g3.addColorStop(1, 'transparent');
       ctx.fillStyle = g3;
       ctx.fillRect(0, 0, totalW, totalH);
@@ -5984,9 +5985,9 @@ const THEMES_DATA = {
           posY = padY + cardH + gap;
         }
 
-        // Soft realistic layered drop shadow on light background
+        // Soft realistic layered drop shadow on gradient background
         ctx.save();
-        ctx.shadowColor = 'rgba(15, 23, 42, 0.20)';
+        ctx.shadowColor = 'rgba(10, 10, 20, 0.45)';
         ctx.shadowBlur = 24;
         ctx.shadowOffsetY = 10;
         ctx.fillStyle = '#111827';
