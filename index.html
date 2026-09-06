@@ -6104,7 +6104,6 @@ const THEMES_DATA = {
         const displayTitle = rawRu.length > maxChars ? (rawRu.substring(0, maxChars - 2) + '..') : rawRu;
         const scoreVal = String(item.score || '—');
 
-        const fontScoreSize = cardW >= 400 ? 16 : 15;
         ctx.font = `bold ${fontTitleSize}px "Inter", -apple-system, sans-serif`;
         const titleW = ctx.measureText(displayTitle).width;
 
