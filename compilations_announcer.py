@@ -13,6 +13,7 @@ import time
 import random
 import urllib.request
 import re
+import math
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 if hasattr(sys.stdout, 'reconfigure'):
@@ -4389,57 +4390,96 @@ def _get_font(size, bold=True):
                 pass
     return ImageFont.load_default()
 
-def create_compilation_collage(poster_urls, title_text, output_filename="compilation_collage.jpg"):
+def draw_vector_star(draw, cx, cy, r_outer=5.5, r_inner=2.6, color=(251, 191, 36, 255)):
+    """Draws a crisp anti-aliased 5-point star polygon."""
+    points = []
+    for i in range(10):
+        angle = -math.pi / 2 + i * math.pi / 5
+        r = r_outer if i % 2 == 0 else r_inner
+        points.append((cx + r * math.cos(angle), cy + r * math.sin(angle)))
+    draw.polygon(points, fill=color)
+
+def create_compilation_collage(items_or_urls, title_text, output_filename="compilation_collage.jpg"):
     """
-    Downloads all poster images and composites them into a single high-resolution,
-    aesthetically polished collage banner with rounded corners, drop shadows,
-    and glowing position badges (following UI/UX Pro Max guidelines).
-    Supports 3 to 10 posters (1 row for <=5, 2 rows grid for 6-10).
+    Downloads poster images and composites them into a single high-resolution,
+    aesthetically polished collage banner in 2+1, 2+2, or 3+2 grid layouts
+    with rank badges and top-right title/score cards.
     """
     os.makedirs(COLLAGE_DIR, exist_ok=True)
     out_path = os.path.join(COLLAGE_DIR, output_filename)
 
-    images = []
-    for u in poster_urls:
+    # Normalize items
+    normalized_items = []
+    for elem in items_or_urls:
+        if isinstance(elem, dict):
+            normalized_items.append(elem)
+        else:
+            normalized_items.append({"poster": str(elem), "ru": "", "score": ""})
+
+    images_and_items = []
+    for it in normalized_items:
+        u = it.get('poster', '')
+        if not u:
+            continue
         try:
             req = urllib.request.Request(u, headers={'User-Agent': 'AnimeVistBot/1.0'})
             with urllib.request.urlopen(req, timeout=10) as resp:
                 img = Image.open(io.BytesIO(resp.read())).convert("RGBA")
-                images.append(img)
+                images_and_items.append((img, it))
         except Exception as e:
             print(f"[Compilations] Ошибка загрузки постера {u}: {e}")
 
-    if not images:
+    if not images_and_items:
         return None
 
-    n = len(images)
+    n = len(images_and_items)
 
-    # Layout configuration based on count
-    if n <= 5:
-        # Massive 1-Row panoramic banner
-        poster_h = 560 if n <= 4 else 500
-        poster_w = int(poster_h * 0.69)  # ~386px
-        card_gap = 26
-        pad_x = 36
-        pad_top = 110
-        pad_bottom = 36
-        total_w = pad_x * 2 + (poster_w * n) + (card_gap * (n - 1))
-        total_h = pad_top + poster_h + pad_bottom
-        is_grid = False
-        cols = n
+    # 2+1, 2+2, 3+2 layout configuration
+    if n == 3:
+        row1_count = 2
+        row2_count = 1
+        cols = 2
+        card_w = 440
+        card_h = 620
+        gap = 24
+    elif n == 4:
+        row1_count = 2
+        row2_count = 2
+        cols = 2
+        card_w = 440
+        card_h = 620
+        gap = 24
+    elif n == 5:
+        row1_count = 3
+        row2_count = 2
+        cols = 3
+        card_w = 380
+        card_h = 535
+        gap = 22
     else:
-        # Grand 2-Row adaptive grid (5x2 for 10, 4x2 for 7-8, 3x2 for 6)
         cols = (n + 1) // 2
-        poster_h = 440
-        poster_w = int(poster_h * 0.69)  # ~304px
-        card_gap = 22
-        row_gap = 24
-        pad_x = 36
-        pad_top = 110
-        pad_bottom = 36
-        total_w = pad_x * 2 + (poster_w * cols) + (card_gap * (cols - 1))
-        total_h = pad_top + (poster_h * 2) + row_gap + pad_bottom
-        is_grid = True
+        row1_count = cols
+        row2_count = n - cols
+        card_w = 380
+        card_h = 535
+        gap = 22
+
+    pad_x = 36
+    pad_y = 26
+    header_h = 88
+
+    row1_w = row1_count * card_w + (row1_count - 1) * gap
+    total_w = pad_x * 2 + row1_w
+    total_h = header_h + pad_y * 2 + card_h * 2 + gap
+
+    # Coordinates
+    cards_coords = []
+    for i in range(row1_count):
+        cards_coords.append((pad_x + i * (card_w + gap), header_h + pad_y))
+    row2_w = row2_count * card_w + (row2_count - 1) * gap
+    row2_start_x = pad_x + (row1_w - row2_w) // 2
+    for i in range(row2_count):
+        cards_coords.append((row2_start_x + i * (card_w + gap), header_h + pad_y + card_h + gap))
 
     # Canvas with dark luxury background (#080C16)
     canvas = Image.new("RGBA", (total_w, total_h), (8, 12, 22, 255))
@@ -4447,106 +4487,65 @@ def create_compilation_collage(poster_urls, title_text, output_filename="compila
 
     # Header fonts
     font_pill = _get_font(12, bold=True)
-    font_title = _get_font(26, bold=True)
-    font_badge = _get_font(18 if is_grid else 19, bold=True)
+    font_title = _get_font(24 if cols == 2 else 26, bold=True)
 
-    # Clean title from emojis and duplicated prefixes
+    # Clean title
     clean_title = re.sub(r'[\U00010000-\U0010ffff]', '', title_text).strip()
     clean_title = re.sub(r'^(ТОП[\s\-\d:]*)+', '', clean_title, flags=re.IGNORECASE).strip()
     header_display = f"ТОП-{n}: {clean_title}" if clean_title else f"ТОП-{n} Шедевров"
 
     # Header glass card container
-    header_box = (pad_x, 14, total_w - pad_x, 92)
+    header_box = (pad_x, 14, total_w - pad_x, 82)
     draw.rounded_rectangle(header_box, radius=12, fill=(15, 23, 42, 220), outline=(255, 255, 255, 25), width=1)
 
-    # Header Pill badge inside container
+    # Header Pill badge
     pill_text = "ANIME VIST  •  CURATED SELECTION"
-    pill_w = 260
-    pill_h = 22
-    draw.rounded_rectangle((pad_x + 14, 18, pad_x + 14 + pill_w, 18 + pill_h), radius=10, fill=(30, 41, 59, 230), outline=(99, 102, 241, 140), width=1)
+    draw.rounded_rectangle((pad_x + 14, 18, pad_x + 14 + 260, 18 + 22), radius=10, fill=(30, 41, 59, 230), outline=(99, 102, 241, 140), width=1)
     draw.text((pad_x + 24, 21), pill_text, fill=(129, 140, 248), font=font_pill)
 
     # Header main title
-    draw.text((pad_x + 18, 54), header_display, fill=(248, 250, 252), font=font_title)
+    draw.text((pad_x + 18, 48), header_display, fill=(248, 250, 252), font=font_title)
 
     # Glowing subtle accent dot in right corner
-    draw.ellipse((total_w - pad_x - 36, 44, total_w - pad_x - 20, 60), fill=(99, 102, 241, 220), outline=(236, 72, 153, 200), width=1)
+    draw.ellipse((total_w - pad_x - 36, 40, total_w - pad_x - 20, 56), fill=(99, 102, 241, 220), outline=(236, 72, 153, 200), width=1)
 
     # Rounded corner mask template for posters
     scale = 2
-    r = 12 if is_grid else 14
-    mask = Image.new("L", (poster_w * scale, poster_h * scale), 0)
+    r = 14
+    mask = Image.new("L", (card_w * scale, card_h * scale), 0)
     draw_mask = ImageDraw.Draw(mask)
-    draw_mask.rounded_rectangle((0, 0, poster_w * scale, poster_h * scale), radius=r * scale, fill=255)
-    mask = mask.resize((poster_w, poster_h), Image.Resampling.LANCZOS)
-
-    # Calculate card coordinates
-    cards_coords = []
-    if not is_grid:
-        curr_x = pad_x
-        for idx in range(n):
-            cards_coords.append((curr_x, pad_top))
-            curr_x += poster_w + card_gap
-    else:
-        # Row 1 (first cols items)
-        curr_x = pad_x
-        for idx in range(cols):
-            cards_coords.append((curr_x, pad_top))
-            curr_x += poster_w + card_gap
-        # Row 2 (remaining items)
-        row2_count = n - cols
-        row2_w = (poster_w * row2_count) + (card_gap * (row2_count - 1))
-        grid_content_w = (poster_w * cols) + (card_gap * (cols - 1))
-        row2_start_x = pad_x + (grid_content_w - row2_w) // 2
-        row2_y = pad_top + poster_h + row_gap
-        curr_x = row2_start_x
-        for idx in range(row2_count):
-            cards_coords.append((curr_x, row2_y))
-            curr_x += poster_w + card_gap
+    draw_mask.rounded_rectangle((0, 0, card_w * scale, card_h * scale), radius=r * scale, fill=255)
+    mask = mask.resize((card_w, card_h), Image.Resampling.LANCZOS)
 
     # Composite cards
-    for idx, raw in enumerate(images, 1):
+    for idx, (raw_img, it) in enumerate(images_and_items, 1):
+        if idx - 1 >= len(cards_coords):
+            break
         pos_x, pos_y = cards_coords[idx - 1]
 
         # 1. Drop shadow behind card
-        shadow = Image.new("RGBA", (poster_w + 16, poster_h + 16), (0, 0, 0, 0))
+        shadow = Image.new("RGBA", (card_w + 16, card_h + 16), (0, 0, 0, 0))
         s_draw = ImageDraw.Draw(shadow)
-        s_draw.rounded_rectangle((8, 8, poster_w + 8, poster_h + 8), radius=r + 2, fill=(0, 0, 0, 150))
+        s_draw.rounded_rectangle((8, 8, card_w + 8, card_h + 8), radius=r + 2, fill=(0, 0, 0, 150))
         shadow = shadow.filter(ImageFilter.GaussianBlur(8))
         canvas.paste(shadow, (pos_x - 8, pos_y - 4), shadow)
 
-        # 2. Resize and apply vignette
-        resized = raw.resize((poster_w, poster_h), Image.Resampling.LANCZOS).convert("RGBA")
+        # 2. Resize and sharpen poster
+        resized = raw_img.resize((card_w, card_h), Image.Resampling.LANCZOS).convert("RGBA")
         resized = resized.filter(ImageFilter.UnsharpMask(radius=1.2, percent=120, threshold=2))
-        resized = resized.filter(ImageFilter.UnsharpMask(radius=1.2, percent=120, threshold=2))
-        resized = resized.filter(ImageFilter.UnsharpMask(radius=1.2, percent=120, threshold=2))
-        vignette = Image.new("RGBA", (poster_w, poster_h), (0, 0, 0, 0))
-        v_draw = ImageDraw.Draw(vignette)
-        for y in range(int(poster_h * 0.62), poster_h):
-            alpha = int(190 * ((y - poster_h * 0.62) / (poster_h * 0.38)))
-            v_draw.line([(0, y), (poster_w, y)], fill=(9, 13, 24, alpha))
-        card_composite = Image.alpha_composite(resized, vignette)
 
         # 3. 1px card border
-        border = Image.new("RGBA", (poster_w, poster_h), (0, 0, 0, 0))
+        border = Image.new("RGBA", (card_w, card_h), (0, 0, 0, 0))
         b_draw = ImageDraw.Draw(border)
-        b_draw.rounded_rectangle((0, 0, poster_w - 1, poster_h - 1), radius=r, outline=(255, 255, 255, 50), width=1)
-        card_with_border = Image.alpha_composite(card_composite, border)
+        b_draw.rounded_rectangle((0, 0, card_w - 1, card_h - 1), radius=r, outline=(255, 255, 255, 45), width=1)
+        card_with_border = Image.alpha_composite(resized, border)
 
         # 4. Paste card with anti-aliased mask
-        card_masked = Image.new("RGBA", (poster_w, poster_h), (0, 0, 0, 0))
+        card_masked = Image.new("RGBA", (card_w, card_h), (0, 0, 0, 0))
         card_masked.paste(card_with_border, (0, 0), mask)
         canvas.paste(card_masked, (pos_x, pos_y), card_masked)
 
-        # 5. Position Badge (modern glassmorphic rank tag: [ • 01 ])
-        num_str = f"{idx:02d}"
-        badge_h = 28 if is_grid else 32
-        badge_w = 54 if is_grid else 60
-        b_r = 8 if is_grid else 9
-        badge = Image.new("RGBA", (badge_w, badge_h), (0, 0, 0, 0))
-        b_draw = ImageDraw.Draw(badge)
-
-        # Luxury metallic color themes per rank
+        # Rank badge colors
         if idx == 1:
             dot_color = (250, 204, 21, 255)      # Gold
             border_color = (250, 204, 21, 180)
@@ -4564,32 +4563,83 @@ def create_compilation_collage(poster_urls, title_text, output_filename="compila
             border_color = (129, 140, 248, 140)
             text_color = (241, 245, 249, 255)
 
-        # Frosted dark glass container
-        b_draw.rounded_rectangle((0, 0, badge_w - 1, badge_h - 1), radius=b_r, fill=(11, 15, 28, 225), outline=border_color, width=1)
+        # 5. Top-Left Rank Badge [ • 01 ]
+        num_str = f"{idx:02d}"
+        badge_h = 30
+        badge_w = 58
+        b_r = 8
+        badge = Image.new("RGBA", (badge_w, badge_h), (0, 0, 0, 0))
+        bd_draw = ImageDraw.Draw(badge)
+        bd_draw.rounded_rectangle((0, 0, badge_w - 1, badge_h - 1), radius=b_r, fill=(11, 15, 28, 225), outline=border_color, width=1)
 
-        # Glowing accent dot
-        dot_r = 3 if is_grid else 3.5
-        dot_cx = 11 if is_grid else 13
+        dot_r = 3.5
+        dot_cx = 13
         dot_cy = badge_h / 2
-        b_draw.ellipse((dot_cx - dot_r, dot_cy - dot_r, dot_cx + dot_r, dot_cy + dot_r), fill=dot_color)
+        bd_draw.ellipse((dot_cx - dot_r, dot_cy - dot_r, dot_cx + dot_r, dot_cy + dot_r), fill=dot_color)
 
-        # Rank number
-        f_size = 13 if is_grid else 15
-        font_badge = _get_font(f_size, bold=True)
-        t_bbox = b_draw.textbbox((0, 0), num_str, font=font_badge)
+        font_badge = _get_font(14, bold=True)
+        t_bbox = bd_draw.textbbox((0, 0), num_str, font=font_badge)
         t_w = t_bbox[2] - t_bbox[0]
         t_h = t_bbox[3] - t_bbox[1]
         text_x = dot_cx + dot_r + (badge_w - (dot_cx + dot_r) - t_w) / 2
-        text_y = (badge_h - t_h) / 2 - (1 if is_grid else 2)
-        b_draw.text((text_x, text_y), num_str, fill=text_color, font=font_badge)
+        text_y = (badge_h - t_h) / 2 - 2
+        bd_draw.text((text_x, text_y), num_str, fill=text_color, font=font_badge)
 
-        # Badge drop shadow
         b_shadow = Image.new("RGBA", (badge_w + 6, badge_h + 6), (0, 0, 0, 0))
         bs_draw = ImageDraw.Draw(b_shadow)
         bs_draw.rounded_rectangle((3, 3, badge_w + 3, badge_h + 3), radius=b_r, fill=(0, 0, 0, 160))
         b_shadow = b_shadow.filter(ImageFilter.GaussianBlur(3))
-        canvas.paste(b_shadow, (pos_x + 7, pos_y + 7), b_shadow)
-        canvas.paste(badge, (pos_x + 9, pos_y + 9), badge)
+        canvas.paste(b_shadow, (pos_x + 9, pos_y + 9), b_shadow)
+        canvas.paste(badge, (pos_x + 12, pos_y + 12), badge)
+
+        # 6. Top-Right Title & Rating Badge (in top right corner of the poster!)
+        raw_ru = it.get('ru', '') or it.get('en', '')
+        score_val = str(it.get('score', ''))
+        if raw_ru or score_val:
+            max_chars = 22 if card_w >= 400 else 18
+            display_title = (raw_ru[:max_chars-2] + '..') if len(raw_ru) > max_chars else raw_ru
+            score_text = score_val if score_val else '—'
+
+            font_tr_title = _get_font(13 if card_w >= 400 else 12, bold=True)
+            font_tr_score = _get_font(12 if card_w >= 400 else 11, bold=True)
+
+            dummy_draw = ImageDraw.Draw(canvas)
+            t_bbox = dummy_draw.textbbox((0, 0), display_title, font=font_tr_title)
+            title_w = t_bbox[2] - t_bbox[0]
+            s_bbox = dummy_draw.textbbox((0, 0), score_text, font=font_tr_score)
+            score_num_w = s_bbox[2] - s_bbox[0]
+            score_w = score_num_w + 16
+
+            pad_tr_x = 11
+            pad_tr_y = 6
+            content_w = max(title_w, score_w)
+            tr_w = content_w + pad_tr_x * 2
+            tr_h = 48
+            tr_r = 8
+
+            tr_x = pos_x + card_w - 12 - tr_w
+            tr_y = pos_y + 12
+
+            tr_badge = Image.new("RGBA", (tr_w, tr_h), (0, 0, 0, 0))
+            tr_draw = ImageDraw.Draw(tr_badge)
+            tr_draw.rounded_rectangle((0, 0, tr_w - 1, tr_h - 1), radius=tr_r, fill=(11, 15, 28, 230), outline=border_color, width=1)
+
+            # Title (right-aligned in badge)
+            tr_draw.text((tr_w - pad_tr_x - title_w, pad_tr_y), display_title, fill=(255, 255, 255, 255), font=font_tr_title)
+
+            # Vector Star + Rating (right-aligned in badge)
+            score_num_x = tr_w - pad_tr_x - score_num_w
+            star_cx = score_num_x - 9
+            star_cy = pad_tr_y + 26
+            draw_vector_star(tr_draw, star_cx, star_cy, r_outer=5.5, r_inner=2.6, color=(251, 191, 36, 255))
+            tr_draw.text((score_num_x, pad_tr_y + 19), score_text, fill=(251, 191, 36, 255), font=font_tr_score)
+
+            tr_shadow = Image.new("RGBA", (tr_w + 6, tr_h + 6), (0, 0, 0, 0))
+            trs_draw = ImageDraw.Draw(tr_shadow)
+            trs_draw.rounded_rectangle((3, 3, tr_w + 3, tr_h + 3), radius=tr_r, fill=(0, 0, 0, 160))
+            tr_shadow = tr_shadow.filter(ImageFilter.GaussianBlur(3))
+            canvas.paste(tr_shadow, (tr_x - 3, tr_y - 3), tr_shadow)
+            canvas.paste(tr_badge, (tr_x, tr_y), tr_badge)
 
     final_rgb = canvas.convert("RGB")
     final_rgb.save(out_path, "JPEG", quality=98, subsampling=0)
@@ -4778,7 +4828,7 @@ def run_compilation_post(genre_key=None, count=4, dry_run=False):
 
     # Generate combined collage poster
     clean_title = theme['title'].replace('🌟', '').replace('🏆', '').replace('🧠', '').replace('⚔️', '').replace('💖', '').replace('😂', '').replace('🌀', '').replace('💎', '').replace('🌆', '').strip()
-    collage_path = create_compilation_collage(poster_urls, f"ТОП-{len(chosen_items)}: {clean_title}")
+    collage_path = create_compilation_collage(chosen_items, f"ТОП-{len(chosen_items)}: {clean_title}")
 
     poster_to_send = collage_path if (collage_path and os.path.exists(collage_path)) else poster_urls[0]
 
